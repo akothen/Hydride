@@ -67,39 +67,63 @@
 		[(scalar_splat_dsl v0 size_i size_o)
 		(remove-duplicates (append (list  'zero-extend) (aie:get-bv-ops v0)))
 	]
-	[(v16int32_add16_dsl v0 v1)
+	[(add_v16int32_dsl v0 v1 num_2 num_3)
 		(cond 
-		[(and ); v16int32_add16
+		[(and  (equal? num_2 16) (equal? num_3 64)); add_v16acc64
  
   (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[else (error "Unable to get ops  for v16int32_add16")]
+		[(and  (equal? num_2 16) (equal? num_3 32)); add_v16int32
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 16) (equal? num_3 32)); add_v16uint32
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 32) (equal? num_3 32)); add_v32acc32
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 32) (equal? num_3 16)); add_v32int16
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 32) (equal? num_3 16)); add_v32uint16
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 64) (equal? num_3 8)); add_v64int8
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? num_2 64) (equal? num_3 8)); add_v64uint8
+ 
+  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for add_v16int32")]
 )
 
 	]
-	[(v8int32_add8_dsl v0 v1)
+	[(sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
-		[(and ); v8int32_add8
- 
-  (remove-duplicates (append (list  'bvadd) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[else (error "Unable to get ops  for v8int32_add8")]
-)
-
-	]
-	[(v16int32_sub16_dsl v0 v1)
-		(cond 
-		[(and ); v16int32_sub16
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)); sub_v16acc64
  
   (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[else (error "Unable to get ops  for v16int32_sub16")]
-)
-
-	]
-	[(mul_elem_32_dsl v0 v1)
-		(cond 
-		[(and ); mul_elem_32
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)); sub_v16int32
  
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[else (error "Unable to get ops  for mul_elem_32")]
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)); sub_v16uint32
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 32)); sub_v32acc32
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)); sub_v32int16
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)); sub_v32uint16
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)); sub_v64int8
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)); sub_v64uint8
+ 
+  (remove-duplicates (append (list  'bvsub) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for sub_v16acc64")]
 )
 
 	]
@@ -127,15 +151,6 @@
  
   (remove-duplicates (append (list  'sign-extend) (aie:get-bv-ops v0)))]
 		[else (error "Unable to get ops  for ups_to_v32acc32")]
-)
-
-	]
-	[(ups_8_32_to_8_80_dsl v0)
-		(cond 
-		[(and ); ups_8_32_to_8_80
- 
-  (remove-duplicates (append (list  'sign-extend) (aie:get-bv-ops v0)))]
-		[else (error "Unable to get ops  for ups_8_32_to_8_80")]
 )
 
 	]

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/llvm-lab/Hydride/codegen-generator/tools/low-level-codegen/RoseLowLevelCodeGen.py", line 8, in <module>
+    from RosetteLifter import RosetteLifter
+ModuleNotFoundError: No module named 'RosetteLifter'

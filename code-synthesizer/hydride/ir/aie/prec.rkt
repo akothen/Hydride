@@ -49,31 +49,31 @@
 	[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
 	[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
 	[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o) prec_i_o ]
-	[(v16int32_add16_dsl v0 v1)
+	[(add_v16int32_dsl v0 v1 num_2 num_3)
 		(cond 
-		[(and ) 32]
-		[else (error "Unable to infer prec for v16int32_add16")]
+		[(and  (equal? num_2 16) (equal? num_3 64)) 64]
+		[(and  (equal? num_2 16) (equal? num_3 32)) 32]
+		[(and  (equal? num_2 16) (equal? num_3 32)) 32]
+		[(and  (equal? num_2 32) (equal? num_3 32)) 32]
+		[(and  (equal? num_2 32) (equal? num_3 16)) 16]
+		[(and  (equal? num_2 32) (equal? num_3 16)) 16]
+		[(and  (equal? num_2 64) (equal? num_3 8)) 8]
+		[(and  (equal? num_2 64) (equal? num_3 8)) 8]
+		[else (error "Unable to infer prec for add_v16int32")]
 )
 
 	]
-	[(v8int32_add8_dsl v0 v1)
+	[(sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
-		[(and ) 32]
-		[else (error "Unable to infer prec for v8int32_add8")]
-)
-
-	]
-	[(v16int32_sub16_dsl v0 v1)
-		(cond 
-		[(and ) 32]
-		[else (error "Unable to infer prec for v16int32_sub16")]
-)
-
-	]
-	[(mul_elem_32_dsl v0 v1)
-		(cond 
-		[(and ) 32]
-		[else (error "Unable to infer prec for mul_elem_32")]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)) 64]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 32]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 32]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 32)) 32]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 16]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 16]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 8]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 8]
+		[else (error "Unable to infer prec for sub_v16acc64")]
 )
 
 	]
@@ -95,13 +95,6 @@
 		(cond 
 		[(and ) 32]
 		[else (error "Unable to infer prec for ups_to_v32acc32")]
-)
-
-	]
-	[(ups_8_32_to_8_80_dsl v0)
-		(cond 
-		[(and ) 80]
-		[else (error "Unable to infer prec for ups_8_32_to_8_80")]
 )
 
 	]

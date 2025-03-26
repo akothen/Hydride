@@ -15,6 +15,44 @@ entry:
 }
 
 ; Function Attrs: mustprogress noinline optnone
+define dso_local noundef <32 x i16> @add_v32int16_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
+entry:
+  %a.addr.i = alloca <32 x i16>, align 32
+  %b.addr.i = alloca <32 x i16>, align 32
+  %a.addr = alloca <32 x i16>, align 32
+  %b.addr = alloca <32 x i16>, align 32
+  store <32 x i16> %a, ptr %a.addr, align 32
+  store <32 x i16> %b, ptr %b.addr, align 32
+  %0 = load <32 x i16>, ptr %a.addr, align 32
+  %1 = load <32 x i16>, ptr %b.addr, align 32
+  store <32 x i16> %0, ptr %a.addr.i, align 32
+  store <32 x i16> %1, ptr %b.addr.i, align 32
+  %2 = load <32 x i16>, ptr %a.addr.i, align 32
+  %3 = load <32 x i16>, ptr %b.addr.i, align 32
+  %add.i = add <32 x i16> %2, %3
+  ret <32 x i16> %add.i
+}
+
+; Function Attrs: mustprogress noinline optnone
+define dso_local noundef <32 x i16> @sub_v32int16_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
+entry:
+  %a.addr.i = alloca <32 x i16>, align 32
+  %b.addr.i = alloca <32 x i16>, align 32
+  %a.addr = alloca <32 x i16>, align 32
+  %b.addr = alloca <32 x i16>, align 32
+  store <32 x i16> %a, ptr %a.addr, align 32
+  store <32 x i16> %b, ptr %b.addr, align 32
+  %0 = load <32 x i16>, ptr %a.addr, align 32
+  %1 = load <32 x i16>, ptr %b.addr, align 32
+  store <32 x i16> %0, ptr %a.addr.i, align 32
+  store <32 x i16> %1, ptr %b.addr.i, align 32
+  %2 = load <32 x i16>, ptr %a.addr.i, align 32
+  %3 = load <32 x i16>, ptr %b.addr.i, align 32
+  %sub.i = sub <32 x i16> %2, %3
+  ret <32 x i16> %sub.i
+}
+
+; Function Attrs: mustprogress noinline optnone
 define linkonce_odr dso_local noundef <32 x i16> @_Z15srs_to_v32int16Dv32_u7__acc32i(<16 x i64> noundef %acc, i32 noundef %shft) #0 {
 entry:
   %acc.addr.i = alloca <16 x i64>, align 32
@@ -150,7 +188,7 @@ entry:
 }
 
 ; Function Attrs: mustprogress noinline optnone
-define linkonce_odr dso_local noundef <16 x i64> @ups_to_v32acc32(<32 x i16> noundef %a, i32 noundef %shft) #0 {
+define dso_local noundef <16 x i64> @ups_to_v32acc32(<32 x i16> noundef %a, i32 noundef %shft) #0 {
 entry:
   %a.addr.i = alloca <32 x i16>, align 32
   %shft.addr.i = alloca i32, align 4

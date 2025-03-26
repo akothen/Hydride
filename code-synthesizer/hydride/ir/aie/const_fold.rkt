@@ -154,44 +154,24 @@
 		[else ( scalar_splat_dsl v0-folded size_i size_o )]
 		)
 	]
-	[ (v16int32_add16_dsl v0 v1)
+	[ (add_v16int32_dsl v0 v1 num_2 num_3)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( v16int32_add16_dsl v0-folded v1-folded ) (vector)))
+(lit (aie:interpret ( add_v16int32_dsl v0-folded v1-folded num_2 num_3 ) (vector)))
 ]
-		[else ( v16int32_add16_dsl v0-folded v1-folded )]
+		[else ( add_v16int32_dsl v0-folded v1-folded num_2 num_3 )]
 		)
 	]
-	[ (v8int32_add8_dsl v0 v1)
+	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( v8int32_add8_dsl v0-folded v1-folded ) (vector)))
+(lit (aie:interpret ( sub_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o ) (vector)))
 ]
-		[else ( v8int32_add8_dsl v0-folded v1-folded )]
-		)
-	]
-	[ (v16int32_sub16_dsl v0 v1)
-		(define v0-folded (aie:const-fold v0))
-		(define v1-folded (aie:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( v16int32_sub16_dsl v0-folded v1-folded ) (vector)))
-]
-		[else ( v16int32_sub16_dsl v0-folded v1-folded )]
-		)
-	]
-	[ (mul_elem_32_dsl v0 v1)
-		(define v0-folded (aie:const-fold v0))
-		(define v1-folded (aie:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( mul_elem_32_dsl v0-folded v1-folded ) (vector)))
-]
-		[else ( mul_elem_32_dsl v0-folded v1-folded )]
+		[else ( sub_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o )]
 		)
 	]
 	[ (mac_elem_32_dsl v0 v1 v2)
@@ -221,15 +201,6 @@
 (lit (aie:interpret ( ups_to_v32acc32_dsl v0-folded ) (vector)))
 ]
 		[else ( ups_to_v32acc32_dsl v0-folded )]
-		)
-	]
-	[ (ups_8_32_to_8_80_dsl v0)
-		(define v0-folded (aie:const-fold v0))
-		(cond
-		[(and (lit? v0-folded))
-(lit (aie:interpret ( ups_8_32_to_8_80_dsl v0-folded ) (vector)))
-]
-		[else ( ups_8_32_to_8_80_dsl v0-folded )]
 		)
 	]
 	[v (error "Unrecognized expression" v)]

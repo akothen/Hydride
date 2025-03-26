@@ -193,6 +193,7 @@ class RosetteLifter:
         assert isinstance(ConstantVal.getType(), RoseBitVectorType)
         print("++++++++++=======ConstantVal:")
         ConstantVal.print()
+        print(f"OutputType : {RosetteAST[-1]}")
         [OutputType] = RosetteAST[-1]
         self.RoseValToLLVMType[ConstantVal] = self.getLLVMType(OutputType[1:])
         return ConstantVal

@@ -283,7 +283,7 @@ def SemaToDict(SemaList):
         )
         ADD_entries = []
         ADD_sema_str = f"""
-        '"(define aieml-eltwiseadd ( arg0 arg1 %lanesize %datasize)"',
+        '"(define (aieml_eltwiseadd arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -301,21 +301,56 @@ def SemaToDict(SemaList):
         '"dst"',
         '")"',
     """
+
+        SUB_entries = []
+        SUB_sema_str = f"""
+        '"(define (aieml_eltwisesub arg0 arg1 %lanesize %datasize)"',
+        '"(define dst"',
+        '"(apply concat"',
+        '"(for/list ([%i (range 0 %lanesize 1)])"',
+        '"(define %low1 (* %datasize %i))"',
+        '"(define %high1 (+ %low1 (- %datasize 1)))"',
+        '"(define %ext_xbuff (extract %high1 %low1 arg0))"',
+        '"(define %low2 (* %datasize %i))"',
+        '"(define %high2 (+ %low2 (- %datasize 1)))"',
+        '"(define %ext_ybuff (extract %high2 %low2 arg1))"',
+        '"(define %o (bvsub %ext_xbuff %ext_ybuff))"',
+        '"%o"',
+        '")"',
+        '")"',
+        '")"',
+        '"dst"',
+        '")"',
+    """
+
         for inst, sema in SemaList.items():
             if sema.instclass == "ADD":
                 ADD_entries.append(ADDInstEntry(inst, sema))
+            if sema.instclass == "SUB":
+                SUB_entries.append(SUBInstEntry(inst, sema))
 
         f.write("""aie_sema = {\n""")
         f.write(
-            f"""\t"aieml-eltwiseadd"  : {{ 
+            f"""\t"aieml_eltwiseadd"  : {{ 
     "target_instructions" : {{"""
         )
         for i in ADD_entries:
             f.write(f"""\t\t{i}""")
         f.write("""\n},""")
         f.write(f""" "semantics": [{ADD_sema_str}]""")
+        f.write("""\n\n},\n""")
+
+        f.write(
+            f"""\t"aieml_eltwisesub"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in SUB_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{SUB_sema_str}]""")
         f.write("""\n}""")
         f.write("""\n}""")
+
 
 
 def ADDInstEntry(InstName, Sema: AIESema):
@@ -339,6 +374,36 @@ def ADDInstEntry(InstName, Sema: AIESema):
                 "out_lanesize_index": None,
                 "in_precision_index": None,
                 "out_precision_index": None,
+                "arg_permute_map": [0, 1, -1, -1],
+                "Signedness": {int(all(param.is_signed for param in params))},
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+  }},"""
+    return ret_str
+
+
+def SUBInstEntry(InstName, Sema: AIESema):
+    params = Sema.params
+    ret_ty_info = extract_info(Sema.rettype)
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+    vectsize = lanesize * datasize
+
+    ret_str = f"""
+  \t"{InstName}" : {{
+   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "{lanesize}", "{datasize}"],
+                "in_vectsize": {vectsize},
+                "out_vectsize": {vectsize},
+                "lanesize": {lanesize},
+                "in_precision": {datasize},
+                "out_precision": {datasize},
+                "in_vectsize_index": 2,
+                "out_vectsize_index": 2,
+                "in_lanesize_index": 2,
+                "out_lanesize_index": 2,
+                "in_precision_index": 3,
+                "out_precision_index": 3,
                 "arg_permute_map": [0, 1, -1, -1],
                 "Signedness": {int(all(param.is_signed for param in params))},
                 "Cost": "None",

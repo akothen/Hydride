@@ -52,19 +52,133 @@ virtual bool legalize(Instruction *I) {
   }
   
     {
-      std::vector<std::string> InstNames = {"llvm.hydride.v16int32_add16_dsl"};
+      std::vector<std::string> InstNames = {"llvm.hydride.add_v16acc64_dsl",
+"llvm.hydride.add_v16int32_dsl",
+"llvm.hydride.add_v16uint32_dsl",
+"llvm.hydride.add_v32acc32_dsl",
+"llvm.hydride.add_v32int16_dsl",
+"llvm.hydride.add_v32uint16_dsl",
+"llvm.hydride.add_v64int8_dsl",
+"llvm.hydride.add_v64uint8_dsl"};
       if(isNameMatch(CI, InstNames)) { 
         
-            { 
-              auto *InstFunction = I->getModule()->getFunction("v16int32_add16_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 64)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v16acc64_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v16acc64_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
                 errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
                 InstToInstMap[CI] = NewCallInst; 
                 ToBeRemoved.insert(CI); 
-                return true;
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v16int32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v16int32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v16uint32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v16uint32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v32acc32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v32acc32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 16)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v32int16_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v32int16_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 16)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v32uint16_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v32uint16_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 64)
+       && isAMatch(CI, 3, 8)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v64int8_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v64int8_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 64)
+       && isAMatch(CI, 3, 8)) {
+              auto *InstFunction = I->getModule()->getFunction("add_v64uint8_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "add_v64uint8_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
               }
             } 
            
@@ -73,61 +187,133 @@ virtual bool legalize(Instruction *I) {
     
 
     {
-      std::vector<std::string> InstNames = {"llvm.hydride.v8int32_add8_dsl"};
+      std::vector<std::string> InstNames = {"llvm.hydride.sub_v16acc64_dsl",
+"llvm.hydride.sub_v16int32_dsl",
+"llvm.hydride.sub_v16uint32_dsl",
+"llvm.hydride.sub_v32acc32_dsl",
+"llvm.hydride.sub_v32int16_dsl",
+"llvm.hydride.sub_v32uint16_dsl",
+"llvm.hydride.sub_v64int8_dsl",
+"llvm.hydride.sub_v64uint8_dsl"};
       if(isNameMatch(CI, InstNames)) { 
         
-            { 
-              auto *InstFunction = I->getModule()->getFunction("v8int32_add8_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 64)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v16acc64_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v16acc64_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
                 errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
                 InstToInstMap[CI] = NewCallInst; 
                 ToBeRemoved.insert(CI); 
-                return true;
+                return true; 
               }
             } 
-           
-      } 
-    }
-    
-
-    {
-      std::vector<std::string> InstNames = {"llvm.hydride.v16int32_sub16_dsl"};
-      if(isNameMatch(CI, InstNames)) { 
-        
-            { 
-              auto *InstFunction = I->getModule()->getFunction("v16int32_sub16_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+          
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v16int32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v16int32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
                 errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
                 InstToInstMap[CI] = NewCallInst; 
                 ToBeRemoved.insert(CI); 
-                return true;
+                return true; 
               }
             } 
-           
-      } 
-    }
-    
-
-    {
-      std::vector<std::string> InstNames = {"llvm.hydride.mul_elem_32_dsl"};
-      if(isNameMatch(CI, InstNames)) { 
-        
-            { 
-              auto *InstFunction = I->getModule()->getFunction("mul_elem_32_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+          
+            if(isAMatch(CI, 2, 16)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v16uint32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v16uint32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
                 errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
                 InstToInstMap[CI] = NewCallInst; 
                 ToBeRemoved.insert(CI); 
-                return true;
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 32)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v32acc32_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v32acc32_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 16)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v32int16_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v32int16_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 32)
+       && isAMatch(CI, 3, 16)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v32uint16_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v32uint16_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 64)
+       && isAMatch(CI, 3, 8)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v64int8_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v64int8_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
+              }
+            } 
+          
+            if(isAMatch(CI, 2, 64)
+       && isAMatch(CI, 3, 8)) {
+              auto *InstFunction = I->getModule()->getFunction("sub_v64uint8_wrapper"); 
+              errs() << "INST FUNCTION NAME: " << "sub_v64uint8_wrapper" << "\n"; 
+              std::vector<int> Permutation = {0,1,-1,-1}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true; 
               }
             } 
            
@@ -141,7 +327,7 @@ virtual bool legalize(Instruction *I) {
         
             { 
               auto *InstFunction = I->getModule()->getFunction("mac_elem_32_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<int> Permutation = {0,1,2}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
@@ -162,7 +348,7 @@ virtual bool legalize(Instruction *I) {
         
             { 
               auto *InstFunction = I->getModule()->getFunction("srs_to_v32int16_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<int> Permutation = {0}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
@@ -183,28 +369,7 @@ virtual bool legalize(Instruction *I) {
         
             { 
               auto *InstFunction = I->getModule()->getFunction("ups_to_v32acc32_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
-              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
-              if (Args.size() != 0) {
-                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
-                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
-                InstToInstMap[CI] = NewCallInst; 
-                ToBeRemoved.insert(CI); 
-                return true;
-              }
-            } 
-           
-      } 
-    }
-    
-
-    {
-      std::vector<std::string> InstNames = {"llvm.hydride.ups_8_32_to_8_80_dsl"};
-      if(isNameMatch(CI, InstNames)) { 
-        
-            { 
-              auto *InstFunction = I->getModule()->getFunction("ups_8_32_to_8_80_wrapper"); 
-              std::vector<int> Permutation = {0,1,-1,-1,-1,-1,-1,-1,-1}; 
+              std::vector<int> Permutation = {0}; 
               std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
               if (Args.size() != 0) {
                 auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 

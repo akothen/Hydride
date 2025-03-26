@@ -160,6 +160,30 @@
              %o)))
   dst)
 
+(define (mul_4x2_2x8 a b)
+  (define dst
+    (apply concat
+           (for/list ([%i (reverse (range 0 8 2))])
+             (define %aLo1 (* 16 %i))
+             (define %aHi1 (+ %aLo1 (- 16 1)))
+             (define %aLo2 (* 16 (+ 1 %i)))
+             (define %aHi2 (+ %aLo2 (- 16 1)))
+             (define %ext_a1 (sign-extend (extract %aHi1 %aLo1 a) (bitvector 32)))
+             (define %ext_a2 (sign-extend (extract %aHi2 %aLo2 a) (bitvector 32)))
+             (define rowOut
+               (apply concat
+                      (for/list ([%j (reverse (range 0 8 1))])
+                        (define %bLo1 (* 16 %j))
+                        (define %bHi1 (+ %bLo1 (- 16 1)))
+                        (define %bLo2 (* 16 (+ 1 %j)))
+                        (define %bHi2 (+ %bLo2 (- 16 1)))
+                        (define %ext_b1 (sign-extend (extract %bHi1 %bLo1 b) (bitvector 32)))
+                        (define %ext_b2 (sign-extend (extract %bHi2 %bLo2 b) (bitvector 32)))
+                        (define %elem (bvadd (bvmul %ext_a1 %ext_b1) (bvmul %ext_a2 %ext_b2)))
+                        %elem)))
+             rowOut)))
+  dst)
+
 (define xbuff_32_16
   (bv
    #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025
@@ -173,7 +197,14 @@
    #x11c2bb1ecd27c282a509de2a7f6bfb506d503c809b5889b812a159689f22ca849548c2d75158f50134009420c74a471a405870a013dcf0b8a4f2ecb0ab5cd797
    512))
 
-(define bv1024? (bitvector 1024))
-(mul_elem_32 xbuff_32_16 ybuff_32_16)
-(pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
-(srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))
+(define matmul_out
+  (bv
+   #xd04bf56c4e9db0f8dae2720cf39b42d8f224a1eceb5ecd8c14608074331bc41cd5d9ddb748d5ce34d91e0a63f2d50494f355c77bf0cd296118fdef9f3141a9450f9bbdc4e4f74eca0e82c44004eac3e204b2a020059291a2f69dd8deedaf28e216d63119f1e33004e74dd83df677e5c403b1c2a51f00505726fa44a9041e82f3
+   1024))
+
+(pretty-print (mul_4x2_2x8 xbuff_32_16 ybuff_32_16))
+
+;;; (define bv1024? (bitvector 1024))
+;;; (mul_elem_32 xbuff_32_16 ybuff_32_16)
+;;; (pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
+;;; (srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))

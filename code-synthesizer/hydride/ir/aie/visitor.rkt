@@ -93,25 +93,15 @@
 		(define v0-visited (aie:visitor v0 fn))
 		(fn ( scalar_splat_dsl v0-visited size_i size_o ))
 	]
-	[ (v16int32_add16_dsl v0 v1)
+	[ (add_v16int32_dsl v0 v1 num_2 num_3)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
-		(fn ( v16int32_add16_dsl v0-visited v1-visited ))
+		(fn ( add_v16int32_dsl v0-visited v1-visited num_2 num_3 ))
 	]
-	[ (v8int32_add8_dsl v0 v1)
+	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
-		(fn ( v8int32_add8_dsl v0-visited v1-visited ))
-	]
-	[ (v16int32_sub16_dsl v0 v1)
-		(define v0-visited (aie:visitor v0 fn))
-		(define v1-visited (aie:visitor v1 fn))
-		(fn ( v16int32_sub16_dsl v0-visited v1-visited ))
-	]
-	[ (mul_elem_32_dsl v0 v1)
-		(define v0-visited (aie:visitor v0 fn))
-		(define v1-visited (aie:visitor v1 fn))
-		(fn ( mul_elem_32_dsl v0-visited v1-visited ))
+		(fn ( sub_v16acc64_dsl v0-visited v1-visited size_i_o prec_i_o ))
 	]
 	[ (mac_elem_32_dsl v0 v1 v2)
 		(define v0-visited (aie:visitor v0 fn))
@@ -126,10 +116,6 @@
 	[ (ups_to_v32acc32_dsl v0)
 		(define v0-visited (aie:visitor v0 fn))
 		(fn ( ups_to_v32acc32_dsl v0-visited ))
-	]
-	[ (ups_8_32_to_8_80_dsl v0)
-		(define v0-visited (aie:visitor v0 fn))
-		(fn ( ups_8_32_to_8_80_dsl v0-visited ))
 	]
 	[_ (error "Unrecognized expression in visitor")]
  )

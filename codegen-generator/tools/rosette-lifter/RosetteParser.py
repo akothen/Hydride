@@ -118,6 +118,7 @@ class RosetteParser:
     FunctionCode = []
     FunctionName = ""
     for CodeLine in CodeLines:
+      print(f"Codeline: {CodeLine}")
       FuncStartFound = False
       for FuncStartToken in TokensDenotingFunctionStart:
         if FuncStartToken in CodeLine:

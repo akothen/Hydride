@@ -48,31 +48,31 @@
 	[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
-	[(v16int32_add16_dsl v0 v1)
+	[(add_v16int32_dsl v0 v1 num_2 num_3)
 		(cond 
-		[(and ) 512]
-		[else (error "Unable to infer length for v16int32_add16: "  prog)]
+		[(and  (equal? num_2 16) (equal? num_3 64)) 1024]
+		[(and  (equal? num_2 16) (equal? num_3 32)) 512]
+		[(and  (equal? num_2 16) (equal? num_3 32)) 512]
+		[(and  (equal? num_2 32) (equal? num_3 32)) 1024]
+		[(and  (equal? num_2 32) (equal? num_3 16)) 512]
+		[(and  (equal? num_2 32) (equal? num_3 16)) 512]
+		[(and  (equal? num_2 64) (equal? num_3 8)) 512]
+		[(and  (equal? num_2 64) (equal? num_3 8)) 512]
+		[else (error "Unable to infer length for add_v16int32: "  prog)]
 )
 
 	]
-	[(v8int32_add8_dsl v0 v1)
+	[(sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
-		[(and ) 256]
-		[else (error "Unable to infer length for v8int32_add8: "  prog)]
-)
-
-	]
-	[(v16int32_sub16_dsl v0 v1)
-		(cond 
-		[(and ) 512]
-		[else (error "Unable to infer length for v16int32_sub16: "  prog)]
-)
-
-	]
-	[(mul_elem_32_dsl v0 v1)
-		(cond 
-		[(and ) 1024]
-		[else (error "Unable to infer length for mul_elem_32: "  prog)]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)) 1024]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 32)) 1024]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[else (error "Unable to infer length for sub_v16acc64: "  prog)]
 )
 
 	]
@@ -94,13 +94,6 @@
 		(cond 
 		[(and ) 1024]
 		[else (error "Unable to infer length for ups_to_v32acc32: "  prog)]
-)
-
-	]
-	[(ups_8_32_to_8_80_dsl v0)
-		(cond 
-		[(and ) 640]
-		[else (error "Unable to infer length for ups_8_32_to_8_80: "  prog)]
 )
 
 	]
