@@ -39,6 +39,7 @@
 
 (define (intr-elemT-size elemT) 
 (cond
+    [(eq? elemT 'int1) 1]
     [(eq? elemT 'int8) 8]
     [(eq? elemT 'int16) 16]
     [(eq? elemT 'int32) 32]
@@ -448,6 +449,10 @@
     [(vec-widen-mul v1 v2) 
      (lambda (i) (do-widened-mul ((interpret-env v1 env) i) ((interpret-env v2 env) i)))
      ]
+    [(vec-if v1 v2 v3) (lambda (i) (do-if ((interpret-env v1 env) i) ((interpret-env v2 env) i) ((interpret-env v3 env) i)))]
+    [(vec-eq v1 v2) (lambda (i) (do-eq ((interpret-env v1 env) i) ((interpret-env v2 env) i)))]
+    [(vec-lt v1 v2) (lambda (i) (do-lt ((interpret-env v1 env) i) ((interpret-env v2 env) i)))]
+    [(vec-le v1 v2) (lambda (i) (do-le ((interpret-env v1 env) i) ((interpret-env v2 env) i)))]
     [(cast-int vec olane oprec) (lambda (i) (cpp:cast ((interpret-env vec env) i) 
         (cond
             [(eq? oprec 8)  'int8]
@@ -917,7 +922,7 @@
   ;   (* lhs rhs)]
   ;  [else
      (define outT (infer-out-type lhs rhs))
-     (define result  (do-widening-mul-extract (cpp:eval lhs) (cpp:eval rhs) #f) )
+     (define result  (do-widening-mul-extract (cpp:eval lhs) (cpp:eval rhs) #t) )
      (mk-cpp-expr result outT)
      ;(mk-cpp-expr (bvmul (cpp:eval lhs) (cpp:eval rhs)) outT)
   ;   ])
@@ -1246,18 +1251,23 @@
     [(and (integer? lhs) (integer? rhs))
      (< lhs rhs)]
     [(cpp:signed-expr? lhs)
-     (mk-cpp-expr (bvslt (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]
+
+     (define bit-value (if (bvslt (cpp:eval lhs) (cpp:eval rhs)) (bv 1 1) (bv 0 1)))
+     (mk-cpp-expr bit-value 'uint1)]
     [else
-     (mk-cpp-expr (bvult (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]))
+     (define bit-value (if (bvult (cpp:eval lhs) (cpp:eval rhs)) (bv 1 1) (bv 0 1)))
+     (mk-cpp-expr bit-value 'uint1)]))
 
 (define (do-le lhs rhs)
   (cond
     [(and (integer? lhs) (integer? rhs))
      (<= lhs rhs)]
     [(cpp:signed-expr? lhs)
-     (mk-cpp-expr (bvsle (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]
+     (define bit-value (if (bvsle (cpp:eval lhs) (cpp:eval rhs)) (bv 1 1) (bv 0 1)))
+     (mk-cpp-expr bit-value 'uint1)]
     [else
-     (mk-cpp-expr (bvule (cpp:eval lhs) (cpp:eval rhs)) 'uint1)]))
+     (define bit-value (if (bvule (cpp:eval lhs) (cpp:eval rhs)) (bv 1 1) (bv 0 1)))
+     (mk-cpp-expr bit-value 'uint1)]))
 
 (define (do-abs lhs)
   (define outT (infer-out-type lhs lhs))

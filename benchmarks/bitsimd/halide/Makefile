@@ -42,7 +42,8 @@ benchmarks = gaussian3x3 \
 			 bitsimd_gemv \
 			 relu \
 			 histogram \
-			 convolution
+			 convolution \
+			 filter_by_key
 
 bin_dirs = $(addsuffix /bin,$(benchmarks))
 
@@ -91,8 +92,11 @@ $(benchmarks): %: %/bin
 		-e object,c_header \
 		target=$(TARGET)
 
+ifeq ($(ENABLE_HYDRIDE),1) 
 	opt -load /shared/hydride/LLVMBitSIMDCEmitter.so -enable-new-pm=0 -bitsimd-ce -adce -globaldce  -S  /tmp/$@_bitserial_depth$(EXPR_DEPTH)_rafae.ll.legalize.ll  -o temp.ll 
 	python3 inline.py $@
+endif
+
 	g++ -g  -DHALIDE_CPP_ALWAYS_USE_CPP_VECTORS -Dbenchmark_$@ --std=c++17 \
 		-O3 -march=native -mavx512vl -mavx512ifma \
 		-I $(HALIDE_DISTRIB)/include -I ./$@/bin -I ./libpimeval/ \

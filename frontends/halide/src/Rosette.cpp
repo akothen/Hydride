@@ -1774,7 +1774,7 @@ public:
         }
 
         // If the expression is a conditional, optimize the branches individually
-        if (base_e.node_type() == IRNodeType::Select) {
+        if (base_e.node_type() == IRNodeType::Select && (arch != HydrideSupportedArchitecture::BitSerial)) {
             debug(1) << "Select case"
                      << "\n";
             return IRMutator::mutate(expr);
@@ -2816,7 +2816,6 @@ private:
             // Abstract scalar arithmetic
             // operations.
             if (!op->type.is_vector() || (_arch == HydrideSupportedArchitecture::HVX && op->type.bits() >= 64)
-                    || (_arch == HydrideSupportedArchitecture::BitSerial)
                     ) {
                 std::string uname = unique_name('h');
                 abstractions[uname] = IRMutator::visit(op);
