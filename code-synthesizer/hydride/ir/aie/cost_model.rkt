@@ -28,11 +28,8 @@
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
-(define cost_add_v16int32_dsl 1)
+(define cost_add_v16acc64_dsl 1)
 (define cost_sub_v16acc64_dsl 1)
-(define cost_mac_elem_32_dsl 1)
-(define cost_srs_to_v32int16_dsl 1)
-(define cost_ups_to_v32acc32_dsl 1)
 
 (define (aie:cost prog)
  (destruct prog
@@ -83,22 +80,13 @@
 		[ (scalar_splat_dsl v0 size_i size_o)
 		(+ 1 (aie:cost  v0) )
 	]
-	[ (add_v16int32_dsl v0 v1 num_2 num_3)
-		(+ cost_add_v16int32_dsl (aie:cost  v0)  (aie:cost  v1)  
+	[ (add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
+		(+ cost_add_v16acc64_dsl (aie:cost  v0)  (aie:cost  v1)  
 		)
 	]
 	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(+ cost_sub_v16acc64_dsl (aie:cost  v0)  (aie:cost  v1)  
 		)
-	]
-	[ (mac_elem_32_dsl v0 v1 v2)
-		(+ cost_mac_elem_32_dsl (aie:cost  v0)  (aie:cost  v1)  (aie:cost  v2) )
-	]
-	[ (srs_to_v32int16_dsl v0)
-		(+ cost_srs_to_v32int16_dsl (aie:cost  v0) )
-	]
-	[ (ups_to_v32acc32_dsl v0)
-		(+ cost_ups_to_v32acc32_dsl (aie:cost  v0) )
 	]
 	[v  (error "Unrecognized Term in cost model" v)]
  )

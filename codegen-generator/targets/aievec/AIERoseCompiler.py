@@ -283,7 +283,7 @@ def SemaToDict(SemaList):
         )
         ADD_entries = []
         ADD_sema_str = f"""
-        '"(define (aieml_eltwiseadd arg0 arg1 %lanesize %datasize)"',
+        '"(define (add_v16acc64 arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -304,7 +304,7 @@ def SemaToDict(SemaList):
 
         SUB_entries = []
         SUB_sema_str = f"""
-        '"(define (aieml_eltwisesub arg0 arg1 %lanesize %datasize)"',
+        '"(define (sub_v16acc64 arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -331,7 +331,7 @@ def SemaToDict(SemaList):
 
         f.write("""aie_sema = {\n""")
         f.write(
-            f"""\t"aieml_eltwiseadd"  : {{ 
+            f"""\t"add_v16acc64"  : {{ 
     "target_instructions" : {{"""
         )
         for i in ADD_entries:
@@ -341,7 +341,7 @@ def SemaToDict(SemaList):
         f.write("""\n\n},\n""")
 
         f.write(
-            f"""\t"aieml_eltwisesub"  : {{ 
+            f"""\t"sub_v16acc64"  : {{ 
     "target_instructions" : {{"""
         )
         for i in SUB_entries:
@@ -368,12 +368,12 @@ def ADDInstEntry(InstName, Sema: AIESema):
                 "lanesize": {lanesize},
                 "in_precision": {datasize},
                 "out_precision": {datasize},
-                "in_vectsize_index": None,
-                "out_vectsize_index": None,
-                "in_lanesize_index": None,
-                "out_lanesize_index": None,
-                "in_precision_index": None,
-                "out_precision_index": None,
+                "in_vectsize_index": 2,
+                "out_vectsize_index": 2,
+                "in_lanesize_index": 2,
+                "out_lanesize_index": 2,
+                "in_precision_index": 3,
+                "out_precision_index": 3,
                 "arg_permute_map": [0, 1, -1, -1],
                 "Signedness": {int(all(param.is_signed for param in params))},
                 "Cost": "None",

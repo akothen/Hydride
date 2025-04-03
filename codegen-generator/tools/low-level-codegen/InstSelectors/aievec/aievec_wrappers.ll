@@ -34,6 +34,26 @@ entry:
 }
 
 ; Function Attrs: mustprogress noinline optnone
+define dso_local noundef <16 x i32> @add_v16int32_wrapper(<16 x i32> noundef %a, <16 x i32> noundef %b) #0 {
+entry:
+  %a.addr.i = alloca <16 x i32>, align 32
+  %b.addr.i = alloca <16 x i32>, align 32
+  %a.addr = alloca <16 x i32>, align 32
+  %b.addr = alloca <16 x i32>, align 32
+  store <16 x i32> %a, ptr %a.addr, align 32
+  store <16 x i32> %b, ptr %b.addr, align 32
+  %0 = load <16 x i32>, ptr %a.addr, align 32
+  %1 = load <16 x i32>, ptr %b.addr, align 32
+  store <16 x i32> %0, ptr %a.addr.i, align 32
+  store <16 x i32> %1, ptr %b.addr.i, align 32
+  %2 = load <16 x i32>, ptr %a.addr.i, align 32
+  %3 = load <16 x i32>, ptr %b.addr.i, align 32
+  %add.i = add <16 x i32> %2, %3
+  ret <16 x i32> %add.i
+}
+
+
+; Function Attrs: mustprogress noinline optnone
 define dso_local noundef <32 x i16> @sub_v32int16_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
 entry:
   %a.addr.i = alloca <32 x i16>, align 32

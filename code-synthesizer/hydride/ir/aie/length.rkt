@@ -48,17 +48,17 @@
 	[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
-	[(add_v16int32_dsl v0 v1 num_2 num_3)
+	[(add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
-		[(and  (equal? num_2 16) (equal? num_3 64)) 1024]
-		[(and  (equal? num_2 16) (equal? num_3 32)) 512]
-		[(and  (equal? num_2 16) (equal? num_3 32)) 512]
-		[(and  (equal? num_2 32) (equal? num_3 32)) 1024]
-		[(and  (equal? num_2 32) (equal? num_3 16)) 512]
-		[(and  (equal? num_2 32) (equal? num_3 16)) 512]
-		[(and  (equal? num_2 64) (equal? num_3 8)) 512]
-		[(and  (equal? num_2 64) (equal? num_3 8)) 512]
-		[else (error "Unable to infer length for add_v16int32: "  prog)]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)) 1024]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 32)) 1024]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[else (error "Unable to infer length for add_v16acc64: "  prog)]
 )
 
 	]
@@ -73,27 +73,6 @@
 		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
 		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
 		[else (error "Unable to infer length for sub_v16acc64: "  prog)]
-)
-
-	]
-	[(mac_elem_32_dsl v0 v1 v2)
-		(cond 
-		[(and ) 1024]
-		[else (error "Unable to infer length for mac_elem_32: "  prog)]
-)
-
-	]
-	[(srs_to_v32int16_dsl v0)
-		(cond 
-		[(and ) 512]
-		[else (error "Unable to infer length for srs_to_v32int16: "  prog)]
-)
-
-	]
-	[(ups_to_v32acc32_dsl v0)
-		(cond 
-		[(and ) 1024]
-		[else (error "Unable to infer length for ups_to_v32acc32: "  prog)]
 )
 
 	]
