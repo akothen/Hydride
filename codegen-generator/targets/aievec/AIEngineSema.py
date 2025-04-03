@@ -2,7 +2,7 @@
 # Part of the Hydride Compiler Infrastructure.
 # ============================== Hydride File =================================
 aie_sema = {
-	"aieml_eltwiseadd"  : { 
+	"add_v16acc64"  : { 
     "target_instructions" : {		
   	"add_v16acc64" : {
    	 "args": ["SYMBOLIC_BV_1024", "SYMBOLIC_BV_1024", "16", "64"],
@@ -157,7 +157,7 @@ aie_sema = {
                 "Extensions": "[]",
   },
 }, "semantics": [
-        '"(define (aieml_eltwiseadd arg0 arg1 %lanesize %datasize)"',
+        '"(define (add_v64uint8 arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -177,7 +177,7 @@ aie_sema = {
     ]
 
 },
-	"aieml_eltwisesub"  : { 
+	"sub_v16acc64"  : { 
     "target_instructions" : {		
   	"sub_v16acc64" : {
    	 "args": ["SYMBOLIC_BV_1024", "SYMBOLIC_BV_1024", "16", "64"],
@@ -332,7 +332,7 @@ aie_sema = {
                 "Extensions": "[]",
   },
 }, "semantics": [
-        '"(define (aieml_eltwisesub arg0 arg1 %lanesize %datasize)"',
+        '"(define (sub_v64uint8 arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',

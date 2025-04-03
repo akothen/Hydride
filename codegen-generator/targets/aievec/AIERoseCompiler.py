@@ -282,8 +282,28 @@ def SemaToDict(SemaList):
             """# ============================== Hydride File =================================\n"""
         )
         ADD_entries = []
-        ADD_sema_str = f"""
-        '"(define (add_v16acc64 arg0 arg1 %lanesize %datasize)"',
+        ADD_classname_set = False
+        ADD_classname = ""
+        SUB_entries = []
+        SUB_classname_set = False
+        SUB_classname = "False"
+
+        for inst, sema in SemaList.items():
+            if sema.instclass == "ADD":
+                if ADD_classname_set:
+                    continue
+                else:
+                    ADD_classname = inst
+                ADD_entries.append(ADDInstEntry(inst, sema))
+            if sema.instclass == "SUB":
+                if SUB_classname_set:
+                    continue
+                else:
+                    SUB_classname = inst
+                SUB_entries.append(SUBInstEntry(inst, sema))
+        if ADD_entries:
+            ADD_sema_str = f"""
+        '"(define ({ADD_classname} arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -301,10 +321,8 @@ def SemaToDict(SemaList):
         '"dst"',
         '")"',
     """
-
-        SUB_entries = []
         SUB_sema_str = f"""
-        '"(define (sub_v16acc64 arg0 arg1 %lanesize %datasize)"',
+        '"(define ({SUB_classname} arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
         '"(for/list ([%i (range 0 %lanesize 1)])"',
@@ -322,13 +340,6 @@ def SemaToDict(SemaList):
         '"dst"',
         '")"',
     """
-
-        for inst, sema in SemaList.items():
-            if sema.instclass == "ADD":
-                ADD_entries.append(ADDInstEntry(inst, sema))
-            if sema.instclass == "SUB":
-                SUB_entries.append(SUBInstEntry(inst, sema))
-
         f.write("""aie_sema = {\n""")
         f.write(
             f"""\t"add_v16acc64"  : {{ 
@@ -350,7 +361,6 @@ def SemaToDict(SemaList):
         f.write(f""" "semantics": [{SUB_sema_str}]""")
         f.write("""\n}""")
         f.write("""\n}""")
-
 
 
 def ADDInstEntry(InstName, Sema: AIESema):
