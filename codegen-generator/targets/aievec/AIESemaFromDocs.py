@@ -100,17 +100,24 @@ def ParseMulHTML() -> list[AIESema]:
     print(f"Links: {link_elements}")
     for entry in link_elements:
         link = entry.find('a')['href']
+        name = entry.find('a').text.lower()
+        unsupported = ["emulated", "complex", "sparse", "bfloat16", "fp32"]
+        if any(tag in name for tag in unsupported):
+            continue
         root_url = "https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_ml_intrinsics/intrinsics/"
         r = requests.get(root_url + link) 
         inner_soup = BeautifulSoup(r.text, 'html.parser') 
         header_elements = inner_soup.find_all('table', attrs={'class':'memname'})
+        print("Processing: ", name)
         for element in header_elements:
             type_and_name = element.find('td', attrs={'class':'memname'})
             type_and_name_split = type_and_name.text.split()
             rettype = type_and_name_split[0]
             raw_name = type_and_name_split[1]
             conf = "conf" in raw_name
+            mac_mm_pattern = r"mac_\d+x(\d+)_\1x\d+(_conf)?$"
             mm_pattern = r"mul_\d+x(\d+)_\1x\d+(_conf)?$"
+            neg_mm_pattern = r"negmul_\d+x(\d+)_\1x\d+(_conf)?$"
             if "operator" in raw_name:
                 continue
             if "cacc" in rettype or "cint" in rettype or "float" in rettype:
@@ -128,8 +135,11 @@ def ParseMulHTML() -> list[AIESema]:
             elif "submac" in raw_name:
                 instclass = "SUBMAC"
             elif re.fullmatch(mm_pattern, raw_name):
-                print("matched mul pattern")
                 instclass = "MATMUL"
+            elif re.fullmatch(neg_mm_pattern, raw_name):
+                instclass = "NEGMATMUL"
+            elif re.fullmatch(mac_mm_pattern, raw_name):
+                instclass = "MACMATMUL"
             else:
                 instclass = "NONE"
             param_types = element.find_all('td', attrs={'class':'paramtype'})
@@ -140,6 +150,8 @@ def ParseMulHTML() -> list[AIESema]:
             for ty, tn in zip(param_types, param_names):
                 #params.append(f"{ty.text} {tn.text}".replace(u'\xa0', u' '))
                 ty_str = ty.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
+                if "sparse" in ty_str:
+                    break
                 tn_str = tn.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
                 params.append(Parameter(tn_str, ty_str, "u" not in ty_str))
 
