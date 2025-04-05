@@ -320,6 +320,69 @@ virtual bool legalize(Instruction *I) {
       } 
     }
     
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.srs_to_v32int16_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("srs_to_v32int16_wrapper"); 
+              std::vector<int> Permutation = {0}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.ups_to_v32acc32_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("ups_to_v32acc32_wrapper"); 
+              std::vector<int> Permutation = {0}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
+
+    {
+      std::vector<std::string> InstNames = {"llvm.hydride.mac_elem_32_dsl"};
+      if(isNameMatch(CI, InstNames)) { 
+        
+            { 
+              auto *InstFunction = I->getModule()->getFunction("mac_elem_32_wrapper"); 
+              std::vector<int> Permutation = {0,1,2}; 
+              std::vector<Value *> Args = getArgsAfterPermutation(CI, InstFunction, Permutation, CI); 
+              if (Args.size() != 0) {
+                auto *NewCallInst = CallInst::Create(InstFunction, Args, "", CI); 
+                errs() << "NEW INSTUCTION:" << *NewCallInst << "\n"; 
+                InstToInstMap[CI] = NewCallInst; 
+                ToBeRemoved.insert(CI); 
+                return true;
+              }
+            } 
+           
+      } 
+    }
+    
 }
     
 

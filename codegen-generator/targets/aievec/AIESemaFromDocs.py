@@ -5,6 +5,7 @@ import urllib
 import os
 import glob
 from AIEMeta import *
+import re
 # only 32 bit integer vector instructions for now
 
 root_url = "https://www.xilinx.com/htmldocs/xilinx2023_2/aiengine_ml_intrinsics/intrinsics/"
@@ -109,6 +110,7 @@ def ParseMulHTML() -> list[AIESema]:
             rettype = type_and_name_split[0]
             raw_name = type_and_name_split[1]
             conf = "conf" in raw_name
+            mm_pattern = r"mul_\d+x(\d+)_\1x\d+(_conf)?$"
             if "operator" in raw_name:
                 continue
             if "cacc" in rettype or "cint" in rettype or "float" in rettype:
@@ -125,6 +127,9 @@ def ParseMulHTML() -> list[AIESema]:
                 instclass = "NEGMAC"
             elif "submac" in raw_name:
                 instclass = "SUBMAC"
+            elif re.fullmatch(mm_pattern, raw_name):
+                print("matched mul pattern")
+                instclass = "MATMUL"
             else:
                 instclass = "NONE"
             param_types = element.find_all('td', attrs={'class':'paramtype'})

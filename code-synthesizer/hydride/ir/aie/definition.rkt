@@ -25,5 +25,8 @@
 ;; ================================================================================
 (struct add_v16acc64_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct sub_v16acc64_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
+(struct srs_to_v32int16_dsl (v0) #:transparent #:mutable)
+(struct ups_to_v32acc32_dsl (v0) #:transparent #:mutable)
+(struct mac_elem_32_dsl (v0 v1 v2) #:transparent #:mutable)
 ;; ================================================================================
 

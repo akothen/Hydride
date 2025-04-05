@@ -89,6 +89,15 @@
 		(sub_v16acc64 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
 		 prec_i_o)
 	]
+	[ (srs_to_v32int16_dsl v0)
+		(srs_to_v32int16 (aie:interpret v0 env))
+	]
+	[ (ups_to_v32acc32_dsl v0)
+		(ups_to_v32acc32 (aie:interpret v0 env))
+	]
+	[ (mac_elem_32_dsl v0 v1 v2)
+		(mac_elem_32 (aie:interpret v0 env) (aie:interpret v1 env) (aie:interpret v2 env))
+	]
 	[v (error "Unrecognized Term in Interpreter" v)]
  )
 )

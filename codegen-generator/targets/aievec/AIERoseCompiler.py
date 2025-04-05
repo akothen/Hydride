@@ -287,6 +287,9 @@ def SemaToDict(SemaList):
         SUB_entries = []
         SUB_classname_set = False
         SUB_classname = "False"
+        MM_entries = []
+        MM_classname_set = False
+        MM_classname = "False"
 
         for inst, sema in SemaList.items():
             if sema.instclass == "ADD":

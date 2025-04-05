@@ -174,6 +174,35 @@
 		[else ( sub_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o )]
 		)
 	]
+	[ (srs_to_v32int16_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( srs_to_v32int16_dsl v0-folded ) (vector)))
+]
+		[else ( srs_to_v32int16_dsl v0-folded )]
+		)
+	]
+	[ (ups_to_v32acc32_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( ups_to_v32acc32_dsl v0-folded ) (vector)))
+]
+		[else ( ups_to_v32acc32_dsl v0-folded )]
+		)
+	]
+	[ (mac_elem_32_dsl v0 v1 v2)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(define v2-folded (aie:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (aie:interpret ( mac_elem_32_dsl v0-folded v1-folded v2-folded ) (vector)))
+]
+		[else ( mac_elem_32_dsl v0-folded v1-folded v2-folded )]
+		)
+	]
 	[v (error "Unrecognized expression" v)]
  )
 )
