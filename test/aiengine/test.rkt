@@ -184,6 +184,34 @@
              rowOut)))
   dst)
 
+(define (mul_4x16_16x8 a b)
+  (define dst
+    (apply concat
+           (for/list ([i (reverse (range 0 4))])
+             (define a_row_start (* 16 i))
+             (define a_row_end (+ a_row_start 15))
+             (define a_row (extract a_row_end a_row_start a))
+             (define rowOut
+               (apply concat
+                      (for/list ([j (reverse (range 0 8))])
+                        (define b_col_start (* 16 j))
+                        (define b_col_end (+ b_col_start 15))
+                        (define b_col (extract b_col_end b_col_start b))
+                        (define elem (bv 0 32)) ; Initialize element to 0
+                        (for/list ([k (range 0 16)])
+                          (define a_elem_start k)
+                          (define a_elem_end k)
+                          (define b_elem_start (* 16 k))
+                          (define b_elem_end (+ b_elem_start 15))
+                          (define a_val
+                            (sign-extend (extract a_elem_end a_elem_start a_row) (bitvector 32)))
+                          (define b_val
+                            (sign-extend (extract b_elem_end b_elem_start b_col) (bitvector 32)))
+                          (define elem (bvadd elem (bvmul a_val b_val))))
+                        elem)))
+             rowOut)))
+  dst)
+
 (define xbuff_32_16
   (bv
    #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025

@@ -86,22 +86,23 @@
 	[ (scalar_splat_dsl v0 size_i size_o)
 		(scalar_splat_dsl (aie:bind-expr v0 env) (aie:bind-expr size_i env) (aie:bind-expr size_o env))
 	]
-	[ (add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
-		(add_v16acc64_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
-		 (aie:bind-expr prec_i_o env))
-	]
-	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
-		(sub_v16acc64_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
-		 (aie:bind-expr prec_i_o env))
+	[ (ups_to_v32acc32_dsl v0)
+		(ups_to_v32acc32_dsl (aie:bind-expr v0 env))
 	]
 	[ (srs_to_v32int16_dsl v0)
 		(srs_to_v32int16_dsl (aie:bind-expr v0 env))
 	]
-	[ (ups_to_v32acc32_dsl v0)
-		(ups_to_v32acc32_dsl (aie:bind-expr v0 env))
+	[ (add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+		(add_v64uint8_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
+		 (aie:bind-expr prec_i_o env))
 	]
-	[ (mac_elem_32_dsl v0 v1 v2)
-		(mac_elem_32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr v2 env))
+	[ (mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
+		(mul_elem_32_v32acc32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
+		 (aie:bind-expr prec_i env) (aie:bind-expr prec_o env))
+	]
+	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+		(sub_v64uint8_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
+		 (aie:bind-expr prec_i_o env))
 	]
 	[v v]
  )

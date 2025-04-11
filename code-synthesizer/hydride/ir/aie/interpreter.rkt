@@ -81,22 +81,23 @@
 	[ (scalar_splat_dsl v0 size_i size_o)
 		(scalar_splat (aie:interpret v0 env) size_i size_o)
 	]
-	[ (add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
-		(add_v16acc64 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
-		 prec_i_o)
-	]
-	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
-		(sub_v16acc64 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
-		 prec_i_o)
+	[ (ups_to_v32acc32_dsl v0)
+		(ups_to_v32acc32 (aie:interpret v0 env))
 	]
 	[ (srs_to_v32int16_dsl v0)
 		(srs_to_v32int16 (aie:interpret v0 env))
 	]
-	[ (ups_to_v32acc32_dsl v0)
-		(ups_to_v32acc32 (aie:interpret v0 env))
+	[ (add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+		(add_v64uint8 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
+		 prec_i_o)
 	]
-	[ (mac_elem_32_dsl v0 v1 v2)
-		(mac_elem_32 (aie:interpret v0 env) (aie:interpret v1 env) (aie:interpret v2 env))
+	[ (mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
+		(mul_elem_32_v32acc32 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
+		 prec_i prec_o)
+	]
+	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+		(sub_v64uint8 (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 
+		 prec_i_o)
 	]
 	[v (error "Unrecognized Term in Interpreter" v)]
  )

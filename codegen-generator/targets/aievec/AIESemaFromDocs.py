@@ -122,7 +122,9 @@ def ParseMulHTML() -> list[AIESema]:
                 continue
             if "cacc" in rettype or "cint" in rettype or "float" in rettype:
                 continue
-            if "mul_elem_" in raw_name:
+            if "negmul_elem_" in raw_name:
+                instclass = "NEGELTMUL"
+            elif "mul_elem_" in raw_name:
                 instclass = "ELTMUL"
             elif "mac_elem_" in raw_name:
                 instclass = "ELTMAC"

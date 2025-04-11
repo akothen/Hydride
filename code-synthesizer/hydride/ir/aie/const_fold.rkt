@@ -154,24 +154,13 @@
 		[else ( scalar_splat_dsl v0-folded size_i size_o )]
 		)
 	]
-	[ (add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
+	[ (ups_to_v32acc32_dsl v0)
 		(define v0-folded (aie:const-fold v0))
-		(define v1-folded (aie:const-fold v1))
 		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( add_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o ) (vector)))
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( ups_to_v32acc32_dsl v0-folded ) (vector)))
 ]
-		[else ( add_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o )]
-		)
-	]
-	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
-		(define v0-folded (aie:const-fold v0))
-		(define v1-folded (aie:const-fold v1))
-		(cond
-		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( sub_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o ) (vector)))
-]
-		[else ( sub_v16acc64_dsl v0-folded v1-folded size_i_o prec_i_o )]
+		[else ( ups_to_v32acc32_dsl v0-folded )]
 		)
 	]
 	[ (srs_to_v32int16_dsl v0)
@@ -183,24 +172,34 @@
 		[else ( srs_to_v32int16_dsl v0-folded )]
 		)
 	]
-	[ (ups_to_v32acc32_dsl v0)
-		(define v0-folded (aie:const-fold v0))
-		(cond
-		[(and (lit? v0-folded))
-(lit (aie:interpret ( ups_to_v32acc32_dsl v0-folded ) (vector)))
-]
-		[else ( ups_to_v32acc32_dsl v0-folded )]
-		)
-	]
-	[ (mac_elem_32_dsl v0 v1 v2)
+	[ (add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
-		(define v2-folded (aie:const-fold v2))
 		(cond
-		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
-(lit (aie:interpret ( mac_elem_32_dsl v0-folded v1-folded v2-folded ) (vector)))
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( add_v64uint8_dsl v0-folded v1-folded size_i_o prec_i_o ) (vector)))
 ]
-		[else ( mac_elem_32_dsl v0-folded v1-folded v2-folded )]
+		[else ( add_v64uint8_dsl v0-folded v1-folded size_i_o prec_i_o )]
+		)
+	]
+	[ (mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( mul_elem_32_v32acc32_dsl v0-folded v1-folded size_i_o prec_i prec_o ) (vector)))
+]
+		[else ( mul_elem_32_v32acc32_dsl v0-folded v1-folded size_i_o prec_i prec_o )]
+		)
+	]
+	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( sub_v64uint8_dsl v0-folded v1-folded size_i_o prec_i_o ) (vector)))
+]
+		[else ( sub_v64uint8_dsl v0-folded v1-folded size_i_o prec_i_o )]
 		)
 	]
 	[v (error "Unrecognized expression" v)]

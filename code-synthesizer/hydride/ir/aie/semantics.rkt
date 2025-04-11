@@ -26,34 +26,13 @@
 ;;                                DSL Semantics
 ;; ================================================================================
 
-(define (add_v16acc64 arg0 arg1 %lanesize %datasize)
+(define (ups_to_v32acc32 vec)
 (define dst
 (apply concat
-(for/list ([%i (range 0 %lanesize 1)])
-(define %low1 (* %datasize %i))
-(define %high1 (+ %low1 (- %datasize 1)))
-(define %ext_xbuff (extract %high1 %low1 arg0))
-(define %low2 (* %datasize %i))
-(define %high2 (+ %low2 (- %datasize 1)))
-(define %ext_ybuff (extract %high2 %low2 arg1))
-(define %o (bvadd %ext_xbuff %ext_ybuff))
-%o
-)
-)
-)
-dst
-)
-(define (sub_v16acc64 arg0 arg1 %lanesize %datasize)
-(define dst
-(apply concat
-(for/list ([%i (range 0 %lanesize 1)])
-(define %low1 (* %datasize %i))
-(define %high1 (+ %low1 (- %datasize 1)))
-(define %ext_xbuff (extract %high1 %low1 arg0))
-(define %low2 (* %datasize %i))
-(define %high2 (+ %low2 (- %datasize 1)))
-(define %ext_ybuff (extract %high2 %low2 arg1))
-(define %o (bvsub %ext_xbuff %ext_ybuff))
+(for/list ([%i (reverse (range 0 32 1))])
+(define %low1 (* 16 %i))
+(define %high1 (+ %low1 (- 16 1)))
+(define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))
 %o
 )
 )
@@ -73,33 +52,51 @@ dst
 )
 dst 
 )
-(define (ups_to_v32acc32 vec)
+(define (add_v64uint8 arg0 arg1 %lanesize %datasize)
 (define dst
 (apply concat
-(for/list ([%i (reverse (range 0 32 1))])
-(define %low1 (* 16 %i))
-(define %high1 (+ %low1 (- 16 1)))
-(define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))
+(for/list ([%i (range 0 %lanesize 1)])
+(define %low1 (* %datasize %i))
+(define %high1 (+ %low1 (- %datasize 1)))
+(define %ext_xbuff (extract %high1 %low1 arg0))
+(define %low2 (* %datasize %i))
+(define %high2 (+ %low2 (- %datasize 1)))
+(define %ext_ybuff (extract %high2 %low2 arg1))
+(define %o (bvadd %ext_xbuff %ext_ybuff))
 %o
 )
 )
 )
 dst
 )
-(define (mac_elem_32 a b c)
+(define (mul_elem_32_v32acc32 arg0 arg1 %lanesize %indatasize %outdatasize)
 (define dst
 (apply concat
-(for/list ([%i (reverse (range 0 32 1))])
-(define %low1 (* 16 %i))
-(define %high1 (+ %low1 (- 16 1)))
-(define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))
-(define %low2 (* 16 %i))
-(define %high2 (+ %low2 (- 16 1)))
-(define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))
-(define %low3 (* 32 %i))
-(define %high3 (+ %low3 (- 32 1)))
-(define %ext_c (extract %high3 %low3 c))
-(define %o (bvadd %ext_c (bvmul %ext_a %ext_b)))
+(for/list ([%i (reverse (range 0 %lanesize 1))])
+(define %low1 (* %indatasize %i))
+(define %high1 (+ %low1 (- %indatasize 1)))
+(define %ext_a (sign-extend (extract %high1 %low1 arg0) (bitvector %outdatasize)))
+(define %low2 (* %indatasize %i))
+(define %high2 (+ %low2 (- %indatasize 1)))
+(define %ext_b (sign-extend (extract %high2 %low2 arg1) (bitvector %outdatasize)))
+(define %o (bvmul %ext_a %ext_b))
+%o
+)
+)
+)
+dst
+)
+(define (sub_v64uint8 arg0 arg1 %lanesize %datasize)
+(define dst
+(apply concat
+(for/list ([%i (range 0 %lanesize 1)])
+(define %low1 (* %datasize %i))
+(define %high1 (+ %low1 (- %datasize 1)))
+(define %ext_xbuff (extract %high1 %low1 arg0))
+(define %low2 (* %datasize %i))
+(define %high2 (+ %low2 (- %datasize 1)))
+(define %ext_ybuff (extract %high2 %low2 arg1))
+(define %o (bvsub %ext_xbuff %ext_ybuff))
 %o
 )
 )

@@ -67,7 +67,23 @@
 		[(scalar_splat_dsl v0 size_i size_o)
 		 (append (list  "llvm-splat-8-32") (aie:get-target-name v0))
 	]
-	[(add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
+	[(ups_to_v32acc32_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "ups_to_v32acc32") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for ups_to_v32acc32")]
+)
+
+	]
+	[(srs_to_v32int16_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "srs_to_v32int16") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for srs_to_v32int16")]
+)
+
+	]
+	[(add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)) 
    (append (list  "add_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
@@ -85,11 +101,29 @@
    (append (list  "add_v64int8") (aie:get-target-name v0) (aie:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 
    (append (list  "add_v64uint8") (aie:get-target-name v0) (aie:get-target-name v1))]
-		[else (error "Unable to get name  for add_v16acc64")]
+		[else (error "Unable to get name  for add_v64uint8")]
 )
 
 	]
-	[(sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
+	[(mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
+		(cond 
+		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)) 
+   (append (list  "mul_elem_16_2_conf_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)) 
+   (append (list  "mul_elem_16_2_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_elem_32_2_conf_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_elem_32_2_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i_o 32) (equal? prec_i 16) (equal? prec_o 32)) 
+   (append (list  "mul_elem_32_conf_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i_o 32) (equal? prec_i 16) (equal? prec_o 32)) 
+   (append (list  "mul_elem_32_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for mul_elem_32_v32acc32")]
+)
+
+	]
+	[(sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)) 
    (append (list  "sub_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
@@ -107,31 +141,7 @@
    (append (list  "sub_v64int8") (aie:get-target-name v0) (aie:get-target-name v1))]
 		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 
    (append (list  "sub_v64uint8") (aie:get-target-name v0) (aie:get-target-name v1))]
-		[else (error "Unable to get name  for sub_v16acc64")]
-)
-
-	]
-	[(srs_to_v32int16_dsl v0)
-		(cond 
-		[(and ) 
-   (append (list  "srs_to_v32int16") (aie:get-target-name v0))]
-		[else (error "Unable to get name  for srs_to_v32int16")]
-)
-
-	]
-	[(ups_to_v32acc32_dsl v0)
-		(cond 
-		[(and ) 
-   (append (list  "ups_to_v32acc32") (aie:get-target-name v0))]
-		[else (error "Unable to get name  for ups_to_v32acc32")]
-)
-
-	]
-	[(mac_elem_32_dsl v0 v1 v2)
-		(cond 
-		[(and ) 
-   (append (list  "mac_elem_32") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
-		[else (error "Unable to get name  for mac_elem_32")]
+		[else (error "Unable to get name  for sub_v64uint8")]
 )
 
 	]

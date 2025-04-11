@@ -94,7 +94,7 @@ entry:
   ret <32 x i16> %5
 }
 
-define dso_local noundef <16 x i64> @mul_elem_32_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
+define dso_local noundef <16 x i64> @mul_elem_32_v32acc32_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
 entry:
   %a.addr = alloca <32 x i16>, align 32
   %b.addr = alloca <32 x i16>, align 32

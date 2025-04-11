@@ -143,8 +143,14 @@
     "-Dbenchmark_add",
   ],
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "mikoz.black-py"
   },
   "python.formatting.provider": "autopep8",
-  "cmake.sourceDirectory": "/home/llvm-lab/Hydride/frontends/halide/dependencies"
+  "cmake.sourceDirectory": "/home/llvm-lab/Hydride/frontends/halide/dependencies",
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
 }
