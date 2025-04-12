@@ -27,6 +27,7 @@
 (struct srs_to_v32int16_dsl (v0) #:transparent #:mutable)
 (struct add_v64uint8_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct mul_elem_32_v32acc32_dsl (v0 v1 size_i_o prec_i prec_o) #:transparent #:mutable)
+(struct mul_elem_32_conf_v32acc32_dsl (v0 v1 v2 prec_i prec_o num_5) #:transparent #:mutable)
 (struct sub_v64uint8_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 ;; ================================================================================
 

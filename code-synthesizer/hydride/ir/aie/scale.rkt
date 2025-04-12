@@ -175,27 +175,7 @@ prec_i_o
 	[ (mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
 		(cond 
 		[(and  (equal? size_i_o 0) (equal? prec_i 16) (equal? prec_o 64))
-(displayln "Scaling case for mul_elem_16_2_conf_v16acc64")
-(mul_elem_32_v32acc32_dsl
-(aie:scale-expr v0 scale-factor)
-(aie:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-prec_i
-prec_o
-)
-]
-		[(and  (equal? size_i_o 0) (equal? prec_i 16) (equal? prec_o 64))
 (displayln "Scaling case for mul_elem_16_2_v16acc64")
-(mul_elem_32_v32acc32_dsl
-(aie:scale-expr v0 scale-factor)
-(aie:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
-prec_i
-prec_o
-)
-]
-		[(and  (equal? size_i_o 1) (equal? prec_i 8) (equal? prec_o 32))
-(displayln "Scaling case for mul_elem_32_2_conf_v32acc32")
 (mul_elem_32_v32acc32_dsl
 (aie:scale-expr v0 scale-factor)
 (aie:scale-expr v1 scale-factor)
@@ -215,7 +195,7 @@ prec_o
 )
 ]
 		[(and  (equal? size_i_o 1) (equal? prec_i 16) (equal? prec_o 32))
-(displayln "Scaling case for mul_elem_32_conf_v32acc32")
+(displayln "Scaling case for mul_elem_32_v32acc32")
 (mul_elem_32_v32acc32_dsl
 (aie:scale-expr v0 scale-factor)
 (aie:scale-expr v1 scale-factor)
@@ -224,14 +204,42 @@ prec_i
 prec_o
 )
 ]
-		[(and  (equal? size_i_o 1) (equal? prec_i 16) (equal? prec_o 32))
-(displayln "Scaling case for mul_elem_32_v32acc32")
-(mul_elem_32_v32acc32_dsl
+		[else (error "Unable to identify how to scale up " prog)]
+		)
+	]
+	[ (mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+		(cond 
+		[(and  (equal? prec_i 16) (equal? prec_o 16) (equal? num_5 64))
+(displayln "Scaling case for mul_elem_16_2_conf_v16acc64")
+(mul_elem_32_conf_v32acc32_dsl
 (aie:scale-expr v0 scale-factor)
 (aie:scale-expr v1 scale-factor)
-(* scale-factor size_i_o)
+(aie:scale-expr v2 scale-factor)
 prec_i
 prec_o
+num_5
+)
+]
+		[(and  (equal? prec_i 32) (equal? prec_o 8) (equal? num_5 32))
+(displayln "Scaling case for mul_elem_32_2_conf_v32acc32")
+(mul_elem_32_conf_v32acc32_dsl
+(aie:scale-expr v0 scale-factor)
+(aie:scale-expr v1 scale-factor)
+(aie:scale-expr v2 scale-factor)
+prec_i
+prec_o
+num_5
+)
+]
+		[(and  (equal? prec_i 32) (equal? prec_o 16) (equal? num_5 32))
+(displayln "Scaling case for mul_elem_32_conf_v32acc32")
+(mul_elem_32_conf_v32acc32_dsl
+(aie:scale-expr v0 scale-factor)
+(aie:scale-expr v1 scale-factor)
+(aie:scale-expr v2 scale-factor)
+prec_i
+prec_o
+num_5
 )
 ]
 		[else (error "Unable to identify how to scale up " prog)]

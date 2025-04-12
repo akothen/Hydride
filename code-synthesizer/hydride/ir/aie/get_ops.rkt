@@ -117,25 +117,31 @@
 	]
 	[(mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
 		(cond 
-		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_elem_16_2_conf_v16acc64
- 
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_elem_16_2_v16acc64
  
   (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_elem_32_2_conf_v32acc32
- 
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_elem_32_2_v32acc32
- 
-  (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
-		[(and  (equal? size_i_o 32) (equal? prec_i 16) (equal? prec_o 32)); mul_elem_32_conf_v32acc32
  
   (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[(and  (equal? size_i_o 32) (equal? prec_i 16) (equal? prec_o 32)); mul_elem_32_v32acc32
  
   (remove-duplicates (append (list  'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
 		[else (error "Unable to get ops  for mul_elem_32_v32acc32")]
+)
+
+	]
+	[(mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+		(cond 
+		[(and  (equal? prec_i 16) (equal? prec_o 16) (equal? num_5 64)); mul_elem_16_2_conf_v16acc64
+ 
+  (remove-duplicates (append (list  'bveq 'bvmul 'bvneg 'if 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v2)))]
+		[(and  (equal? prec_i 32) (equal? prec_o 8) (equal? num_5 32)); mul_elem_32_2_conf_v32acc32
+ 
+  (remove-duplicates (append (list  'bveq 'bvmul 'bvneg 'if 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v2)))]
+		[(and  (equal? prec_i 32) (equal? prec_o 16) (equal? num_5 32)); mul_elem_32_conf_v32acc32
+ 
+  (remove-duplicates (append (list  'bveq 'bvmul 'bvneg 'if 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v2)))]
+		[else (error "Unable to get ops  for mul_elem_32_conf_v32acc32")]
 )
 
 	]

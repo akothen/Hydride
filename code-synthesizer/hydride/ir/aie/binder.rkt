@@ -100,6 +100,10 @@
 		(mul_elem_32_v32acc32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
 		 (aie:bind-expr prec_i env) (aie:bind-expr prec_o env))
 	]
+	[ (mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+		(mul_elem_32_conf_v32acc32_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr v2 env) 
+		 (aie:bind-expr prec_i env) (aie:bind-expr prec_o env) (aie:bind-expr num_5 env))
+	]
 	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(sub_v64uint8_dsl (aie:bind-expr v0 env) (aie:bind-expr v1 env) (aie:bind-expr size_i_o env) 
 		 (aie:bind-expr prec_i_o env))

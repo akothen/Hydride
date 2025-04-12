@@ -109,7 +109,7 @@
 ;; (pretty-print (v16acc64_mul xbuff_32_16 ybuff_32_16))
 
 ;; unsigned for now
-(define (mul_elem_32 a b)
+(define (mul_elem_32 a b int_sub)
   (define dst
     (apply concat
            (for/list ([%i (reverse (range 0 32 1))])
@@ -120,7 +120,13 @@
              (define %high2 (+ %low2 (- 16 1)))
              (define %ext_b (bvsizeext (extract %high2 %low2 b) 32 1))
              (define %o (bvmul %ext_a %ext_b))
-             %o)))
+             ;; (pretty-print (extract (+ %i 0) %i int_sub))
+             ;; (pretty-print (bveq (extract (+ %i 0) %i int_sub) (bv #b1 1)))
+             (pretty-print (bvneg %o))
+             (pretty-print %o)
+             (println "")
+             (if (bveq (extract (+ %i 0) %i int_sub) (bv #b1 1)) (bvneg %o) %o)
+             )))
   dst)
 
 (define (srs_to_v32int16 acc)
@@ -184,34 +190,6 @@
              rowOut)))
   dst)
 
-(define (mul_4x16_16x8 a b)
-  (define dst
-    (apply concat
-           (for/list ([i (reverse (range 0 4))])
-             (define a_row_start (* 16 i))
-             (define a_row_end (+ a_row_start 15))
-             (define a_row (extract a_row_end a_row_start a))
-             (define rowOut
-               (apply concat
-                      (for/list ([j (reverse (range 0 8))])
-                        (define b_col_start (* 16 j))
-                        (define b_col_end (+ b_col_start 15))
-                        (define b_col (extract b_col_end b_col_start b))
-                        (define elem (bv 0 32)) ; Initialize element to 0
-                        (for/list ([k (range 0 16)])
-                          (define a_elem_start k)
-                          (define a_elem_end k)
-                          (define b_elem_start (* 16 k))
-                          (define b_elem_end (+ b_elem_start 15))
-                          (define a_val
-                            (sign-extend (extract a_elem_end a_elem_start a_row) (bitvector 32)))
-                          (define b_val
-                            (sign-extend (extract b_elem_end b_elem_start b_col) (bitvector 32)))
-                          (define elem (bvadd elem (bvmul a_val b_val))))
-                        elem)))
-             rowOut)))
-  dst)
-
 (define xbuff_32_16
   (bv
    #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025
@@ -230,9 +208,11 @@
    #xd04bf56c4e9db0f8dae2720cf39b42d8f224a1eceb5ecd8c14608074331bc41cd5d9ddb748d5ce34d91e0a63f2d50494f355c77bf0cd296118fdef9f3141a9450f9bbdc4e4f74eca0e82c44004eac3e204b2a020059291a2f69dd8deedaf28e216d63119f1e33004e74dd83df677e5c403b1c2a51f00505726fa44a9041e82f3
    1024))
 
-(pretty-print (mul_4x2_2x8 xbuff_32_16 ybuff_32_16))
+;; (pretty-print (mul_4x2_2x8 xbuff_32_16 ybuff_32_16))
 
 ;;; (define bv1024? (bitvector 1024))
-;;; (mul_elem_32 xbuff_32_16 ybuff_32_16)
+(bveq (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv #b01100100000100110111111010011110 32))
+(mul_elem_32 xbuff_32_16 ybuff_32_16 (bv 0 32)) )
+
 ;;; (pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
 ;;; (srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))

@@ -1,9 +1,3 @@
-define dso_local noundef <16 x i32> @v16int32_add16_wrapper(<16 x i32> noundef %a, <16 x i32> noundef %b) local_unnamed_addr #0 {
-entry:
-  %add.i = add <16 x i32> %b, %a
-  ret <16 x i32> %add.i
-}
-
 ; Function Attrs: mustprogress noinline optnone
 define dso_local noundef <32 x i16> @srs_to_v32int16_wrapper(<16 x i64> noundef %acc) #0 {
 entry:
@@ -13,45 +7,6 @@ entry:
   %call = call noundef <32 x i16> @_Z15srs_to_v32int16Dv32_u7__acc32i(<16 x i64> noundef %0, i32 noundef 0)
   ret <32 x i16> %call
 }
-
-; Function Attrs: mustprogress noinline optnone
-define dso_local noundef <32 x i16> @add_v32int16_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
-entry:
-  %a.addr.i = alloca <32 x i16>, align 32
-  %b.addr.i = alloca <32 x i16>, align 32
-  %a.addr = alloca <32 x i16>, align 32
-  %b.addr = alloca <32 x i16>, align 32
-  store <32 x i16> %a, ptr %a.addr, align 32
-  store <32 x i16> %b, ptr %b.addr, align 32
-  %0 = load <32 x i16>, ptr %a.addr, align 32
-  %1 = load <32 x i16>, ptr %b.addr, align 32
-  store <32 x i16> %0, ptr %a.addr.i, align 32
-  store <32 x i16> %1, ptr %b.addr.i, align 32
-  %2 = load <32 x i16>, ptr %a.addr.i, align 32
-  %3 = load <32 x i16>, ptr %b.addr.i, align 32
-  %add.i = add <32 x i16> %2, %3
-  ret <32 x i16> %add.i
-}
-
-; Function Attrs: mustprogress noinline optnone
-define dso_local noundef <16 x i32> @add_v16int32_wrapper(<16 x i32> noundef %a, <16 x i32> noundef %b) #0 {
-entry:
-  %a.addr.i = alloca <16 x i32>, align 32
-  %b.addr.i = alloca <16 x i32>, align 32
-  %a.addr = alloca <16 x i32>, align 32
-  %b.addr = alloca <16 x i32>, align 32
-  store <16 x i32> %a, ptr %a.addr, align 32
-  store <16 x i32> %b, ptr %b.addr, align 32
-  %0 = load <16 x i32>, ptr %a.addr, align 32
-  %1 = load <16 x i32>, ptr %b.addr, align 32
-  store <16 x i32> %0, ptr %a.addr.i, align 32
-  store <16 x i32> %1, ptr %b.addr.i, align 32
-  %2 = load <16 x i32>, ptr %a.addr.i, align 32
-  %3 = load <16 x i32>, ptr %b.addr.i, align 32
-  %add.i = add <16 x i32> %2, %3
-  ret <16 x i32> %add.i
-}
-
 
 ; Function Attrs: mustprogress noinline optnone
 define dso_local noundef <32 x i16> @sub_v32int16_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b) #0 {
@@ -173,37 +128,6 @@ entry:
   %shl18 = shl i32 %10, 0
   %or19 = or i32 %or17, %shl18
   ret i32 %or19
-}
-
-; Function Attrs: mustprogress noinline optnone
-define dso_local noundef <16 x i64> @mac_elem_32_wrapper(<32 x i16> noundef %a, <32 x i16> noundef %b, <16 x i64> noundef %acc1) #0 {
-entry:
-  %a.addr.i = alloca <32 x i16>, align 32
-  %b.addr.i = alloca <32 x i16>, align 32
-  %acc1.addr.i = alloca <16 x i64>, align 32
-  %conf.i = alloca i32, align 4
-  %a.addr = alloca <32 x i16>, align 32
-  %b.addr = alloca <32 x i16>, align 32
-  %acc1.addr = alloca <16 x i64>, align 32
-  store <32 x i16> %a, ptr %a.addr, align 32
-  store <32 x i16> %b, ptr %b.addr, align 32
-  store <16 x i64> %acc1, ptr %acc1.addr, align 32
-  %0 = load <32 x i16>, ptr %a.addr, align 32
-  %1 = load <32 x i16>, ptr %b.addr, align 32
-  %2 = load <16 x i64>, ptr %acc1.addr, align 32
-  store <32 x i16> %0, ptr %a.addr.i, align 32
-  store <32 x i16> %1, ptr %b.addr.i, align 32
-  store <16 x i64> %2, ptr %acc1.addr.i, align 32
-  %call.i = call noundef i32 @_ZL21aiev2_compute_controliiiiiiiiiii(i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 3, i32 noundef 1, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0, i32 noundef 0)
-  store i32 %call.i, ptr %conf.i, align 4
-  %3 = load <32 x i16>, ptr %a.addr.i, align 32
-  %4 = bitcast <32 x i16> %3 to <64 x i8>
-  %5 = load <32 x i16>, ptr %b.addr.i, align 32
-  %6 = bitcast <32 x i16> %5 to <16 x i32>
-  %7 = load <16 x i64>, ptr %acc1.addr.i, align 32
-  %8 = load i32, ptr %conf.i, align 4
-  %9 = call noundef <16 x i64> @llvm.aie2.I512.I512.ACC1024.acc32.mac.conf(<64 x i8> %4, <16 x i32> %6, <16 x i64> %7, i32 %8)
-  ret <16 x i64> %9
 }
 
 ; Function Attrs: mustprogress noinline optnone

@@ -42,6 +42,9 @@ def SemaToDict(SemaList):
         ELTMUL_entries = []
         ELTMUL_classname_set = False
         ELTMUL_classname = "False"
+        ELTMUL_CONF_entries = []
+        ELTMUL_CONF_classname_set = False
+        ELTMUL_CONF_classname = "False"
         MM_entries = []
         MM_classname_set = False
         MM_classname = "False"
@@ -60,11 +63,19 @@ def SemaToDict(SemaList):
                     SUB_classname = inst
                 SUB_entries.append(SUBInstEntry(inst, sema))
             if sema.instclass == "ELTMUL":
-                if ELTMUL_classname_set:
-                    continue
+                if sema.conf:
+                    if ELTMUL_CONF_classname_set:
+                        continue
+                    else:
+                        ELTMUL_CONF_classname = inst
+                    ELTMUL_CONF_entries.append(ELTMULInstEntry(inst, sema))
+
                 else:
-                    ELTMUL_classname = inst
-                ELTMUL_entries.append(ELTMULInstEntry(inst, sema))
+                    if ELTMUL_classname_set:
+                        continue
+                    else:
+                        ELTMUL_classname = inst
+                    ELTMUL_entries.append(ELTMULInstEntry(inst, sema))
         if ADD_entries:
             ADD_sema_str = f"""
         '"(define ({ADD_classname} arg0 arg1 %lanesize %datasize)"',
@@ -103,7 +114,7 @@ def SemaToDict(SemaList):
         '")"',
         '"dst"',
         '")"',
-    """
+        """
         ELTMUL_sema_str = f"""
         '"(define ({ELTMUL_classname} arg0 arg1 %lanesize %indatasize %outdatasize)"',
         '"(define dst"',
@@ -122,7 +133,28 @@ def SemaToDict(SemaList):
         '")"',
         '"dst"',
         '")"',
-    """
+        """
+
+        ELTMUL_CONF_sema_str = f"""
+            '"(define ({ELTMUL_CONF_classname} arg0 arg1 int_sub %lanesize %indatasize %outdatasize)"',
+            '"(define dst"',
+            '"(apply concat"',
+            '"(for/list ([%i (reverse (range 0 %lanesize 1))])"',
+            '"(define %low1 (* %indatasize %i))"',
+            '"(define %high1 (+ %low1 (- %indatasize 1)))"',
+            '"(define %ext_a (sign-extend (extract %high1 %low1 arg0) (bitvector %outdatasize)))"',
+            '"(define %low2 (* %indatasize %i))"',
+            '"(define %high2 (+ %low2 (- %indatasize 1)))"',
+            '"(define %ext_b (sign-extend (extract %high2 %low2 arg1) (bitvector %outdatasize)))"',
+            '"(define %o (bvmul %ext_a %ext_b))"',
+            '"(if (bveq (extract (+ %i 0) %i int_sub) (bv #b1 1)) (bvneg %o) %o)"',
+            '")"',
+            '")"',
+            '")"',
+            '"dst"',
+            '")"',
+            """
+
         f.write("""aie_sema = {\n""")
         f.write(
             """
@@ -229,6 +261,16 @@ def SemaToDict(SemaList):
         f.write("""\n\n},\n""")
 
         f.write(
+            f"""\t"{ELTMUL_CONF_classname}"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in ELTMUL_CONF_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{ELTMUL_CONF_sema_str}]""")
+        f.write("""\n\n},\n""")
+
+        f.write(
             f"""\t"{SUB_classname}"  : {{ 
     "target_instructions" : {{"""
         )
@@ -254,26 +296,48 @@ def ELTMULInstEntry(InstName, Sema: AIESema):
     in_vectsize = in_lanesize * in_datasize
     is_neg = int("neg" in InstName)
 
-    ret_str = f"""
-  \t"{InstName}" : {{
-   \t "args": ["SYMBOLIC_BV_{in_vectsize}", "SYMBOLIC_BV_{in_vectsize}", "{lanesize}", "{in_datasize}", "{datasize}"],
-                "in_vectsize": {in_vectsize},
-                "out_vectsize": {out_vectsize},
-                "lanesize": {in_lanesize},
-                "in_precision": {in_datasize},
-                "out_precision": {datasize},
-                "in_vectsize_index": 2,
-                "out_vectsize_index": 2,
-                "in_lanesize_index": 2,
-                "out_lanesize_index": 2,
-                "in_precision_index": 3,
-                "out_precision_index": 4,
-                "arg_permute_map": [0, 1, -1, -1, -1],
-                "Signedness": {int(all(param.is_signed for param in params))},
-                "Cost": "None",
-                "SIMD": "True",
-                "Extensions": "[]",
-  }},"""
+    if Sema.conf:
+        ret_str = f"""
+    \t"{InstName}" : {{
+    \t "args": ["SYMBOLIC_BV_{in_vectsize}", "SYMBOLIC_BV_{in_vectsize}", "SYMBOLIC_BV_32", "{lanesize}", "{in_datasize}", "{datasize}"],
+                    "in_vectsize": {in_vectsize},
+                    "out_vectsize": {out_vectsize},
+                    "lanesize": {in_lanesize},
+                    "in_precision": {in_datasize},
+                    "out_precision": {datasize},
+                    "in_vectsize_index": 2,
+                    "out_vectsize_index": 2,
+                    "in_lanesize_index": 2,
+                    "out_lanesize_index": 2,
+                    "in_precision_index": 3,
+                    "out_precision_index": 4,
+                    "arg_permute_map": [0, 1, 2, -1, -1, -1],
+                    "Signedness": {int(all(param.is_signed for param in params))},
+                    "Cost": "None",
+                    "SIMD": "True",
+                    "Extensions": "[]",
+    }},"""
+    else:
+        ret_str = f"""
+    \t"{InstName}" : {{
+    \t "args": ["SYMBOLIC_BV_{in_vectsize}", "SYMBOLIC_BV_{in_vectsize}", "{lanesize}", "{in_datasize}", "{datasize}"],
+                    "in_vectsize": {in_vectsize},
+                    "out_vectsize": {out_vectsize},
+                    "lanesize": {in_lanesize},
+                    "in_precision": {in_datasize},
+                    "out_precision": {datasize},
+                    "in_vectsize_index": 2,
+                    "out_vectsize_index": 2,
+                    "in_lanesize_index": 2,
+                    "out_lanesize_index": 2,
+                    "in_precision_index": 3,
+                    "out_precision_index": 4,
+                    "arg_permute_map": [0, 1, -1, -1, -1],
+                    "Signedness": {int(all(param.is_signed for param in params))},
+                    "Cost": "None",
+                    "SIMD": "True",
+                    "Extensions": "[]",
+    }},"""
     return ret_str
 
 

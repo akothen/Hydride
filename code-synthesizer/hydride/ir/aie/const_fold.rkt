@@ -192,6 +192,17 @@
 		[else ( mul_elem_32_v32acc32_dsl v0-folded v1-folded size_i_o prec_i prec_o )]
 		)
 	]
+	[ (mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(define v2-folded (aie:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (aie:interpret ( mul_elem_32_conf_v32acc32_dsl v0-folded v1-folded v2-folded prec_i prec_o num_5 ) (vector)))
+]
+		[else ( mul_elem_32_conf_v32acc32_dsl v0-folded v1-folded v2-folded prec_i prec_o num_5 )]
+		)
+	]
 	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))

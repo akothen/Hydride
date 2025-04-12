@@ -86,6 +86,23 @@ dst
 )
 dst
 )
+(define (mul_elem_32_conf_v32acc32 arg0 arg1 int_sub %lanesize %indatasize %outdatasize)
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 %lanesize 1))])
+(define %low1 (* %indatasize %i))
+(define %high1 (+ %low1 (- %indatasize 1)))
+(define %ext_a (sign-extend (extract %high1 %low1 arg0) (bitvector %outdatasize)))
+(define %low2 (* %indatasize %i))
+(define %high2 (+ %low2 (- %indatasize 1)))
+(define %ext_b (sign-extend (extract %high2 %low2 arg1) (bitvector %outdatasize)))
+(define %o (bvmul %ext_a %ext_b))
+(if (bveq (extract (+ %i 0) %i int_sub) (bv #b1 1)) (bvneg %o) %o)
+)
+)
+)
+dst
+)
 (define (sub_v64uint8 arg0 arg1 %lanesize %datasize)
 (define dst
 (apply concat

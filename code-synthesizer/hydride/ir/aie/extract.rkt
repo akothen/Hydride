@@ -176,31 +176,13 @@
 	]
 	[(mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
 		(cond 
-		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_elem_16_2_conf_v16acc64
- 
- (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
- 
- (values (mul_elem_32_v32acc32_dsl expr-0 expr-1 size_i_o prec_i prec_o ) num-consumed-1)]
 		[(and  (equal? size_i_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_elem_16_2_v16acc64
  
  (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
  
  (values (mul_elem_32_v32acc32_dsl expr-0 expr-1 size_i_o prec_i prec_o ) num-consumed-1)]
-		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_elem_32_2_conf_v32acc32
- 
- (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
- 
- (values (mul_elem_32_v32acc32_dsl expr-0 expr-1 size_i_o prec_i prec_o ) num-consumed-1)]
 		[(and  (equal? size_i_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_elem_32_2_v32acc32
- 
- (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
-(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
- 
- (values (mul_elem_32_v32acc32_dsl expr-0 expr-1 size_i_o prec_i prec_o ) num-consumed-1)]
-		[(and  (equal? size_i_o 32) (equal? prec_i 16) (equal? prec_o 32)); mul_elem_32_conf_v32acc32
  
  (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
@@ -213,6 +195,33 @@
  
  (values (mul_elem_32_v32acc32_dsl expr-0 expr-1 size_i_o prec_i prec_o ) num-consumed-1)]
 		[else (error "Unable to extract  for mul_elem_32_v32acc32")]
+)
+
+	]
+	[(mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+		(cond 
+		[(and  (equal? prec_i 16) (equal? prec_o 16) (equal? num_5 64)); mul_elem_16_2_conf_v16acc64
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (mul_elem_32_conf_v32acc32_dsl expr-0 expr-1 expr-2 prec_i prec_o num_5 ) num-consumed-2)]
+		[(and  (equal? prec_i 32) (equal? prec_o 8) (equal? num_5 32)); mul_elem_32_2_conf_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (mul_elem_32_conf_v32acc32_dsl expr-0 expr-1 expr-2 prec_i prec_o num_5 ) num-consumed-2)]
+		[(and  (equal? prec_i 32) (equal? prec_o 16) (equal? num_5 32)); mul_elem_32_conf_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (mul_elem_32_conf_v32acc32_dsl expr-0 expr-1 expr-2 prec_i prec_o num_5 ) num-consumed-2)]
+		[else (error "Unable to extract  for mul_elem_32_conf_v32acc32")]
 )
 
 	]
