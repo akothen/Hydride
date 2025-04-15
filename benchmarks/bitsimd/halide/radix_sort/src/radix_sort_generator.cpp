@@ -14,7 +14,6 @@ class RadixSort : public Generator<RadixSort> {
             const int num_bits = 32;
             // Step 2: Define Halide variables.
 
-            //Func sorted_output("sorted_output");
             std::vector<Func> states(num_bits);
 
             // Step 3: Perform Radix Sort by iterating over each bit.
@@ -40,6 +39,12 @@ class RadixSort : public Generator<RadixSort> {
                 count_zeros() = 0;
                 count_zeros() += select(bit_value(r) == 0, 1, 0);
 
+                // Factorize reduction for counting zeros to offload to PIM
+                Var i("i_"+std::to_string(b));
+                Func intermediate_count = count_zeros.update().rfactor({{r,i }});
+                intermediate_count.compute_root().update().vectorize(i, 32);
+                
+
 
 
                 RDom k(0, n);
@@ -57,18 +62,10 @@ class RadixSort : public Generator<RadixSort> {
 
 
                 // Step 5: Reorder elements based on the current bit.
-                //
-                /*
-                   states[state_index](x) = select(bit_value(x) == 0, 
-                   input_func(clamp(prefix_sum_zeros(x), 0, n-1)), 
-                   input_func(clamp(count_zeros() + prefix_sum_ones(x) , 0, n-1))
-                   );
-                   */
 
                 Func output_indices("output_indices_"+std::to_string(b));
                 output_indices(x) =  select(bit_value(x) == 0, clamp(prefix_sum_zeros(x), 0, n-1), clamp(count_zeros() + prefix_sum_ones(x)  , 0, n-1));
 
-                //states[state_index](x) = input_func(output_indices(x));
                 RDom scatter(0, n);
                 states[state_index](x) = undef<int>();  // or 0, depending on your needs
                 states[state_index](output_indices(scatter)) = input_func(scatter);
@@ -83,8 +80,6 @@ class RadixSort : public Generator<RadixSort> {
             Output(x) = states[num_bits-1](x);
             Output.vectorize(x,32);
 
-            // Step 7: Apply vectorization for performance optimization.
-            // sorted_output.vectorize(x, 8);
 
 
 
