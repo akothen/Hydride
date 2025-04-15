@@ -11,7 +11,7 @@ class RadixSort : public Generator<RadixSort> {
         void generate() {
 
             auto n = Input.dim(0).extent();
-            const int num_bits = 1;
+            const int num_bits = 32;
             // Step 2: Define Halide variables.
 
             //Func sorted_output("sorted_output");
@@ -20,14 +20,14 @@ class RadixSort : public Generator<RadixSort> {
             // Step 3: Perform Radix Sort by iterating over each bit.
             for (int b = 0; b < num_bits; b++) {
 
-
+                int state_index = b;
                 // Calculate the current bit value (either 0 or 1) for each element.
                 Func input_func("input_func_bit_"+std::to_string(b));
                 // Load the input into a Halide function.
-                if(b == 0){
+                if(state_index == 0){
                     input_func(x) = Input(x);
                 } else {
-                    input_func(x) = states[b-1](x);
+                    input_func(x) = states[state_index-1](x);
                 }
 
                 Func count_zeros("count_zeros_bit_"+std::to_string(b));
@@ -41,39 +41,40 @@ class RadixSort : public Generator<RadixSort> {
                 count_zeros() += select(bit_value(r) == 0, 1, 0);
 
 
-                // Calculate the cumulative positions for zeros and ones.
-                Func zero_pos("zero_pos_bit_"+std::to_string(b)), one_pos("one_pos_bit_"+std::to_string(b));
-                zero_pos(x) = x;//select(x < count_zeros(), x, 0); // idx < #zeros ? x : 0;
-                one_pos(x) = x + count_zeros();
 
-                RDom k(1, n - 1);
+                RDom k(0, n);
                 Func prefix_sum_zeros("prefix_sum_zeros_"+std::to_string(b));
                 Var psum_zero_idx;
                 prefix_sum_zeros(psum_zero_idx) = (int32_t) 0;
-                prefix_sum_zeros(k) = select(k ==0 , 0 , prefix_sum_zeros(k - 1) + select(bit_value(k) == 0, 1, 0)) ;
+                prefix_sum_zeros(k) = select(k ==0 , 0 , prefix_sum_zeros(k - 1) + select(bit_value(clamp(k-1, 0 , n-1)) == 0, 1, 0)) ;
 
 
 
                 Func prefix_sum_ones("prefix_sum_ones_"+std::to_string(b));
                 Var psum_one_idx;
                 prefix_sum_ones(psum_one_idx) = (int32_t) 0;
-                prefix_sum_ones(k) = select(k ==0 , 0 , prefix_sum_ones(k - 1) + select(bit_value(k) == 1, 1, 0)) ;
+                prefix_sum_ones(k) = select(k ==0 , 0 , prefix_sum_ones(k - 1) + select(bit_value(clamp(k-1, 0, n-1)) == 1, 1, 0)) ;
 
 
                 // Step 5: Reorder elements based on the current bit.
                 //
-                states[b](x) = select(bit_value(x) == 0, 
-                        input_func(clamp(prefix_sum_zeros(x), 0, n-1)), 
-                        input_func(clamp(count_zeros() + prefix_sum_ones(x) , 0, n-1))
-                        );
-                states[b].compute_root().vectorize(x, 32);
                 /*
+                   states[state_index](x) = select(bit_value(x) == 0, 
+                   input_func(clamp(prefix_sum_zeros(x), 0, n-1)), 
+                   input_func(clamp(count_zeros() + prefix_sum_ones(x) , 0, n-1))
+                   );
+                   */
 
-                states[b](x) = select(bit_value(x) == 0, 
-                        input_func(clamp(prefix_sum_zeros(x), 0, n)), 
-                        input_func(clamp(count_zeros() + prefix_sum_ones(x) - 1, 0, n))
-                        );
-                        */
+                Func output_indices("output_indices_"+std::to_string(b));
+                output_indices(x) =  select(bit_value(x) == 0, clamp(prefix_sum_zeros(x), 0, n-1), clamp(count_zeros() + prefix_sum_ones(x)  , 0, n-1));
+
+                //states[state_index](x) = input_func(output_indices(x));
+                RDom scatter(0, n);
+                states[state_index](x) = undef<int>();  // or 0, depending on your needs
+                states[state_index](output_indices(scatter)) = input_func(scatter);
+
+
+                states[state_index].compute_root();
 
 
 
