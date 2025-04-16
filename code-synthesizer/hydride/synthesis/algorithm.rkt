@@ -39,6 +39,13 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/scale)
 
+(require hydride/ir/x86/definition)
+(require hydride/ir/x86/cost_model)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/printer)
+(require hydride/ir/x86/binder)
+(require hydride/ir/x86/scale)
+
 (require hydride/ir/visa/definition)
 (require hydride/ir/visa/cost_model)
 (require hydride/ir/visa/const_fold)
@@ -80,7 +87,7 @@
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
       [(equal? target 'visa) visa:hydride-printer]
-      [(equal? target 'x86) hydride:hydride-printer]))
+      [(equal? target 'x86) x86:hydride-printer]))
 
   (displayln sol)
   (displayln (printer-functor sol)))
@@ -161,14 +168,14 @@
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
       [(equal? target 'visa) visa:const-fold]
-      [(equal? target 'x86) hydride:const-fold]))
+      [(equal? target 'x86) x86:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
       [(equal? target 'visa) visa:cost]
-      [(equal? target 'x86) hydride:cost]))
+      [(equal? target 'x86) x86:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
 
@@ -279,14 +286,14 @@
       [(equal? target 'hvx) hvx:const-fold]
       [(equal? target 'arm) arm:const-fold]
       [(equal? target 'visa) visa:const-fold]
-      [(equal? target 'x86) hydride:const-fold]))
+      [(equal? target 'x86) x86:const-fold]))
 
   (define cost-functor
     (cond
       [(equal? target 'hvx) hvx:cost]
       [(equal? target 'arm) arm:cost]
       [(equal? target 'visa) visa:cost]
-      [(equal? target 'x86) hydride:cost]))
+      [(equal? target 'x86) x86:cost]))
 
   (define folded (const-fold-functor synthesized-sol))
 
@@ -329,7 +336,7 @@
   (define synthesized-sol
     (destruct
      halide-expr
-     [(buffer data elem buffsize)
+     [(buffer data shape layout elemT buffsize id)
       (debug-log "Leaf buffer:")
       (debug-log halide-expr)
       (reg (hash-ref! id-map halide-expr -1)) ;; have a map to use accurate reg number
@@ -532,7 +539,7 @@
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
             [(equal? target 'visa) visa:cost]
-            [(equal? target 'x86) hydride:cost]))
+            [(equal? target 'x86) x86:cost]))
         (debug-log (cost-functor materialize))
 
         ;; Now that we've synthesized the sub-expression

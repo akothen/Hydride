@@ -181,7 +181,7 @@
   (define visitor-fn
     (cond
       [(equal? target 'x86)
-       hydride:visitor
+       x86:visitor
       ]
       [(equal? target 'hvx)
        hvx:visitor
@@ -222,7 +222,7 @@
     (src-interpreter src-cost-fn src-visitor src-length-fn src-prec-fn src-get-ops)
     (cond
       [(equal? src-language 'x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
 
       [(equal? src-language 'hvx)
@@ -240,7 +240,7 @@
     (cond
       [(equal? target-language 'x86)
        (set-target-x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
 
       [(equal? target-language 'hvx)
@@ -445,7 +445,7 @@
        (values hvx:extract-expr  hvx:get-sub-exprs hvx:get-length hvx:get-prec hvx:bind-expr hvx:cost)
        ]
       [(equal? target "x86")
-       (values hydride:extract-expr  hydride:get-sub-exprs hydride:get-length hydride:get-prec bind-expr hydride:cost)
+       (values x86:extract-expr  x86:get-sub-exprs x86:get-length x86:get-prec bind-expr x86:cost)
        ]
       [else
         (error "Unsupported target for inst-combine-hydride-expr " target)

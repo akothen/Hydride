@@ -57,6 +57,19 @@
 (require hydride/ir/arm/extract)
 (require hydride/ir/arm/sub_expr)
 
+(require hydride/ir/x86/cost_model)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/printer)
+(require hydride/ir/x86/binder)
+(require hydride/ir/x86/scale)
+(require hydride/ir/x86/get_ops)
+(require hydride/ir/x86/length)
+(require hydride/ir/x86/prec)
+(require hydride/ir/x86/visitor)
+(require hydride/ir/x86/interpreter)
+(require hydride/ir/x86/extract)
+(require hydride/ir/x86/sub_expr)
+
 (require hydride/ir/visa/cost_model)
 (require hydride/ir/visa/const_fold)
 (require hydride/ir/visa/printer)
@@ -213,7 +226,7 @@
   (define visitor-fn
     (cond
       [(equal? target 'x86)
-       hydride:visitor
+       x86:visitor
       ]
       [(equal? target 'hvx)
        hvx:visitor
@@ -260,7 +273,7 @@
     (src-interpreter src-cost-fn src-visitor src-length-fn src-prec-fn src-get-ops)
     (cond
       [(equal? src-language 'x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
 
       [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
@@ -293,7 +306,7 @@
     (cond
       [(equal? target-language 'x86)
        (set-target-x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
       [(and (equal? target-language 'hvx) (equal? cost-model-type 'instcombine))
        (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
@@ -521,7 +534,7 @@
     (src-interpreter src-cost-fn src-visitor src-length-fn src-prec-fn src-get-ops)
     (cond
       [(equal? src-language 'x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
 
       [(and (equal? src-language 'hvx) (equal? cost-model-type 'instcombine))
@@ -554,7 +567,7 @@
     (cond
       [(equal? target-language 'x86)
        (set-target-x86)
-       (values hydride:interpret hydride:cost hydride:visitor hydride:get-length hydride:get-prec hydride:get-bv-ops)
+       (values x86:interpret x86:cost x86:visitor x86:get-length x86:get-prec x86:get-bv-ops)
        ]
       [(and (equal? target-language 'hvx) (equal? cost-model-type 'instcombine))
        (values hvx:interpret hvx-instcombine:cost hvx:visitor hvx:get-length hvx:get-prec hvx:get-bv-ops)
@@ -796,7 +809,7 @@
        (values visa:extract-expr  visa:get-sub-exprs visa:get-length visa:get-prec visa:bind-expr visa:cost)
        ]
       [(equal? target "x86")
-       (values hydride:extract-expr  hydride:get-sub-exprs hydride:get-length hydride:get-prec bind-expr hydride:cost)
+       (values x86:extract-expr  x86:get-sub-exprs x86:get-length x86:get-prec bind-expr x86:cost)
        ]
       [else
         (error "Unsupported target for inst-combine-hydride-expr " target)

@@ -320,8 +320,12 @@ class Context:
         if scale_factor != None:
             for idx, arg in enumerate(self.context_args):
                 if isinstance(arg, BitVector):
-                    scale_factor_cond = scale_factor_cond and (
-                        arg.size % scale_factor == 0)
+                    if self.dsl_name == "_tile_dpbssd_dsl":
+                        scale_factor_cond = scale_factor_cond and (
+                            arg.size % (scale_factor**2) == 0)
+                    else:
+                        scale_factor_cond = scale_factor_cond and (
+                            arg.size % scale_factor == 0)
 
         return has_defined_io and (self.in_vectsize_index != None) and (self.out_vectsize_index != None) and has_defined_lanesize and scale_factor_cond
 
@@ -360,10 +364,18 @@ class Context:
 
         for idx, arg in enumerate(self.context_args):
             if isinstance(arg, BitVector):
-                assert arg.size % scale_factor == 0, "scale_factor {} must evenly divide the operand sizes {}".format(
-                    scale_factor, arg.size)
-                scaled_bv_arg = BitVector(
-                    arg.name, int(arg.size // scale_factor))
+                if self.dsl_name == "_tile_dpbssd_dsl":
+                    # For dpbssd, we need to scale the vector size by the square of the scale factor
+                    # since it is a 2D operation
+                    assert arg.size % (scale_factor**2) == 0, "scale_factor {} must evenly divide the operand sizes {}".format(
+                        scale_factor**2, arg.size)
+                    scaled_bv_arg = BitVector(
+                        arg.name, int(arg.size // (scale_factor**2)))
+                else:
+                    assert arg.size % scale_factor == 0, "scale_factor {} must evenly divide the operand sizes {}".format(
+                        scale_factor, arg.size)
+                    scaled_bv_arg = BitVector(
+                        arg.name, int(arg.size // scale_factor))
                 if arg.size // scale_factor == 1 and self.enable_mixed_scaling:
                     # For Scalar vector ops, try keeping the scalar args the same size
                     # and hope verification fails any mis-scaling
@@ -415,7 +427,12 @@ class Context:
                         arg.name, value=int(arg.value // scale_factor))
                     scaled_args.append(scaled_int)
                 else:
-                    scaled_args.append(arg)
+                    if self.dsl_name == "_tile_dpbssd_dsl":
+                        scaled_int = Integer(
+                        arg.name, value=int(arg.value // scale_factor))
+                        scaled_args.append(scaled_int)
+                    else:
+                        scaled_args.append(arg)
             else:
                 scaled_args.append(arg)
 
@@ -430,9 +447,12 @@ class Context:
             assert self.in_precision == self.out_precision, "Only scale precision for elementwise bitwise operations"
             self.in_precision = self.in_precision // scale_factor
             self.out_precision = self.out_precision // scale_factor
-
-        self.in_vectsize = int(self.in_vectsize // scale_factor)
-        self.out_vectsize = int(self.out_vectsize // scale_factor)
+        if self.dsl_name == "_tile_dpbssd_dsl":
+            self.in_vector_size = int(self.in_vectsize // (scale_factor**2))    
+            self.out_vectsize = int(self.out_vectsize // (scale_factor**2))
+        else:
+            self.in_vector_size = int(self.in_vectsize // scale_factor)
+            self.out_vectsize = int(self.out_vectsize // scale_factor)
 
         self.context_args = scaled_args
 

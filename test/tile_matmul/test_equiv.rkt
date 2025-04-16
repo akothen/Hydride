@@ -144,7 +144,7 @@
 (println cex)
 (cond
   [(unsat? cex) (exit)])
-
+(printf "Equal jb")
 (printf "(set! v1 ~a)\n" (evaluate v1 cex))
 (printf "(set! v2 ~a)\n" (evaluate v2 cex))
 (printf "(set! v3 ~a)\n" (evaluate v3 cex))

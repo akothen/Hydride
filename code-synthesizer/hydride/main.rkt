@@ -85,6 +85,21 @@
 (require hydride/ir/arm/get_ops)
 (require hydride/ir/arm/get_name)
 
+;; x86 IR
+(require hydride/ir/x86/semantics)
+(require hydride/ir/x86/definition)
+(require hydride/ir/x86/cost_model)
+(require hydride/ir/x86/length)
+(require hydride/ir/x86/prec)
+(require hydride/ir/x86/printer)
+(require hydride/ir/x86/interpreter)
+(require hydride/ir/x86/binder)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/visitor)
+(require hydride/ir/x86/scale)
+(require hydride/ir/x86/get_ops)
+(require hydride/ir/x86/get_name)
+
 ;; ARM IR
 (require hydride/ir/visa/semantics)
 (require hydride/ir/visa/definition)
@@ -184,6 +199,20 @@
   (all-from-out hydride/ir/arm/scale)
   (all-from-out hydride/ir/arm/get_ops)
   (all-from-out hydride/ir/arm/get_name)
+
+  (all-from-out hydride/ir/x86/semantics)
+  (all-from-out hydride/ir/x86/definition)
+  (all-from-out hydride/ir/x86/cost_model)
+  (all-from-out hydride/ir/x86/length)
+  (all-from-out hydride/ir/x86/prec)
+  (all-from-out hydride/ir/x86/printer)
+  (all-from-out hydride/ir/x86/interpreter)
+  (all-from-out hydride/ir/x86/binder)
+  (all-from-out hydride/ir/x86/const_fold)
+  (all-from-out hydride/ir/x86/visitor)
+  (all-from-out hydride/ir/x86/scale)
+  (all-from-out hydride/ir/x86/get_ops)
+  (all-from-out hydride/ir/x86/get_name)
 
   (all-from-out hydride/ir/visa/semantics)
   (all-from-out hydride/ir/visa/definition)

@@ -2960,8 +2960,8 @@ class RoseSimilarityCheckerParallel():
 
 if __name__ == '__main__':
     # SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
-    SimilarityChecker = RoseSimilarityCheckerParallel(["ARM"])
-    # SimilarityChecker = RoseSimilarityChecker(["x86"])
+    # SimilarityChecker = RoseSimilarityCheckerParallel(["ARM"])
+    SimilarityChecker = RoseSimilarityCheckerParallel(["x86"])
     sys.stdout = sys.__stderr__
     SimilarityChecker.performSimilarityChecking()
     # SimilarityChecker.parallelizeSimilarityChecking()

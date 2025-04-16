@@ -98,7 +98,7 @@
                 (list bvmul sign-extend zero-extend)))]
    [(load buf idxs alignment) empty-list]
    [(int-imm data signed?) empty-list]
-   [(buffer data elemT buffsize)
+   [(buffer data shape layout elemT buffsize id)
     (if (halide:is-buffer-signed p)
         (list sign-extend)
         (list zero-extend))]
@@ -530,7 +530,7 @@
              (define-values (leaf-sol args-used) (bind-expr-args buf args (- depth 1)))
              (values (load-sca leaf-sol idx) args-used)))]
       [(int-imm data signed?) (debug-log args) (values (int-imm data signed?) 0)]
-      [(buffer data elemT buffsize) (values (arg 0) 1)]
+      [(buffer data shape layout elemT buffsize id) (values (arg 0) 1)]
       ;; Type Casts
       [(cast-int vec olane oprec)
        (cond
@@ -1197,7 +1197,11 @@
                   (define sym-bv (vector-ref sym-bvs i))
                   (define size (vec-size expr))
                   (define expr-elemT (get-elemT expr))
-                  (halide:create-buffer sym-bv expr-elemT))))
+                  (halide:create-buffer sym-bv
+                                        (halide:tensor-shape expr)
+                                        (halide:tensor-layout expr)
+                                        expr-elemT
+                                        i))))
 
 (define (print-buffer-type-info buff)
 
@@ -1295,8 +1299,8 @@
    [(load buf idxs alignment) (vec-size idxs)]
    [(load-sca buf idx) 1]
    [(int-imm data signed?) (bvlength data)]
-   [(buffer data elemT buffsize) buffsize]
-   [(buffer-index index elemT buffsize) buffsize]
+   [(buffer data shape layout elemT buffsize id) buffsize]
+   [(buffer-index index shape layout elemT buffsize id) buffsize]
    ;; Type Casts
    [(cast-int vec olane oprec) (* olane oprec)]
    [(cast-uint vec olane oprec) (* olane oprec)]
@@ -1416,23 +1420,26 @@
 ;; Reduce the number of vector lanes in the
 ;; halide factor by scale-factor x
 (define (scale-down-expr expr scale-factor)
-
   (define scaled? #t)
-
   (define (visitor-fn e)
     (destruct e
-              [(buffer data elemT buffsize)
-               (define prec (vec-precision e))
-               (define len (halide:vec-len e))
+              [(buffer data shape layout elemT buffsize id)
+               ;; Scale down each dimension in shape by dividing by scale-factor
+               (define (all-divisible? v)
+                 (andmap (lambda (x) (= (remainder scale-factor scale-factor) 0)) (vector->list v)))
+               (define scaled-dims
+                 (if (all-divisible? shape)
+                     (vector-map (lambda (x) (/ x scale-factor)) shape)
+                     (begin
+                       (set! scaled? #f)
+                       (error "Unsupported scaling for" e)
+                       shape)))
+               (define scaled-shape (vector-map (lambda (x) (/ x scale-factor)) shape))
+               ;; Calculate scaled-size as product of all dimensions
                (define scaled-size
-                 (cond
-                   [(equal? (modulo len scale-factor) 0) (* prec (/ len scale-factor))]
-                   [else
-
-                    (set! scaled? #f)
-                    ;(error "Unsupported scaling for " e)
-                    (* prec len)]))
-               (halide:create-buffer (bv 0 (bitvector scaled-size)) elemT)]
+                 (for/fold ([result buffsize]) ([_ (in-range (vector-length shape))])
+                   (/ result scale-factor)))
+               (halide:create-buffer (bv 0 (bitvector scaled-size)) scaled-shape layout elemT id)]
               [(cast-int vec olane oprec) (cast-int vec (/ olane scale-factor) oprec)]
               [(cast-uint vec olane oprec) (cast-uint vec (/ olane scale-factor) oprec)]
               [(vec-saturate vec olane oprec signed?)
@@ -1447,46 +1454,46 @@
                  [(equal? scale-factor 16) (x8 sca)]
                  [else
                   (set! scaled? #f)
-                  ;(error "Unsupported scaling size: " scale-factor)
-                  ])]
+                  e])]
               [(x64 sca)
                (cond
                  [(equal? scale-factor 2) (x32 sca)]
                  [(equal? scale-factor 4) (x16 sca)]
                  [(equal? scale-factor 8) (x8 sca)]
-                 [(equal? scale-factor 8) (x8 sca)]
                  [else
                   (set! scaled? #f)
-                  e
-                  ;(error "Unsupported scaling size: " scale-factor)
-                  ])]
+                  e])]
               [(x32 sca)
                (cond
                  [(equal? scale-factor 2) (x16 sca)]
                  [(equal? scale-factor 4) (x8 sca)]
                  [else
                   (set! scaled? #f)
-                  e
-                  ;(error "Unsupported scaling size: " scale-factor)
-                  ])]
+                  e])]
               [(x16 sca)
                (cond
                  [(equal? scale-factor 2) (x8 sca)]
                  [else
                   (set! scaled? #f)
-                  e
-                  ;(error "Unsupported scaling size: " scale-factor)
-                  ])]
+                  e])]
               [(ramp base stride len) (set! scaled? #f) (ramp base stride (/ len scale-factor))]
               [(slice_vectors vec base stride len)
                (slice_vectors vec (/ base scale-factor) stride (/ len scale-factor))]
+              [(vec-tile_matmul m n k v0 v1 v2)
+               (vec-tile_matmul (/ m scale-factor) (/ n scale-factor) (/ k scale-factor) v0 v1 v2)]
               [v v]))
-
+  (define (ext-visitor expr handler visit)
+    (destruct
+     expr
+     [(vec-tile_matmul m n k v0 v1 v2)
+      (handler
+       (vec-tile_matmul m n k (visit v0 handler ext-visitor) (visit v1 handler ext-visitor) v2))]
+     [_ 'not-handled]))
   (define result
     (cond
       [(equal? scale-factor 1) expr]
       [else (halide:visit expr visitor-fn)]))
-
+  (debug-log (format "Scaled down expr: ~a" result))
   (values scaled? result))
 
 (define (count-number-instructions expr)
@@ -1494,7 +1501,7 @@
   (define count 0)
   (define (visitor-fn e)
     (destruct e
-              [(buffer data elemT buffsize) '()]
+              [(buffer data shape layout elemT buffsize id) '()]
               [(int-imm data signed?) '()]
               [_ (set! count (+ count 1))]))
 
@@ -1506,7 +1513,7 @@
 
   (define (visitor-fn e)
     (destruct e
-              [(buffer data elemT buffsize)
+              [(buffer data shape layout elemT buffsize id)
                (begin
                  (if (hash-has-key? id-map e)
                      (list)
@@ -1604,7 +1611,7 @@
 
 (define (hash-expr expr)
   (define (visitor-fn e)
-    (destruct e [(buffer data elemT buffsize) (list 'buf elemT buffsize)] [_ e]))
+    (destruct e [(buffer data shape layout elemT buffsize id) (list 'buf elemT buffsize)] [_ e]))
 
   (define hashed-expr (halide:visit expr visitor-fn))
   hashed-expr)
@@ -1612,7 +1619,7 @@
 (define (get-expr-depth e)
   (define depth 1)
   (destruct e
-            [(buffer data elemT buffsize) (set! depth 0)]
+            [(buffer data shape layout elemT buffsize id) (set! depth 0)]
             [(reg id) (set! depth 0)]
             [_
              (define sub-exp (halide:sub-exprs e))
@@ -1771,8 +1778,8 @@
    [(load buf idxs alignment) (size-to-elemT (vec-precision idxs))]
    [(load-sca buf idx) 'int8]
    [(int-imm data signed?) (size-to-elemT-signed (bvlength data) signed?)]
-   [(buffer data elemT buffsize) elemT]
-   [(buffer-index index elemT buffsize) elemT]
+   [(buffer data shape layout elemT buffsize id) elemT]
+   [(buffer-index index shape layout elemT buffsize id) elemT]
    ;; Type Casts
    [(cast-int vec olane oprec) (size-to-elemT-signed oprec #t)]
    [(cast-uint vec olane oprec) (size-to-elemT-signed oprec #f)]
@@ -1906,8 +1913,8 @@
    [(load buf idxs alignment) (vec-precision idxs)]
    [(load-sca buf idx) 1]
    [(int-imm data signed?) (bvlength data)]
-   [(buffer data elemT buffsize) (elemT-size elemT)]
-   [(buffer-index index elemT buffsize) (elemT-size elemT)]
+   [(buffer data shape layout elemT buffsize id) (elemT-size elemT)]
+   [(buffer-index index shape layout elemT buffsize id) (elemT-size elemT)]
    ;; Type Casts
    [(cast-int vec olane oprec) oprec]
    [(cast-uint vec olane oprec) oprec]
@@ -2090,7 +2097,9 @@
      ;; proceed with next steps
 
      (define (get-types b)
-       (destruct b [(buffer data elemT buffsize) elemT] [_ (error "Must be buffers to get types")]))
+       (destruct b
+                 [(buffer data shape layout elemT buffsize id) elemT]
+                 [_ (error "Must be buffers to get types")]))
 
      (define types-e1
        (for/list ([b regs-1])
@@ -2107,7 +2116,7 @@
 
         (define (get-sizes b)
           (destruct b
-                    [(buffer data elemT buffsize) buffsize]
+                    [(buffer data shape layout elemT buffsize id) buffsize]
                     [_ (error "Must be buffers to get types")]))
         (define sizes-e1
           (sort (for/list ([b regs-1])
@@ -2155,10 +2164,14 @@
   ;; and ordering for the arguments
 
   (define (get-sizes b)
-    (destruct b [(buffer data elemT buffsize) buffsize] [_ (error "Must be buffers to get types")]))
+    (destruct b
+              [(buffer data shape layout elemT buffsize id) buffsize]
+              [_ (error "Must be buffers to get types")]))
 
   (define (get-type b)
-    (destruct b [(buffer data elemT buffsize) elemT] [_ (error "Must be buffers to get types")]))
+    (destruct b
+              [(buffer data shape layout elemT buffsize id) elemT]
+              [_ (error "Must be buffers to get types")]))
 
   (define bv-sizes
     (for/list ([b regs-1])
@@ -2190,7 +2203,7 @@
 
   (define (grammar-visitor expr)
     (destruct expr
-              [(buffer data elemT buffsize)
+              [(buffer data shape layout elemT buffsize id)
                (define (matches-size? s)
                  (equal? (bvlength s) buffsize))
                (define holes-of-size (filter matches-size? (vector->list sym-bvs)))

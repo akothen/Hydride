@@ -33,7 +33,7 @@ from utils.ConstFold import ConstFold
 
 dsl_list = []
 
-TARGET = 'visa'
+TARGET = 'x86'
 scd = None
 cost_name = ""
 interpret_name = ""
@@ -54,20 +54,20 @@ variant_names = ""
 if TARGET == 'x86':
     dsl_list = parse_dict(semantcs, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=None)
-    cost_name = "hydride:cost"
-    interpret_name = "hydride:interpret"
-    scale_name = "hydride:scale-expr"
-    const_fold_name = "hydride:const-fold"
-    visitor_name = "hydride:visitor"
-    get_len_name = "hydride:get-length"
-    get_prec_name = "hydride:get-prec"
-    printer_name = "hydride:hydride-printer"
-    get_ops_name = "hydride:get-bv-ops"
-    bind_name = "bind-expr"
-    get_target_op_name = "hydride:get-target-name"
-    subexpr_name = "hydride:get-sub-exprs"
-    extract_names = "hydride:extract-expr"
-    variant_names = "hydride:get-variants"
+    cost_name = "x86:cost"
+    interpret_name = "x86:interpret"
+    scale_name = "x86:scale-expr"
+    const_fold_name = "x86:const-fold"
+    visitor_name = "x86:visitor"
+    get_len_name = "x86:get-length"
+    get_prec_name = "x86:get-prec"
+    printer_name = "x86:hydride-printer"
+    get_ops_name = "x86:get-bv-ops"
+    bind_name = "x86:bind-expr"
+    get_target_op_name = "x86:get-target-name"
+    subexpr_name = "x86:get-sub-exprs"
+    extract_names = "x86:extract-expr"
+    variant_names = "x86:get-variants"
 elif TARGET == 'hvx':
     dsl_list = parse_dict(hvx_semantics, keep_duplicate=True)
     scd = ScaleDef(base_vect_size=1024)
@@ -237,8 +237,8 @@ if __name__ == "__main__":
         write_to_file(hydride_header)
         write_to_file(definition_header.format(target=TARGET))
         QUQ = sd.emit_struct_defs(dsl_list).split("\n")
-        if TARGET != "x86":
-            QUQ = QUQ[:3]+QUQ[24:]
+        # if TARGET != "x86":
+        QUQ = QUQ[:3]+QUQ[24:]
         write_to_file("\n".join(QUQ))
     with open("get_name.rkt", "w+") as RacketFile:
         def write_to_file(line):

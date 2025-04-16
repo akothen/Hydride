@@ -40,7 +40,20 @@ class RoseMatrixExtractRowOp(RoseMatrixOp):
         return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
-        NotImplemented
+        Spaces = " " * NumSpace
+        Name = self.getName()
+        RowIdx = self.getRowIndex()
+        NumBits = self.getOperand(2)
+        String = f"{Spaces}(define {Name} ("
+        String += f"{RoseOpcode.bvextract.getRosetteOp()} "
+        
+        # For row i in an NxM matrix, we extract bits [i*M + M-1 : i*M]
+        HighIdx = f"(+ (* {RowIdx.getName()} {NumBits.getName()}) (- {NumBits.getName()} 1))"
+        LowIdx = f"(* {RowIdx.getName()} {NumBits.getName()})"
+        
+        String += f"{HighIdx} {LowIdx} {self.getTile().getName()}))\n"
+        print("!!!",self,"to", String)
+        return String
 
 
 class RoseMatrixInsertRowOp(RoseMatrixOp):
@@ -71,7 +84,8 @@ class RoseMatrixInsertRowOp(RoseMatrixOp):
         return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
-        NotImplemented
+        # raise NotImplementedError
+        return "RoseMatrixInsertRowOp"
 
 
 class RoseMatrixInsertRowsOp(RoseMatrixOp):
@@ -107,6 +121,6 @@ class RoseMatrixInsertRowsOp(RoseMatrixOp):
         return True
 
     def to_rosette(self, NumSpace=0, ReverseIndexing=False):
-        NotImplemented
-
+        # raise NotImplementedError
+        return "RoseMatrixInsertRowsOp"
 

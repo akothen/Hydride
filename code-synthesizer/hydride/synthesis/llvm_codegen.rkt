@@ -18,6 +18,7 @@
 
 (require hydride/ir/hvx/printer)
 (require hydride/ir/arm/printer)
+(require hydride/ir/x86/printer)
 (require hydride/ir/visa/printer)
 (require hydride/ir/arith/utils)
 
@@ -46,7 +47,7 @@
       [(equal? target 'hvx) hvx:hydride-printer]
       [(equal? target 'visa) visa:hydride-printer]
       [(equal? target 'arm) arm:hydride-printer]
-      [(equal? target 'x86) hydride:hydride-printer]))
+      [(equal? target 'x86) x86:hydride-printer]))
   (define hydride-str (printer-functor hydride-expr))
 
   (string-append (apply string-append string-list) "\n" hydride-str "\n"))

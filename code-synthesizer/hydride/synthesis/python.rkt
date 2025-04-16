@@ -158,7 +158,7 @@
   (define mod-path (build-path gen (string->path grammar-file-name)))
   (debug-log mod-path)
   (generate-grammar-file spec-contents mod-path base_name VF 0) ;; IS_SHUFFLE = 0
-  (debug-log "Generated Grammar File")
+  (debug-log (format "Generated Grammar File ~a\n" mod-path))
   (define (get-grammar mod name)
     (debug-log (format "Dynamically importing from ~a ... \n" name))
     (dynamic-require mod (string->symbol name)))
@@ -183,7 +183,7 @@
                               step-idx
                               depth
                               scale-factor) ;; IS_SHUFFLE = 0
-  (debug-log "Generated Grammar File")
+  (debug-log (format "Generated Grammar File ~a\n" mod-path))
   (define (get-grammar mod name)
     (debug-log (format "Dynamically importing from ~a ... \n" name))
     (dynamic-require mod (string->symbol name)))

@@ -44,8 +44,10 @@
 
 (struct int-imm (data signed?) #:transparent #:mutable)
 
-(struct buffer (data  elemT buffSize) #:transparent )
-(struct buffer-index (index  elemT buffSize) #:transparent  )
+;; Extended buffer struct with matrix dimensions
+(struct buffer (data shape-vector layout-vector elemT buffSize id) #:transparent
+  #:auto-value '())
+(struct buffer-index (index shape-vector layout-vector elemT buffSize id) #:transparent)
 (struct load (buf idxs alignment) #:transparent)
 (struct ramp (base stride len) #:transparent)
 (struct aligned (mod rem) #:transparent)

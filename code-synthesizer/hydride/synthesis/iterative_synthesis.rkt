@@ -14,6 +14,10 @@
 (require hydride/ir/hydride/interpreter)
 (require hydride/ir/hydride/visitor)
 
+(require hydride/ir/x86/interpreter)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/visitor)
+
 (require hydride/ir/hvx/interpreter)
 (require hydride/ir/hvx/const_fold)
 (require hydride/ir/hvx/visitor)
@@ -21,6 +25,10 @@
 (require hydride/ir/arm/interpreter)
 (require hydride/ir/arm/const_fold)
 (require hydride/ir/arm/visitor)
+
+(require hydride/ir/x86/interpreter)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/visitor)
 
 (require hydride/ir/visa/interpreter)
 (require hydride/ir/visa/const_fold)
@@ -302,6 +310,7 @@
 (define (z3-optimize assert-query-fn grammar cex-ls failing-ls cost-fn cost-bound failed-sols)
   (begin
     (debug-log "*********** z3-optimize *****************")
+    ;;; (debug-log grammar)
 
     (define synthesis-timeout? #f)
     (define sol?
@@ -415,7 +424,7 @@
 
   (define interpreter
     (cond
-      [(equal? target 'x86) hydride:interpret]
+      [(equal? target 'x86) x86:interpret]
       [(equal? target 'arm) arm:interpret]
       [(equal? target 'visa) visa:interpret]
       [(equal? target 'hvx) hvx:interpret]))
@@ -604,7 +613,7 @@
 
      (define visitor-functor
        (cond
-         [(equal? target 'x86) hydride:visitor]
+         [(equal? target 'x86) x86:visitor]
          [(equal? target 'arm) arm:visitor]
          [(equal? target 'visa) visa:visitor]
          [(equal? target 'hvx) hvx:visitor]))
@@ -666,7 +675,7 @@
 
           (define const-fold
             (cond
-              [(equal? target 'x86) hydride:const-fold]
+              [(equal? target 'x86) x86:const-fold]
               [(equal? target 'arm) arm:const-fold]
               [(equal? target 'visa) visa:const-fold]
               [(equal? target 'hvx) hvx:const-fold]))

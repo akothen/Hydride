@@ -26,6 +26,11 @@
 (require hydride/ir/arm/binder)
 (require hydride/ir/arm/interpreter)
 
+(require hydride/ir/x86/definition)
+(require hydride/ir/x86/visitor)
+(require hydride/ir/x86/binder)
+(require hydride/ir/x86/interpreter)
+
 (require hydride/ir/visa/definition)
 (require hydride/ir/visa/visitor)
 (require hydride/ir/visa/binder)
@@ -65,7 +70,7 @@
       [(equal? target 'hvx) hvx:visitor]
       [(equal? target 'arm) arm:visitor]
       [(equal? target 'visa) visa:visitor]
-      [(equal? target 'x86) hydride:visitor]))
+      [(equal? target 'x86) x86:visitor]))
   (visitor-functor hydride-expr swizzle-visitor))
 
 ;; Generate LLVM Permute with mask vector. A quick way of
@@ -210,7 +215,7 @@
       [(equal? target 'hvx) hvx:interpret]
       [(equal? target 'arm) arm:interpret]
       [(equal? target 'visa) visa:interpret]
-      [(equal? target 'x86) hydride:interpret]))
+      [(equal? target 'x86) x86:interpret]))
 
   (debug-log swizzle-hash)
 

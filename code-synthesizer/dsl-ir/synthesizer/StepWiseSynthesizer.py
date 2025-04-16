@@ -683,14 +683,15 @@ class StepWiseSynthesizer(SynthesizerBase):
             if self.consider_dsl_inst(dsl_inst):
 
                 if (not self.is_shuffle) and dsl_inst.name in ShuffleList:
+                    print("Skipping ", dsl_inst.name, "as it is a shuffle operation")
                     continue
+
 
                 operator_contexts = self.get_supported_context_for_dsl(
                     dsl_inst, limit=self.contexts_per_dsl_inst)
 
                 operation_dsl_insts += ([dsl_inst] * len(operator_contexts))
                 operation_dsl_args_list += [ctx for ctx in operator_contexts]
-
                 continue
             else:
                 print(f"Skipping  {dsl_inst.name} as it is not considered")

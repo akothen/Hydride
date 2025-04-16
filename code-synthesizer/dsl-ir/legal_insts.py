@@ -1,4 +1,4 @@
-legal_map={
+legal_map = {
     "_mm_sub_pi16": 1,
     "_mm512_sub_epi16": 1,
     "_m_psubw": 1,
@@ -2054,5 +2054,6 @@ legal_map={
     "_mm512_mask_srli_epi32": 1,
     "_mm512_maskz_srli_epi32": 1,
     "_mm256_set_m128i": 1,
-    "_mm256_setr_m128i": 1
+    "_mm256_setr_m128i": 1,
+    "_tile_dpbssd": 1,
 }

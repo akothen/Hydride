@@ -49,7 +49,7 @@ DEBUG_LIST = [
 
 SKIP_LIST = []
 
-MUST_INCLUDE = []
+MUST_INCLUDE = ["_tile_dpbssd"]
 USE_BW_ALGO = False
 ENABLE_SHUFFLE = True
 UPCAST_OPERATIONS = False
@@ -950,7 +950,7 @@ class SynthesizerBase:
                 if ctx.is_bounded:
                     ctx.specialize_context_bounded(self.spec.output_precision)
 
-        check = dsl_inst.name in DEBUG_LIST and DEBUG
+        check = dsl_inst.name in DEBUG_LIST or DEBUG
         if check:
             print("============================================")
             print("Getting support contexts for ", dsl_inst.name)
@@ -1032,6 +1032,7 @@ class SynthesizerBase:
             lane_size_cond = False
 
             if self.BASE_VECT_SIZE != None:
+                breakpoint()
                 lane_size_cond = (ctx.lane_size == self.BASE_VECT_SIZE) or (ctx.lane_size == self.MAX_BW_SIZE) or any(
                     [ctx.lane_size == input_precision for input_precision in self.spec.input_precision])
                 if check:
@@ -1370,7 +1371,6 @@ class SynthesizerBase:
     # and the DSL instruction overlap
 
     def does_dsl_configs_overlap(self, dsl_inst, match_all=False):
-
         if match_all:
             def supports_ip(ip):
                 return dsl_inst.supports_config(input_precision=ip,
@@ -1513,9 +1513,10 @@ class SynthesizerBase:
                 print("Intentionally skip", SKIP, " in ", dsl_inst.name)
                 return False
 
-        if dsl_inst.name in DEBUG_LIST and DEBUG:
+        if dsl_inst.name in DEBUG_LIST or DEBUG:
             print("Going Over {}".format(dsl_inst.name))
             print("Config Overlaps?", self.does_dsl_configs_overlap(dsl_inst))
             print("Ops Overlaps?", self.does_dsl_ops_overlap(dsl_inst))
 
-        return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
+        # return self.does_dsl_configs_overlap(dsl_inst) and self.does_dsl_ops_overlap(dsl_inst)
+        return True

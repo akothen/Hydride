@@ -41,6 +41,14 @@
 (require hydride/ir/arm/scale)
 (require hydride/ir/arm/interpreter)
 
+(require hydride/ir/x86/definition)
+(require hydride/ir/x86/cost_model)
+(require hydride/ir/x86/const_fold)
+(require hydride/ir/x86/printer)
+(require hydride/ir/x86/binder)
+(require hydride/ir/x86/scale)
+(require hydride/ir/x86/interpreter)
+
 (require hydride/ir/visa/definition)
 (require hydride/ir/visa/cost_model)
 (require hydride/ir/visa/const_fold)
@@ -62,13 +70,13 @@
                               expr-depth
                               VF
                               id-map
-                              solver
+                              solver ;;;9
                               opt?
                               sym?
                               scale-factor
                               synth-log)
 
-  (define actual-expr-depth
+  (define actual-expr-depth ;;;3
     (cond
       [(equal? input-lang 'mlir) expr-depth]
       ;; Immediate expression is ramp, we can use the provided depth
@@ -95,15 +103,16 @@
        (min max-no-mul-depth expr-depth)]
       [else expr-depth]))
 
-  (define-values (get-expr-depth get-sub-exprs
-                                 get-expr-bv-sizes
-                                 get-expr-elemT
-                                 get-len
-                                 scale-down-expr
-                                 create-buffers
-                                 bind-expr-args
-                                 assemble-result
-                                 hash-expr-fn)
+  (define-values (get-expr-depth
+                  get-sub-exprs
+                  get-expr-bv-sizes
+                  get-expr-elemT
+                  get-len
+                  scale-down-expr
+                  create-buffers
+                  bind-expr-args
+                  assemble-result
+                  hash-expr-fn)
     (cond
       [(equal? input-lang 'halide)
        (define (get-halide-output expr)
@@ -141,8 +150,13 @@
   (define leaves-sizes (get-expr-bv-sizes leaves))
   (define leaves-elemT (get-expr-elemT leaves))
   (define sym-bvs (create-concrete-bvs leaves-sizes)) ;; Can this be concrete
+  (debug-log (format "halide-expr: ~a" halide-expr))
+  (debug-log (format "Leaves: ~a" leaves))
+  (debug-log (format "Leaves sizes: ~a" leaves-sizes))
+  (debug-log (format "Leaves elemT: ~a" leaves-elemT))
+  (debug-log (format "sym-bvs: ~a" sym-bvs))
 
-  (define effective-scale-factor scale-factor)
+  (define effective-scale-factor scale-factor) ;;;10
   (debug-log "Pre scale factor: ")
   (debug-log effective-scale-factor)
   (debug-log "Check leaves")
@@ -167,34 +181,37 @@
   (define (map-functor ele)
     (define-values (_ scaled-ele) (scale-down-expr ele effective-scale-factor))
     scaled-ele)
-
-  (define scaled-leaves (map map-functor leaves))
+  (define-values (_ scaled-down-expr-full) (scale-down-expr halide-expr effective-scale-factor))
+  (define scaled-leaves (get-sub-exprs scaled-down-expr-full (+ actual-expr-depth 1))) ;;;1
   (define scaled-leaves-sizes (get-expr-bv-sizes scaled-leaves))
   (define scaled-leaves-elemT (get-expr-elemT scaled-leaves))
   (define scaled-bvs (create-concrete-bvs scaled-leaves-sizes)) ;; Can this be concrete
-
   (define dummy-args (create-buffers scaled-leaves scaled-bvs))
+  (debug-log (format "Scaled leaves: ~a" scaled-leaves))
+  (debug-log (format "Scaled leaves sizes: ~a" scaled-leaves-sizes))
+  (debug-log (format "Scaled leaves elemT: ~a" scaled-leaves-elemT))
+  (debug-log (format "scaled-bvs: ~a" scaled-bvs))
+  (debug-log (format "Dummy args: ~a" dummy-args))
 
   ;; Produce a vector from dummy-args such that, everytime we encounter a leaf id we
-  ;; have seen before, we use the previous dummy-arg, otherwise we preserve what 
+  ;; have seen before, we use the previous dummy-arg, otherwise we preserve what
   ;; in the list
-  (define (update-arg-by-leaves leaves dummy-args) 
+  (define (update-arg-by-leaves leaves dummy-args)
     (let ([tmp (make-hash)])
       (list->vector (for/list ([i (in-range (length leaves))])
-        (let ([a_id (destruct (list-ref leaves i)
-                              [(arith:tensor data shape layout elemT buffsize id)
-                               id]
-                              ;; TODO for halide reg
-                              [_ (- i (length leaves))] ;; for non-reg-like leaves
-                              ;; give it a unique id, i-n is collision free in this way
-                              )])
-          (if (hash-has-key? tmp a_id)
-              (vector-ref dummy-args (hash-ref tmp a_id))
-              (begin
-                (hash-set! tmp a_id i)
-                (vector-ref dummy-args i))))))))
+                      (let ([a_id (destruct (list-ref leaves i)
+                                            [(arith:tensor data shape layout elemT buffsize id) id]
+                                            ;; TODO for halide reg
+                                            [_ (- i (length leaves))] ;; for non-reg-like leaves
+                                            ;; give it a unique id, i-n is collision free in this way
+                                            )])
+                        (if (hash-has-key? tmp a_id)
+                            (vector-ref dummy-args (hash-ref tmp a_id))
+                            (begin
+                              (hash-set! tmp a_id i)
+                              (vector-ref dummy-args i))))))))
   (set! dummy-args (update-arg-by-leaves scaled-leaves dummy-args))
-  (debug-log "created dummy args!")
+  (debug-log (format "created dummy args: ~a" dummy-args))
 
   ;; Helper for verification of later up-scaled versions
   (define (verify-upscaled-equal? hydride-expr)
@@ -218,7 +235,7 @@
         [(equal? target 'hvx) (hvx:interpret hydride-expr conc-bvs)]
         [(equal? target 'arm) (arm:interpret hydride-expr conc-bvs)]
         [(equal? target 'visa) (visa:interpret hydride-expr conc-bvs)]
-        [(equal? target 'x86) (hydride:interpret hydride-expr conc-bvs)]))
+        [(equal? target 'x86) (x86:interpret hydride-expr conc-bvs)]))
 
     (define conc-equal? (equal? conc-halide-res conc-hydride-res))
 
@@ -243,7 +260,7 @@
            [(equal? target 'hvx) (hvx:interpret hydride-expr sym-bvs)]
            [(equal? target 'arm) (arm:interpret hydride-expr sym-bvs)]
            [(equal? target 'visa) (visa:interpret hydride-expr sym-bvs)]
-           [(equal? target 'x86) (hydride:interpret hydride-expr sym-bvs)]))
+           [(equal? target 'x86) (x86:interpret hydride-expr sym-bvs)]))
 
        (define verification-timeout? #t)
        (define cex
@@ -272,7 +289,7 @@
   (define synthesized-sol
     (destruct
      halide-expr
-     [(buffer data elem buffsize)
+     [(buffer data shape layout elemT buffsize id)
       (debug-log "Leaf buffer:")
       (debug-log halide-expr)
       (reg (hash-ref! id-map halide-expr -1)) ;; have a map to use accurate reg number
@@ -286,10 +303,10 @@
       (begin
 
         (define-values (_ scaled-down-expr) (scale-down-expr halide-expr effective-scale-factor))
-        (define-values (expr-extract num-used)
+        (define-values (expr-extract num-used) ;;;0
           (bind-expr-args scaled-down-expr dummy-args actual-expr-depth))
 
-        (debug-log expr-extract)
+        (debug-log (format "expr-extract: ~a" expr-extract))
 
         ;; The extracted sub-expression is to be treated
         ;; as synthesis of some un-seen new expression
@@ -308,16 +325,26 @@
         (define (invoke-spec env-full)
           (set! env-full (update-arg-by-leaves scaled-leaves env-full))
           (debug-log (format "invoke-spec with env: ~a\n" env-full))
+          (debug-log (format "scaled-leaves: ~a" scaled-leaves))
           (define synth-buffers-full (create-buffers scaled-leaves env-full))
+          (debug-log (format "synth-buffers-full: ~a\n" synth-buffers-full))
           ;(debug-log scaled-leaves)
 
           (cond
             [(equal? input-lang 'halide) (halide:assume-buffers-signedness synth-buffers-full)])
+          (debug-log (format "synth-buffers-full-new: ~a" synth-buffers-full))
 
           (define-values (_ scaled-down-expr-full)
             (scale-down-expr halide-expr effective-scale-factor))
           (define-values (_expr-extract-full _num-used)
             (bind-expr-args scaled-down-expr-full synth-buffers-full actual-expr-depth))
+          (debug-log (format "scaled-down-expr-full: ~a" scaled-down-expr-full))
+          (debug-log (format "synth-buffers-full: ~a" synth-buffers-full))
+          (debug-log (format "scaled-leaves: ~a" scaled-leaves))
+          (debug-log (format "env-full: ~a" env-full))
+          (debug-log (format "actual-expr-depth: ~a" actual-expr-depth))
+
+          ;;; (define _expr-extract-full scaled-down-expr-full)
           (debug-log "Scaled expression:")
           (debug-log _expr-extract-full)
 
@@ -350,14 +377,14 @@
 
           _result_lane)
 
-        (define depth-limit
+        (define depth-limit ;;;4
           (cond
             [(equal? target 'hvx) 5]
             [(equal? target 'arm) 5]
             [(equal? target 'visa) 5]
             [(equal? target 'x86) 5]))
-        (define optimize? opt?)
-        (define symbolic? sym?)
+        (define optimize? opt?) ;;;7
+        (define symbolic? sym?) ;;;8
 
         (debug-log (format "Synthesizing sub-expression using expression-depth ~a \n"
                            actual-expr-depth))
@@ -493,7 +520,7 @@
             [(equal? target 'hvx) hvx:cost]
             [(equal? target 'arm) arm:cost]
             [(equal? target 'visa) visa:cost]
-            [(equal? target 'x86) hydride:cost]))
+            [(equal? target 'x86) x86:cost]))
         (debug-log (cost-functor materialize))
 
         ;; Now that we've synthesized the sub-expression
@@ -524,7 +551,7 @@
             [(equal? target 'hvx) (hvx:scale-expr materialize effective-scale-factor)]
             [(equal? target 'arm) (arm:scale-expr materialize effective-scale-factor)]
             [(equal? target 'visa) (visa:scale-expr materialize effective-scale-factor)]
-            [(equal? target 'x86) (hydride:scale-expr materialize effective-scale-factor)]))
+            [(equal? target 'x86) (x86:scale-expr materialize effective-scale-factor)]))
 
         (debug-log (format "Upscaled mat: ~a" upscaled-mat))
 
@@ -679,7 +706,9 @@
            (define thds
              (for/list ([t (range step-low step-high)])
                (set-optimize-bound-found #f)
-               (parameterize ([current-solver (if (equal? solver 'z3) (z3) (boolector))]
+               (parameterize ([current-solver (if (equal? solver 'z3)
+                                                  (z3)
+                                                  (boolector))]
                               ;[current-custodian (make-custodian)]
                               [current-bitwidth 16])
                  (thread
@@ -732,7 +761,7 @@
                          (set! min-cost (cost-model mat))
                          (debug-log (format "Better solution found for query with cost ~a\n"
                                             min-cost))])]))) ; (thread thunk
-                 ) ;; paramterize
+                  ) ;; paramterize
                ) ;; threads list
              ) ;; thds
 

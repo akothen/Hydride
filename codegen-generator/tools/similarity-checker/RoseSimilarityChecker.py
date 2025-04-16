@@ -2737,6 +2737,6 @@ if __name__ == '__main__':
     #SimilarityChecker = RoseSimilarityChecker(["Hexagon", "ARM"])
     import sys
     sys.stdout = sys.__stderr__
-    SimilarityChecker.performSimilarityChecking()
+    # SimilarityChecker.performSimilarvsityChecking()
     # SimilarityChecker.parallelizeSimilarityChecking()
 
