@@ -190,6 +190,64 @@
              rowOut)))
   dst)
 
+
+;; mul_conv_32x8()
+;; v32acc32 mul_conv_32x8 	( 	v64uint8  	a,		v64int8  	b ) 	
+;; take first 39 elem from 64 lane thing, operate over that to get v32acc32
+
+
+(define (mul_conv_32x8 matA matB m n indatasize outdatasize) 
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 m 1))])
+        (define res
+          (apply bvadd
+            (for/list ([%j (reverse (range 0 n 1))])
+              (define %aLo1 (* indatasize (+ %i %j)))
+              (define %aHi1 (+ %aLo1 (- indatasize 1)))
+              (define %bLo1 (* indatasize %j))
+              (define %bHi1 (+ %bLo1 (- indatasize 1)))
+              (define %ext_a1 (zero-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))
+              (define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))
+              (define %elem (bvmul %ext_a1 %ext_b1))
+              (fprintf (current-output-port) "Elem: ~a ~n" %elem)
+              %elem
+            )
+          )
+        )
+        res
+      )
+    )
+  )
+  dst
+)
+
+(define (mul_conv_32x8 matA matB m n indatasize outdatasize) 
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 m 1))])
+(define res
+(apply bvadd
+(for/list ([%j (reverse (range 0 n 1))])
+(define %aLo1 (* indatasize (+ %i %j)))
+(define %aHi1 (+ %aLo1 (- indatasize 1)))
+(define %bLo1 (* indatasize %j))
+(define %bHi1 (+ %bLo1 (- indatasize 1)))
+(define %ext_a1 (zero-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))
+(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))
+(define %elem (bvmul %ext_a1 %ext_b1))
+(fprintf (current-output-port) "Elem: ~a ~n" %elem)
+%elem
+)
+)
+)
+res
+)
+)
+)
+dst
+)
+
 (define xbuff_32_16
   (bv
    #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025
@@ -198,6 +256,16 @@
   (bv
    #xabce3c7dcc7dc68bd8699467269f1d681ad0a9b0e7e24db6e1b77de3a563f2a4c4cdd40d1668b8d73b889f5c4f87d7ea6fad8e78d799eea817a16f9f6261de0b
    512))
+
+(define xbuff_64_8
+  (bv
+   #x41f7f7f68573f9c6d3a126462fb53a52cec923d8a46c9f54ce67fd7826f6c9392a68457350d7cde7ee8042380ce6f2396cb8b9ac6c3cc63bd7b2155020dc4025
+   512))
+(define ybuff_64_8
+  (bv
+   #xabce3c7dcc7dc68bd8699467269f1d681ad0a9b0e7e24db6e1b77de3a563f2a4c4cdd40d1668b8d73b889f5c4f87d7ea6fad8e78d799eea817a16f9f6261de0b
+   512))
+
 (define out_32_16
   (bv
    #x11c2bb1ecd27c282a509de2a7f6bfb506d503c809b5889b812a159689f22ca849548c2d75158f50134009420c74a471a405870a013dcf0b8a4f2ecb0ab5cd797
@@ -211,8 +279,10 @@
 ;; (pretty-print (mul_4x2_2x8 xbuff_32_16 ybuff_32_16))
 
 ;;; (define bv1024? (bitvector 1024))
-(bveq (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv #b01100100000100110111111010011110 32))
-(mul_elem_32 xbuff_32_16 ybuff_32_16 (bv 0 32)) )
+;; (bveq (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv #b01100100000100110111111010011110 32))
+;; (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv 0 32)) )
+(define bv1024? (bitvector 1024))
+(bv1024? (mul_conv_32x8 xbuff_64_8 ybuff_64_8 32 8 8 32))
 
 ;;; (pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
 ;;; (srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))
