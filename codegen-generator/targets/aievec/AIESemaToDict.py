@@ -241,6 +241,108 @@ def SemaToDict(SemaList):
         """
         )
         f.write(
+        """
+       "mac_elem_32": {
+        "target_instructions": {
+            "mac_elem_32": {
+                "args": ["SYMBOLIC_BV_512", "SYMBOLIC_BV_512", "SYMBOLIC_BV_1024"],
+                "in_vectsize": 512,
+                "out_vectsize": 1024,
+                "lanesize": 512,
+                "in_precision": 16,
+                "out_precision": 32,
+                "in_vectsize_index": None,
+                "out_vectsize_index": None,
+                "in_lanesize_index": None,
+                "out_lanesize_index": None,
+                "in_precision_index": None,
+                "out_precision_index": None,
+                "arg_permute_map": [],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+        },
+        "semantics": [
+            '"(define (mac_elem_32 a b c)"',
+            '"(define dst"',
+            '"(apply concat"',
+            '"(for/list ([%i (reverse (range 0 32 1))])"',
+            '"(define %low1 (* 16 %i))"',
+            '"(define %high1 (+ %low1 (- 16 1)))"',
+            '"(define %ext_a (sign-extend (extract %high1 %low1 a) (bitvector 32)))"',
+            '"(define %low2 (* 16 %i))"',
+            '"(define %high2 (+ %low2 (- 16 1)))"',
+            '"(define %ext_b (sign-extend (extract %high2 %low2 b) (bitvector 32)))"',
+            '"(define %low3 (* 32 %i))"',
+            '"(define %high3 (+ %low3 (- 32 1)))"',
+            '"(define %ext_c (extract %high3 %low3 c))"',
+            '"(define %o (bvadd %ext_c (bvmul %ext_a %ext_b)))"',
+            '"%o"',
+            '")"',
+            '")"',
+            '")"',
+            '"dst"',
+            '")"'
+        ],
+    }, 
+        """
+        )
+        f.write(
+        """
+       "mul_conv_32x8": {
+        "target_instructions": {
+            "mul_conv_32x8": {
+                "args": ["SYMBOLIC_BV_512", "SYMBOLIC_BV_512"],
+                "in_vectsize": 512,
+                "out_vectsize": 1024,
+                "lanesize": 512,
+                "in_precision": 8,
+                "out_precision": 32,
+                "in_vectsize_index": None,
+                "out_vectsize_index": None,
+                "in_lanesize_index": None,
+                "out_lanesize_index": None,
+                "in_precision_index": None,
+                "out_precision_index": None,
+                "arg_permute_map": [],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+        },
+        "semantics": [
+            '"(define (mul_conv_32x8 matA matB) "',
+            '"(define dst"',
+            '"(apply concat"',
+            '"(for/list ([%i (reverse (range 0 32 1))])"',
+            '"(define res"',
+            '"(apply bvadd"',
+            '"(for/list ([%j (reverse (range 0 8 1))])"',
+            '"(define %aLo1 (* 8 (+ %i %j)))"',
+            '"(define %aHi1 (+ %aLo1 (- 8 1)))"',
+            '"(define %bLo1 (* 8 %j))"',
+            '"(define %bHi1 (+ %bLo1 (- 8 1)))"',
+            '"(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector 32)))"',
+            '"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector 32)))"',
+            '"(define %elem (bvmul %ext_a1 %ext_b1))"',
+            '"%elem"',
+            '")"',
+            '")"',
+            '")"',
+            '"res"',
+            '")"',
+            '")"',
+            '")"',
+            '"dst"',
+            '")"',
+        ],
+    }, 
+        """
+        )
+        f.write(
             f"""\t"{ADD_classname}"  : {{ 
     "target_instructions" : {{"""
         )
@@ -342,6 +444,35 @@ def ELTMULInstEntry(InstName, Sema: AIESema):
 
 
 def ADDInstEntry(InstName, Sema: AIESema):
+    params = Sema.params
+    ret_ty_info = extract_info(Sema.rettype)
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+    vectsize = lanesize * datasize
+
+    ret_str = f"""
+  \t"{InstName}" : {{
+   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "{lanesize}", "{datasize}"],
+                "in_vectsize": {vectsize},
+                "out_vectsize": {vectsize},
+                "lanesize": {lanesize},
+                "in_precision": {datasize},
+                "out_precision": {datasize},
+                "in_vectsize_index": 2,
+                "out_vectsize_index": 2,
+                "in_lanesize_index": 2,
+                "out_lanesize_index": 2,
+                "in_precision_index": 3,
+                "out_precision_index": 3,
+                "arg_permute_map": [0, 1, -1, -1],
+                "Signedness": {int(all(param.is_signed for param in params))},
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+  }},"""
+    return ret_str
+
+def ShuffleInstEntry(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
     lanesize = ret_ty_info["NumLanes"]

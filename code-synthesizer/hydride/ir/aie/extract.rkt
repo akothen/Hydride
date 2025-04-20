@@ -120,6 +120,31 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ); mac_elem_32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (mac_elem_32_dsl expr-0 expr-1 expr-2 ) num-consumed-2)]
+		[else (error "Unable to extract  for mac_elem_32")]
+)
+
+	]
+	[(mul_conv_32x8_dsl v0 v1)
+		(cond 
+		[(and ); mul_conv_32x8
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_32x8_dsl expr-0 expr-1 ) num-consumed-1)]
+		[else (error "Unable to extract  for mul_conv_32x8")]
+)
+
+	]
 	[(add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)); add_v16acc64

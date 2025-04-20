@@ -85,6 +85,24 @@
 )
 
 	]
+	[(mac_elem_32_dsl v0 v1 v2)
+		(cond 
+		[(and ); mac_elem_32
+ 
+  (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1) (aie:get-bv-ops v2)))]
+		[else (error "Unable to get ops  for mac_elem_32")]
+)
+
+	]
+	[(mul_conv_32x8_dsl v0 v1)
+		(cond 
+		[(and ); mul_conv_32x8
+ 
+  (remove-duplicates (append (list  'bvadd 'bvmul 'sign-extend) (aie:get-bv-ops v0) (aie:get-bv-ops v1)))]
+		[else (error "Unable to get ops  for mul_conv_32x8")]
+)
+
+	]
 	[(add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(cond 
 		[(and  (equal? size_i_o 16) (equal? prec_i_o 64)); add_v16acc64

@@ -172,6 +172,27 @@
 		[else ( srs_to_v32int16_dsl v0-folded )]
 		)
 	]
+	[ (mac_elem_32_dsl v0 v1 v2)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(define v2-folded (aie:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (aie:interpret ( mac_elem_32_dsl v0-folded v1-folded v2-folded ) (vector)))
+]
+		[else ( mac_elem_32_dsl v0-folded v1-folded v2-folded )]
+		)
+	]
+	[ (mul_conv_32x8_dsl v0 v1)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded))
+(lit (aie:interpret ( mul_conv_32x8_dsl v0-folded v1-folded ) (vector)))
+]
+		[else ( mul_conv_32x8_dsl v0-folded v1-folded )]
+		)
+	]
 	[ (add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))

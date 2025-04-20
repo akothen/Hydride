@@ -91,6 +91,65 @@ def ParseAddSubHTML() -> list[AIESema]:
     f.close()
     return tmp
 
+
+def ParseShuffleHTML() -> list[AIESema]:
+    f = open("./intrinsics/group__intr__gpvectorop__interleave.html", "r")
+    soup = BeautifulSoup(f.read(), 'html.parser')
+    header_elements = soup.find_all('table', attrs={'class':'memname'})
+    tmp = []
+    for element in header_elements:
+        type_and_name = element.find('td', attrs={'class':'memname'})
+        skip = ["eShuffleMode", "c", "sparse", "float"]
+        if any(to_skip in type_and_name.text for to_skip in skip):
+            continue
+        type_and_name_split = type_and_name.text.split()
+        instclass = ""
+        rettype = type_and_name_split[0]
+        raw_name = type_and_name_split[1]
+        conf = "conf" in raw_name
+        if "_" in raw_name:
+            instclass = "BROADCAST"
+        if "operator" in raw_name:
+            continue
+        if "cacc" in rettype or "cint" in rettype or "float" in rettype:
+            continue
+        name = NameGen(type_and_name_split[0], type_and_name_split[1])
+        param_types = element.find_all('td', attrs={'class':'paramtype'})
+        param_names = element.find_all('td', attrs={'class':'paramname'})
+        params = []
+        if len(param_names) != len(param_types):
+            continue
+        for ty, tn in zip(param_types, param_names):
+            #params.append(f"{ty.text} {tn.text}".replace(u'\xa0', u' '))
+            ty_str = ty.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
+            tn_str = tn.text.replace(u'\xa0', u' ').strip().replace(" ", "").replace(",", "")
+            params.append(Parameter(tn_str, ty_str, "u" not in ty_str))
+        match len(params):
+            case 3:
+                instclass = "SHUFFLE_2"
+            case 2:
+                if instclass == '':
+                    instclass = "SHUFFLE_1"
+        sema_lo = AIESema(
+            intrin=name + "_lo",
+            params=params,
+            instclass=instclass,
+            conf=conf,
+            rettype=rettype,
+            )
+
+        sema_hi = AIESema(
+            intrin=name + "_hi",
+            params=params,
+            instclass=instclass,
+            conf=conf,
+            rettype=rettype,
+            )
+        tmp.append(sema_lo)
+        tmp.append(sema_hi)
+    f.close()
+    return tmp
+
 def ParseMulHTML() -> list[AIESema]:
     f = open("./intrinsics/group__intr__gpvectorop__mul.html", "r")
     soup = BeautifulSoup(f.read(), 'html.parser')
@@ -175,3 +234,4 @@ def ParseMulHTML() -> list[AIESema]:
 
 #print(len(ParseAddSubHTML()))
 #ParseMulHTML()
+ParseShuffleHTML()
