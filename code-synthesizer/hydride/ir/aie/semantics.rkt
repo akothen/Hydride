@@ -26,6 +26,10 @@
 ;;                                DSL Semantics
 ;; ================================================================================
 
+(define (shift_bytes a b shift %lanesize %datasize)
+(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))
+dst
+)
 (define (ups_to_v32acc32 vec)
 (define dst
 (apply concat
@@ -96,7 +100,27 @@ res
 )
 dst
 )
-(define (add_v64uint8 arg0 arg1 %lanesize %datasize)
+(define (shuffle_v128int4_lo arg0 arg1 %lanesize %indatasize)
+(define dst
+(apply concat
+(for/list ([%inner.it (reverse (range 0 %lanesize 1))])
+(define %low (* %indatasize %inner.it))
+(define %high (+ %inner.it (- %indatasize 1)))
+(define %a (extract %high %low arg0))
+(define %b (extract %high %low arg1))
+(concat %a %b))))
+(extract (- (* %lanesize %indatasize) 1) 0 dst))
+(define (shuffle_v128int4_hi arg0 arg1 %lanesize %indatasize)
+(define dst
+(apply concat
+(for/list ([%inner.it (reverse (range 0 %lanesize 1))])
+(define %low (* %indatasize %inner.it))
+(define %high (+ %inner.it (- %indatasize 1)))
+(define %a (extract %high %low arg0))
+(define %b (extract %high %low arg1))
+(concat %a %b))))
+(extract (- (* 2 (* %lanesize %indatasize)) 1) (* %lanesize %indatasize) dst))
+(define (add_v16acc64 arg0 arg1 %lanesize %datasize)
 (define dst
 (apply concat
 (for/list ([%i (range 0 %lanesize 1)])
@@ -113,7 +137,7 @@ dst
 )
 dst
 )
-(define (mul_elem_32_v32acc32 arg0 arg1 %lanesize %indatasize %outdatasize)
+(define (mul_elem_16_2_v16acc64 arg0 arg1 %lanesize %indatasize %outdatasize)
 (define dst
 (apply concat
 (for/list ([%i (reverse (range 0 %lanesize 1))])
@@ -130,7 +154,7 @@ dst
 )
 dst
 )
-(define (mul_elem_32_conf_v32acc32 arg0 arg1 int_sub %lanesize %indatasize %outdatasize)
+(define (mul_elem_16_2_conf_v16acc64 arg0 arg1 int_sub %lanesize %indatasize %outdatasize)
 (define dst
 (apply concat
 (for/list ([%i (reverse (range 0 %lanesize 1))])
@@ -147,7 +171,7 @@ dst
 )
 dst
 )
-(define (sub_v64uint8 arg0 arg1 %lanesize %datasize)
+(define (sub_v16acc64 arg0 arg1 %lanesize %datasize)
 (define dst
 (apply concat
 (for/list ([%i (range 0 %lanesize 1)])

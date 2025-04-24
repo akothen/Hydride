@@ -23,13 +23,16 @@
 ;; ================================================================================
 ;;                                Struct Definitions
 ;; ================================================================================
+(struct shift_bytes_dsl (v0 v1 num_2 size_i_o prec_i_o) #:transparent #:mutable)
 (struct ups_to_v32acc32_dsl (v0) #:transparent #:mutable)
 (struct srs_to_v32int16_dsl (v0) #:transparent #:mutable)
 (struct mac_elem_32_dsl (v0 v1 v2) #:transparent #:mutable)
 (struct mul_conv_32x8_dsl (v0 v1) #:transparent #:mutable)
-(struct add_v64uint8_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
-(struct mul_elem_32_v32acc32_dsl (v0 v1 size_i_o prec_i prec_o) #:transparent #:mutable)
-(struct mul_elem_32_conf_v32acc32_dsl (v0 v1 v2 prec_i prec_o num_5) #:transparent #:mutable)
-(struct sub_v64uint8_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
+(struct shuffle_v128int4_lo_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
+(struct shuffle_v128int4_hi_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
+(struct add_v16acc64_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
+(struct mul_elem_16_2_v16acc64_dsl (v0 v1 size_i_o prec_i prec_o) #:transparent #:mutable)
+(struct mul_elem_16_2_conf_v16acc64_dsl (v0 v1 v2 prec_i prec_o num_5) #:transparent #:mutable)
+(struct sub_v16acc64_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 ;; ================================================================================
 

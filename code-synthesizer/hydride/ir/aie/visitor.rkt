@@ -93,6 +93,11 @@
 		(define v0-visited (aie:visitor v0 fn))
 		(fn ( scalar_splat_dsl v0-visited size_i size_o ))
 	]
+	[ (shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( shift_bytes_dsl v0-visited v1-visited num_2 size_i_o prec_i_o ))
+	]
 	[ (ups_to_v32acc32_dsl v0)
 		(define v0-visited (aie:visitor v0 fn))
 		(fn ( ups_to_v32acc32_dsl v0-visited ))
@@ -112,26 +117,36 @@
 		(define v1-visited (aie:visitor v1 fn))
 		(fn ( mul_conv_32x8_dsl v0-visited v1-visited ))
 	]
-	[ (add_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+	[ (shuffle_v128int4_lo_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
-		(fn ( add_v64uint8_dsl v0-visited v1-visited size_i_o prec_i_o ))
+		(fn ( shuffle_v128int4_lo_dsl v0-visited v1-visited size_i_o prec_i_o ))
 	]
-	[ (mul_elem_32_v32acc32_dsl v0 v1 size_i_o prec_i prec_o)
+	[ (shuffle_v128int4_hi_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
-		(fn ( mul_elem_32_v32acc32_dsl v0-visited v1-visited size_i_o prec_i prec_o ))
+		(fn ( shuffle_v128int4_hi_dsl v0-visited v1-visited size_i_o prec_i_o ))
 	]
-	[ (mul_elem_32_conf_v32acc32_dsl v0 v1 v2 prec_i prec_o num_5)
+	[ (add_v16acc64_dsl v0 v1 size_i_o prec_i_o)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( add_v16acc64_dsl v0-visited v1-visited size_i_o prec_i_o ))
+	]
+	[ (mul_elem_16_2_v16acc64_dsl v0 v1 size_i_o prec_i prec_o)
+		(define v0-visited (aie:visitor v0 fn))
+		(define v1-visited (aie:visitor v1 fn))
+		(fn ( mul_elem_16_2_v16acc64_dsl v0-visited v1-visited size_i_o prec_i prec_o ))
+	]
+	[ (mul_elem_16_2_conf_v16acc64_dsl v0 v1 v2 prec_i prec_o num_5)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
 		(define v2-visited (aie:visitor v2 fn))
-		(fn ( mul_elem_32_conf_v32acc32_dsl v0-visited v1-visited v2-visited prec_i prec_o num_5 ))
+		(fn ( mul_elem_16_2_conf_v16acc64_dsl v0-visited v1-visited v2-visited prec_i prec_o num_5 ))
 	]
-	[ (sub_v64uint8_dsl v0 v1 size_i_o prec_i_o)
+	[ (sub_v16acc64_dsl v0 v1 size_i_o prec_i_o)
 		(define v0-visited (aie:visitor v0 fn))
 		(define v1-visited (aie:visitor v1 fn))
-		(fn ( sub_v64uint8_dsl v0-visited v1-visited size_i_o prec_i_o ))
+		(fn ( sub_v16acc64_dsl v0-visited v1-visited size_i_o prec_i_o ))
 	]
 	[_ (error "Unrecognized expression in visitor")]
  )

@@ -222,55 +222,16 @@
   dst
 )
 
-'"(define (mul_conv_32x8 matA matB m n indatasize outdatasize) "',
-'"(define dst"',
-'"(apply concat"',
-'"(for/list ([%i (reverse (range 0 m 1))])"',
-'"(define res"',
-'"(apply bvadd"',
-'"(for/list ([%j (reverse (range 0 n 1))])"',
-'"(define %aLo1 (* indatasize (+ %i %j)))"',
-'"(define %aHi1 (+ %aLo1 (- indatasize 1)))"',
-'"(define %bLo1 (* indatasize %j))"',
-'"(define %bHi1 (+ %bLo1 (- indatasize 1)))"',
-'"(define %ext_a1 (zero-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))"',
-'"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))"',
-'"(define %elem (bvmul %ext_a1 %ext_b1))"',
-'"%elem"',
-'")"',
-'")"',
-'")"',
-'"res"',
-'")"',
-'")"',
-'")"',
+(define (shift_bytes a b shift %lanesize %datasize)
+  (define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))
+  dst
+)
+
+'"(define (shift_bytes a b shift %lanesize %datasize)"',
+'"(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))"',
 '"dst"',
 '")"',
 
-'"(define (mul_conv_32x8 matA matB) "',
-'"(define dst"',
-'"(apply concat"',
-'"(for/list ([%i (reverse (range 0 32 1))])"',
-'"(define res"',
-'"(apply bvadd"',
-'"(for/list ([%j (reverse (range 0 8 1))])"',
-'"(define %aLo1 (* 8 (+ %i %j)))"',
-'"(define %aHi1 (+ %aLo1 (- 8 1)))"',
-'"(define %bLo1 (* 8 %j))"',
-'"(define %bHi1 (+ %bLo1 (- 8 1)))"',
-'"(define %ext_a1 (zero-extend (extract %aHi1 %aLo1 matA) (bitvector 32)))"',
-'"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector 32)))"',
-'"(define %elem (bvmul %ext_a1 %ext_b1))"',
-'"%elem"',
-'")"',
-'")"',
-'")"',
-'"res"',
-'")"',
-'")"',
-'")"',
-'"dst"',
-'")"',
 
 (define xbuff_32_16
   (bv
@@ -306,7 +267,10 @@
 ;; (bveq (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv #b01100100000100110111111010011110 32))
 ;; (mul_elem_32 xbuff_32_16 ybuff_32_16 (bv 0 32)) )
 (define bv1024? (bitvector 1024))
-(bv1024? (mul_conv_32x8 xbuff_64_8 ybuff_64_8 32 8 8 32))
+(define bv512? (bitvector 512))
+;;(bv1024? (mul_conv_32x8 xbuff_64_8 ybuff_64_8 32 8 8 32))
+(bv512? (shift_bytes xbuff_32_16 ybuff_32_16 8 16 32))
+(shift_bytes xbuff_32_16 ybuff_32_16 8 16 32)
 
 ;;; (pretty-print (bv1024? (mul_elem_32 xbuff_32_16 ybuff_32_16)))
 ;;; (srs_to_v32int16 (mul_elem_32 xbuff_32_16 ybuff_32_16))

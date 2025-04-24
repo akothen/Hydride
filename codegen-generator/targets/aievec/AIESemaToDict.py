@@ -34,50 +34,65 @@ def SemaToDict(SemaList):
             """# ============================== Hydride File =================================\n"""
         )
         ADD_entries = []
-        ADD_classname_set = False
         ADD_classname = ""
+
         SUB_entries = []
-        SUB_classname_set = False
-        SUB_classname = "False"
+        SUB_classname = ""
+
         ELTMUL_entries = []
-        ELTMUL_classname_set = False
-        ELTMUL_classname = "False"
+        ELTMUL_classname = ""
+
         ELTMUL_CONF_entries = []
-        ELTMUL_CONF_classname_set = False
-        ELTMUL_CONF_classname = "False"
+        ELTMUL_CONF_classname = ""
+
         MM_entries = []
-        MM_classname_set = False
-        MM_classname = "False"
+        MM_classname = ""
+
+        SHUFFLELO_entries = []
+        SHUFFLELO_classname = ""
+
+        SHUFFLELO_entries = []
+        SHUFFLELO_classname = ""
+
+        SHUFFLEHI_entries = []
+        SHUFFLEHI_classname = ""
+
+
+        SHIFT_entries = []
+        SHIFT_classname = ""
+
+        SHIFT_BYTES_entries = []
+        SHIFT_BYTES_classname = ""
 
         for inst, sema in SemaList.items():
+            if sema.instclass == "SHUFFLE_2_LO":
+                if not SHUFFLELO_classname:
+                    SHUFFLELO_classname = inst
+                SHUFFLELO_entries.append(ShuffleInstEntry(inst, sema))
+            if sema.instclass == "SHUFFLE_2_HI":
+                if not SHUFFLEHI_classname:
+                    SHUFFLEHI_classname = inst
+                SHUFFLEHI_entries.append(ShuffleInstEntry(inst, sema))
             if sema.instclass == "ADD":
-                if ADD_classname_set:
-                    continue
-                else:
+                if not ADD_classname:
                     ADD_classname = inst
                 ADD_entries.append(ADDInstEntry(inst, sema))
             if sema.instclass == "SUB":
-                if SUB_classname_set:
-                    continue
-                else:
+                if not SUB_classname:
                     SUB_classname = inst
                 SUB_entries.append(SUBInstEntry(inst, sema))
             if sema.instclass == "ELTMUL":
                 if sema.conf:
-                    if ELTMUL_CONF_classname_set:
-                        continue
-                    else:
+                    if not ELTMUL_CONF_classname:
                         ELTMUL_CONF_classname = inst
                     ELTMUL_CONF_entries.append(ELTMULInstEntry(inst, sema))
 
                 else:
-                    if ELTMUL_classname_set:
-                        continue
-                    else:
+                    if not ELTMUL_classname:
                         ELTMUL_classname = inst
                     ELTMUL_entries.append(ELTMULInstEntry(inst, sema))
-        if ADD_entries:
-            ADD_sema_str = f"""
+
+        ADD_sema_str = f"""
         '"(define ({ADD_classname} arg0 arg1 %lanesize %datasize)"',
         '"(define dst"',
         '"(apply concat"',
@@ -135,6 +150,45 @@ def SemaToDict(SemaList):
         '")"',
         """
 
+        SHIFT_sema_str = f"""
+        '"(define ({SHUFFLELO_classname} arg0 arg1 %lanesize %indatasize)"',
+        '"(define dst"',
+        '"(apply concat"',
+        '"(for/list ([%inner.it (reverse (range 0 %lanesize 1))])"',
+        '"(define %low (* %indatasize %inner.it))"',
+        '"(define %high (+ %inner.it (- %indatasize 1)))"',
+        '"(define %a (extract %high %low arg0))"',
+        '"(define %b (extract %high %low arg1))"',
+        '"(concat %a %b))))"',
+        '"(extract (- (* %lanesize %indatasize) 1) 0 dst))"',
+        """
+
+        SHUFFLELO_sema_str = f"""
+        '"(define ({SHUFFLELO_classname} arg0 arg1 %lanesize %indatasize)"',
+        '"(define dst"',
+        '"(apply concat"',
+        '"(for/list ([%inner.it (reverse (range 0 %lanesize 1))])"',
+        '"(define %low (* %indatasize %inner.it))"',
+        '"(define %high (+ %inner.it (- %indatasize 1)))"',
+        '"(define %a (extract %high %low arg0))"',
+        '"(define %b (extract %high %low arg1))"',
+        '"(concat %a %b))))"',
+        '"(extract (- (* %lanesize %indatasize) 1) 0 dst))"',
+        """
+
+        SHUFFLEHI_sema_str = f"""
+        '"(define ({SHUFFLEHI_classname} arg0 arg1 %lanesize %indatasize)"',
+        '"(define dst"',
+        '"(apply concat"',
+        '"(for/list ([%inner.it (reverse (range 0 %lanesize 1))])"',
+        '"(define %low (* %indatasize %inner.it))"',
+        '"(define %high (+ %inner.it (- %indatasize 1)))"',
+        '"(define %a (extract %high %low arg0))"',
+        '"(define %b (extract %high %low arg1))"',
+        '"(concat %a %b))))"',
+        '"(extract (- (* 2 (* %lanesize %indatasize)) 1) (* %lanesize %indatasize) dst))"',
+        """
+
         ELTMUL_CONF_sema_str = f"""
             '"(define ({ELTMUL_CONF_classname} arg0 arg1 int_sub %lanesize %indatasize %outdatasize)"',
             '"(define dst"',
@@ -156,6 +210,41 @@ def SemaToDict(SemaList):
             """
 
         f.write("""aie_sema = {\n""")
+
+        f.write(
+            """
+        "shift_bytes": {
+        "target_instructions": {
+            "shift_bytes": {
+                "args": ["SYMBOLIC_BV_512", "SYMBOLIC_BV_512", "8", "16", "32"],
+                "in_vectsize": 512,
+                "out_vectsize": 512,
+                "lanesize": 512,
+                "in_precision": 32,
+                "out_precision": 32,
+                "in_vectsize_index": 3,
+                "out_vectsize_index": 3,
+                "in_lanesize_index": 3,
+                "out_lanesize_index": 3,
+                "in_precision_index": 4,
+                "out_precision_index": 4,
+                "arg_permute_map": [0],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+        },
+        "semantics": [
+            '"(define (shift_bytes a b shift %lanesize %datasize)"',
+            '"(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))"',
+            '"dst"',
+            '")"',
+        ],
+    },
+        """
+        )
+        
         f.write(
             """
         "ups_to_v32acc32": {
@@ -241,7 +330,7 @@ def SemaToDict(SemaList):
         """
         )
         f.write(
-        """
+            """
        "mac_elem_32": {
         "target_instructions": {
             "mac_elem_32": {
@@ -290,7 +379,7 @@ def SemaToDict(SemaList):
         """
         )
         f.write(
-        """
+            """
        "mul_conv_32x8": {
         "target_instructions": {
             "mul_conv_32x8": {
@@ -342,6 +431,28 @@ def SemaToDict(SemaList):
     }, 
         """
         )
+        
+        
+        f.write(
+            f"""\t"{SHUFFLELO_classname}"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in SHUFFLELO_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{SHUFFLELO_sema_str}]""")
+        f.write("""\n\n},\n""")
+
+        f.write(
+            f"""\t"{SHUFFLEHI_classname}"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in SHUFFLEHI_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{SHUFFLEHI_sema_str}]""")
+        f.write("""\n\n},\n""")
+        
         f.write(
             f"""\t"{ADD_classname}"  : {{ 
     "target_instructions" : {{"""
@@ -472,6 +583,7 @@ def ADDInstEntry(InstName, Sema: AIESema):
   }},"""
     return ret_str
 
+
 def ShuffleInstEntry(InstName, Sema: AIESema):
     params = Sema.params
     ret_ty_info = extract_info(Sema.rettype)
@@ -500,6 +612,39 @@ def ShuffleInstEntry(InstName, Sema: AIESema):
                 "Extensions": "[]",
   }},"""
     return ret_str
+
+
+def ShiftInstEntry(InstName, Sema: AIESema):
+    params = Sema.params
+    ret_ty_info = extract_info(Sema.rettype)
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+    vectsize = lanesize * datasize
+    shift = params[2]
+
+    ret_str = f"""
+  \t"{InstName}" : {{
+   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "{shift}" "{lanesize}", "{datasize}"],
+                "in_vectsize": {vectsize},
+                "out_vectsize": {vectsize},
+                "lanesize": {lanesize},
+                "in_precision": {datasize},
+                "out_precision": {datasize},
+                "in_vectsize_index": 2,
+                "out_vectsize_index": 2,
+                "in_lanesize_index": 2,
+                "out_lanesize_index": 2,
+                "in_precision_index": 3,
+                "out_precision_index": 3,
+                "arg_permute_map": [0, 1, -1, -1],
+                "Signedness": {int(all(param.is_signed for param in params))},
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+  }},"""
+    return ret_str
+
+
 
 
 def SUBInstEntry(InstName, Sema: AIESema):
