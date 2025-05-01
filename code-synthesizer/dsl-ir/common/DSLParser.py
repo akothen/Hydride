@@ -74,6 +74,12 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
         if "ctx_sema" not in sub_obj:
             sub_obj['ctx_sema'] = None
 
+        if "arg_permute_map" not in sub_obj:
+            sub_obj['arg_permute_map'] = []
+
+
+
+
 
         dsl_inst.add_context(name = subinst_name,
                              in_vectsize = sub_obj['in_vectsize'],
@@ -93,7 +99,9 @@ def populate_dsl_inst(dsl_inst, sub_inst_dict, keep_duplicate=False):
                              in_lanesize_index = sub_obj['in_lanesize_index'],
                              out_lanesize_index = sub_obj['out_lanesize_index'],
                              ctx_sema = sub_obj['ctx_sema'] ,
-                             extensions = sub_obj['Extensions']
+                             extensions = sub_obj['Extensions'],
+                             permutation = sub_obj['arg_permute_map']
+
                              )
 
     return dsl_inst

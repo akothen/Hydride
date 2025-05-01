@@ -454,6 +454,8 @@ class Reg(OperandType):
         self.precision = precision
         self.size = size
         self.signed = signed
+        self.out_precision = precision
+        self.out_vectsize = size
 
         assert self.precision != None, "precision for reg needs to be provied"
         assert self.size != None, "size for reg needs to be provided"

@@ -147,7 +147,7 @@ class Context:
                  out_precision_index=None, cost=None,
                  signedness=None, in_lanesize_index=None,
                  out_lanesize_index=None, semantics=None,
-                 ctx_sema=None, extensions=None
+                 ctx_sema=None, extensions=None, permutation = None
                  ):
         self.name = name
         self.dsl_name = dsl_name
@@ -171,6 +171,7 @@ class Context:
         self.unscaled_sym_bvs_idx = []
         self.is_bounded = False
         self.ctx_sema = ctx_sema
+        self.permutation = permutation
 
         self.num_args = len(args)
         self.unparsed_args = args
@@ -859,7 +860,7 @@ class DSLInstruction(InstructionType):
                     out_precision_index=None, cost=None,
                     signedness=None, in_lanesize_index=None,
                     out_lanesize_index=None,
-                    ctx_sema=None, extensions=None):
+                    ctx_sema=None, extensions=None, permutation = None):
 
         if extensions != None and 'halide' in extensions:
             self.add_dsl_to_name = False
@@ -877,7 +878,8 @@ class DSLInstruction(InstructionType):
                     out_lanesize_index=out_lanesize_index,
                     semantics=self.semantics,
                     ctx_sema=ctx_sema,
-                    extensions=extensions
+                    extensions=extensions,
+                    permutation = permutation
                     )
         )
 
