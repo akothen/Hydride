@@ -23,11 +23,14 @@
 ;; ================================================================================
 ;;                                Struct Definitions
 ;; ================================================================================
-(struct shift_bytes_dsl (v0 v1 num_2 size_i_o prec_i_o) #:transparent #:mutable)
+(struct concat_v16int16_dsl (v0 v1 size_i size_o prec_i prec_o) #:transparent #:mutable)
+(struct ups_to_v16acc32_dsl (v0) #:transparent #:mutable)
 (struct ups_to_v32acc32_dsl (v0) #:transparent #:mutable)
+(struct srs_to_v16int16_dsl (v0) #:transparent #:mutable)
 (struct srs_to_v32int16_dsl (v0) #:transparent #:mutable)
 (struct mac_elem_32_dsl (v0 v1 v2) #:transparent #:mutable)
-(struct mul_conv_32x8_dsl (v0 v1) #:transparent #:mutable)
+(struct mul_conv_16x4_conf_v16acc64_dsl (v0 v1 num_2 num_3 size_i size_o prec_i prec_o) #:transparent #:mutable)
+(struct shift_v16int32_dsl (v0 v1 v2 size_i_o prec_i_o) #:transparent #:mutable)
 (struct shuffle_v128int4_lo_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct shuffle_v128int4_hi_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)
 (struct add_v16acc64_dsl (v0 v1 size_i_o prec_i_o) #:transparent #:mutable)

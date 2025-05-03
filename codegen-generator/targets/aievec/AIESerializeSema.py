@@ -30,6 +30,7 @@ class SemaGenerator:
         AllSemantics += ParseAddSubHTML()
         AllSemantics += ParseMulHTML()
         AllSemantics += ParseShuffleHTML()
+        AllSemantics += ParseShiftHTML()
         for i in AllSemantics:
             self.result[i.intrin] = i
         return self.result

@@ -361,10 +361,37 @@
 		(define relavent-indices (filter filter-fn (range 0 2)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog shift_bytes_dsl)
-		(define input-precs-dsl (list  32  ))
-		(define input-size-dsl (list   (list 512 512 ) ) )
-		(define variants (list (shift_bytes_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8 16 32 ) 
+	[(equal? prog concat_v16int16_dsl)
+		(define input-precs-dsl (list  16 8  ))
+		(define input-size-dsl (list   (list 256 256 ) (list 256 256 ) ) )
+		(define variants (list (concat_v16int16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 16 32 16 16 ) 
+(concat_v16int16_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32 64 8 8 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 2)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog ups_to_v16acc32_dsl)
+		(define input-precs-dsl (list  16  ))
+		(define input-size-dsl (list   (list 256 ) ) )
+		(define variants (list (ups_to_v16acc32_dsl (reg (bv 0 8)) ) 
 ))
 		
             (define (filter-fn i)
@@ -391,6 +418,32 @@
 		(define input-precs-dsl (list  16  ))
 		(define input-size-dsl (list   (list 512 ) ) )
 		(define variants (list (ups_to_v32acc32_dsl (reg (bv 0 8)) ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 1)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog srs_to_v16int16_dsl)
+		(define input-precs-dsl (list  64  ))
+		(define input-size-dsl (list   (list 1024 ) ) )
+		(define variants (list (srs_to_v16int16_dsl (reg (bv 0 8)) ) 
 ))
 		
             (define (filter-fn i)
@@ -465,10 +518,17 @@
 		(define relavent-indices (filter filter-fn (range 0 1)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
-	[(equal? prog mul_conv_32x8_dsl)
-		(define input-precs-dsl (list  8  ))
-		(define input-size-dsl (list   (list 512 512 ) ) )
-		(define variants (list (mul_conv_32x8_dsl (reg (bv 0 8)) (reg (bv 1 8)) ) 
+	[(equal? prog mul_conv_16x4_conf_v16acc64_dsl)
+		(define input-precs-dsl (list  16 16 8 8 8 8 8 8  ))
+		(define input-size-dsl (list   (list 512 512 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) (list 512 512 ) ) )
+		(define variants (list (mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 16 4 32 16 16 64 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 16 4 32 16 16 64 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32 8 64 32 8 32 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 32 8 64 32 8 32 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 4 4 64 32 8 32 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 4 4 64 32 8 32 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8 8 64 32 8 32 ) 
+(mul_conv_16x4_conf_v16acc64_dsl (reg (bv 0 8)) (reg (bv 1 8)) 8 8 64 32 8 32 ) 
 ))
 		
             (define (filter-fn i)
@@ -488,7 +548,38 @@
               (and length-condition prec-condition)
               )
         
-		(define relavent-indices (filter filter-fn (range 0 1)))
+		(define relavent-indices (filter filter-fn (range 0 8)))
+		(for/list ([i relavent-indices]) (list-ref variants i))
+	]
+	[(equal? prog shift_v16int32_dsl)
+		(define input-precs-dsl (list  32 32 16 16 8 8  ))
+		(define input-size-dsl (list   (list 512 512 32 ) (list 512 512 32 ) (list 512 512 32 ) (list 512 512 32 ) (list 512 512 32 ) (list 512 512 32 ) ) )
+		(define variants (list (shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 16 32 ) 
+(shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 16 32 ) 
+(shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 32 16 ) 
+(shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 32 16 ) 
+(shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 64 8 ) 
+(shift_v16int32_dsl (reg (bv 0 8)) (reg (bv 1 8)) (reg (bv 2 8)) 64 8 ) 
+))
+		
+            (define (filter-fn i)
+              (define length-condition #f)
+              (define prec-condition #f)
+
+              (for/list ([l input-sizes])
+                        (for/list ([l_ (list-ref input-size-dsl i)])
+                                  (cond [(equal? l l_) (set! length-condition #t)] )
+                                  )
+                        )
+
+              (for/list ([p input-precs])
+                        (cond [(equal? p (list-ref input-precs-dsl i)) (set! prec-condition #t)] )
+                        )
+
+              (and length-condition prec-condition)
+              )
+        
+		(define relavent-indices (filter filter-fn (range 0 6)))
 		(for/list ([i relavent-indices]) (list-ref variants i))
 	]
 	[(equal? prog shuffle_v128int4_lo_dsl)

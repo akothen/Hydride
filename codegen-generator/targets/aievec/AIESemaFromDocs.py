@@ -150,7 +150,7 @@ def ParseShuffleHTML() -> list[AIESema]:
     f.close()
     return tmp
 
-def ParseShuffleHTML() -> list[AIESema]:
+def ParseShiftHTML() -> list[AIESema]:
     f = open("./intrinsics/group__intr__gpvectorop__shift.html", "r")
     soup = BeautifulSoup(f.read(), 'html.parser')
     header_elements = soup.find_all('table', attrs={'class':'memname'})
@@ -234,6 +234,7 @@ def ParseMulHTML() -> list[AIESema]:
             conf = "conf" in raw_name
             mac_mm_pattern = r"mac_\d+x(\d+)_\1x\d+(_conf)?$"
             mm_pattern = r"mul_\d+x(\d+)_\1x\d+(_conf)?$"
+            mm_conv_pattern = r"mul_conv_\d+x(\d+)_\1x\d+"
             neg_mm_pattern = r"negmul_\d+x(\d+)_\1x\d+(_conf)?$"
             if "operator" in raw_name:
                 continue
@@ -253,6 +254,12 @@ def ParseMulHTML() -> list[AIESema]:
                 instclass = "NEGMAC"
             elif "submac" in raw_name:
                 instclass = "SUBMAC"
+            elif raw_name.startswith("mul_conv"):
+                # todo: add negmul_conv and channel handling
+                instclass = "MULCONV"
+            elif raw_name.startswith("mac_conv"):
+                # todo: add negmul_conv and channel handling
+                instclass = "MACCONV"
             elif re.fullmatch(mm_pattern, raw_name):
                 instclass = "MATMUL"
             elif re.fullmatch(neg_mm_pattern, raw_name):

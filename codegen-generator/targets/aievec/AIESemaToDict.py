@@ -5,6 +5,14 @@ import re
 import pprint
 
 
+def extract_conv_info(s):
+    match = re.match(r"mul_conv_(\d+)x(\d+)", s)
+    if match:
+        return {"M": int(match.group(1)), "N": int(match.group(2))}
+    else:
+        return None
+
+
 def extract_info(s):
     pattern = r"v(?P<NumLanes>\d+)(?P<signed>u?)(?P<Type>int|acc)(?P<SizeOfElement>\d+)"
     match = re.match(pattern, s)
@@ -48,6 +56,9 @@ def SemaToDict(SemaList):
         MM_entries = []
         MM_classname = ""
 
+        MULCONV_entries = []
+        MULCONV_classname = ""
+
         SHUFFLELO_entries = []
         SHUFFLELO_classname = ""
 
@@ -56,7 +67,6 @@ def SemaToDict(SemaList):
 
         SHUFFLEHI_entries = []
         SHUFFLEHI_classname = ""
-
 
         SHIFT_entries = []
         SHIFT_classname = ""
@@ -73,6 +83,10 @@ def SemaToDict(SemaList):
                 if not SHUFFLEHI_classname:
                     SHUFFLEHI_classname = inst
                 SHUFFLEHI_entries.append(ShuffleInstEntry(inst, sema))
+            if sema.instclass == "SHIFT_ELEMS":
+                if not SHIFT_classname:
+                    SHIFT_classname = inst
+                SHIFT_entries.append(ShiftInstEntry(inst, sema))
             if sema.instclass == "ADD":
                 if not ADD_classname:
                     ADD_classname = inst
@@ -86,11 +100,14 @@ def SemaToDict(SemaList):
                     if not ELTMUL_CONF_classname:
                         ELTMUL_CONF_classname = inst
                     ELTMUL_CONF_entries.append(ELTMULInstEntry(inst, sema))
-
                 else:
                     if not ELTMUL_classname:
                         ELTMUL_classname = inst
                     ELTMUL_entries.append(ELTMULInstEntry(inst, sema))
+            if sema.instclass == "MULCONV":
+                if not MULCONV_classname:
+                    MULCONV_classname = inst
+                MULCONV_entries.append(MULCONVInstEntry(inst, sema))
 
         ADD_sema_str = f"""
         '"(define ({ADD_classname} arg0 arg1 %lanesize %datasize)"',
@@ -150,17 +167,38 @@ def SemaToDict(SemaList):
         '")"',
         """
 
-        SHIFT_sema_str = f"""
-        '"(define ({SHUFFLELO_classname} arg0 arg1 %lanesize %indatasize)"',
+        MULCONV_sema_str = f"""
+        '"(define ({MULCONV_classname} matA matB m n in_lanesize lanesize indatasize outdatasize) "',
         '"(define dst"',
         '"(apply concat"',
-        '"(for/list ([%inner.it (reverse (range 0 %lanesize 1))])"',
-        '"(define %low (* %indatasize %inner.it))"',
-        '"(define %high (+ %inner.it (- %indatasize 1)))"',
-        '"(define %a (extract %high %low arg0))"',
-        '"(define %b (extract %high %low arg1))"',
-        '"(concat %a %b))))"',
-        '"(extract (- (* %lanesize %indatasize) 1) 0 dst))"',
+        '"(for/list ([%i (reverse (range 0 m 1))])"',
+        '"(define res"',
+        '"(apply bvadd"',
+        '"(for/list ([%j (reverse (range 0 n 1))])"',
+        '"(define %aLo1 (* indatasize (+ %i %j)))"',
+        '"(define %aHi1 (+ %aLo1 (- indatasize 1)))"',
+        '"(define %bLo1 (* indatasize %j))"',
+        '"(define %bHi1 (+ %bLo1 (- indatasize 1)))"',
+        '"(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))"',
+        '"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))"',
+        '"(define %elem (bvmul %ext_a1 %ext_b1))"',
+        '"%elem"',
+        '")"',
+        '")"',
+        '")"',
+        '"res"',
+        '")"',
+        '")"',
+        '")"',
+        '"dst"',
+        '")"',
+        """
+
+        SHIFT_sema_str = f"""
+        '"(define ({SHIFT_classname} a b shift %lanesize %datasize)"',
+        '"(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))"',
+        '"dst"',
+        '")"',
         """
 
         SHUFFLELO_sema_str = f"""
@@ -213,21 +251,73 @@ def SemaToDict(SemaList):
 
         f.write(
             """
-        "shift_bytes": {
+        "concat_v16int16": {
         "target_instructions": {
-            "shift_bytes": {
-                "args": ["SYMBOLIC_BV_512", "SYMBOLIC_BV_512", "8", "16", "32"],
-                "in_vectsize": 512,
+            "concat_v16int16": {
+                "args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256", "16", "32", "16", "16"],
+                "in_vectsize": 256,
                 "out_vectsize": 512,
-                "lanesize": 512,
-                "in_precision": 32,
+                "lanesize": 256,
+                "in_precision": 16,
                 "out_precision": 32,
-                "in_vectsize_index": 3,
+                "in_vectsize_index": 2,
                 "out_vectsize_index": 3,
-                "in_lanesize_index": 3,
+                "in_lanesize_index": 2,
                 "out_lanesize_index": 3,
                 "in_precision_index": 4,
-                "out_precision_index": 4,
+                "out_precision_index": 5,
+                "arg_permute_map": [0, 1, -1, -1, -1, -1],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+            "concat_v32int8": {
+                "args": ["SYMBOLIC_BV_256", "SYMBOLIC_BV_256", "32", "64", "8", "8"],
+                "in_vectsize": 256,
+                "out_vectsize": 512,
+                "lanesize": 256,
+                "in_precision": 8,
+                "out_precision": 8,
+                "in_vectsize_index": 2,
+                "out_vectsize_index": 3,
+                "in_lanesize_index": 2,
+                "out_lanesize_index": 3,
+                "in_precision_index": 4,
+                "out_precision_index": 5,
+                "arg_permute_map": [0, 1, -1, -1, -1, -1],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+        },
+        "semantics": [
+            '"(define (concat_v16int16 vecA vecB %inlanesize %outlanesize %inprec %outprec)"',
+            '"(concat vecA vecB)"',
+            '")"',
+        ],
+    },
+        """
+        
+        )
+        f.write(
+            """
+        "ups_to_v16acc32": {
+        "target_instructions": {
+            "ups_to_v16acc32": {
+                "args": ["SYMBOLIC_BV_256"],
+                "in_vectsize": 256,
+                "out_vectsize": 512,
+                "lanesize": 256,
+                "in_precision": 16,
+                "out_precision": 32,
+                "in_vectsize_index": None,
+                "out_vectsize_index": None,
+                "in_lanesize_index": None,
+                "out_lanesize_index": None,
+                "in_precision_index": None,
+                "out_precision_index": None,
                 "arg_permute_map": [0],
                 "Signedness": 1,
                 "Cost": "None",
@@ -236,15 +326,26 @@ def SemaToDict(SemaList):
             },
         },
         "semantics": [
-            '"(define (shift_bytes a b shift %lanesize %datasize)"',
-            '"(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))"',
+            '"(define (ups_to_v16acc32 vec)"',
+            '"(define dst"',
+            '"(apply concat"',
+            '"(for/list ([%i (reverse (range 0 16 1))])"',
+            '"(define %low1 (* 16 %i))"',
+            '"(define %high1 (+ %low1 (- 16 1)))"',
+            '"(define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))"',
+            '"%o"',
+            '")"',
+            '")"',
+            '")"',
             '"dst"',
             '")"',
         ],
     },
         """
-        )
         
+        )
+
+
         f.write(
             """
         "ups_to_v32acc32": {
@@ -285,6 +386,49 @@ def SemaToDict(SemaList):
             '")"',
         ],
     },
+        """
+        
+        )
+        f.write(
+            """
+       "srs_to_v16int16": {
+        "target_instructions": {
+            "srs_to_v16int16": {
+                "args": ["SYMBOLIC_BV_1024"],
+                "in_vectsize": 1024,
+                "out_vectsize": 256,
+                "lanesize": 1024,
+                "in_precision": 64,
+                "out_precision": 16,
+                "in_vectsize_index": None,
+                "out_vectsize_index": None,
+                "in_lanesize_index": None,
+                "out_lanesize_index": None,
+                "in_precision_index": None,
+                "out_precision_index": None,
+                "arg_permute_map": [0],
+                "Signedness": 1,
+                "Cost": "None",
+                "SIMD": "True",
+                "Extensions": "[]",
+            },
+        },
+        "semantics": [
+            '"(define (srs_to_v16int16 acc)"',
+            '"(define dst"',
+            '"(apply concat"',
+            '"(for/list ([%i (reverse (range 0 16 1))])"',
+            '"(define %low1 (* 64 %i))"',
+            '"(define %high1 (+ %low1 (- 64 1)))"',
+            '"(define %o (extract 15 0 (extract %high1 %low1 acc)))"',
+            '"%o"',
+            '")"',
+            '")"',
+            '")"',
+            '"dst "',
+            '")"',
+        ],
+    }, 
         """
         )
         f.write(
@@ -378,61 +522,27 @@ def SemaToDict(SemaList):
     }, 
         """
         )
+
         f.write(
-            """
-       "mul_conv_32x8": {
-        "target_instructions": {
-            "mul_conv_32x8": {
-                "args": ["SYMBOLIC_BV_512", "SYMBOLIC_BV_512"],
-                "in_vectsize": 512,
-                "out_vectsize": 1024,
-                "lanesize": 512,
-                "in_precision": 8,
-                "out_precision": 32,
-                "in_vectsize_index": None,
-                "out_vectsize_index": None,
-                "in_lanesize_index": None,
-                "out_lanesize_index": None,
-                "in_precision_index": None,
-                "out_precision_index": None,
-                "arg_permute_map": [],
-                "Signedness": 1,
-                "Cost": "None",
-                "SIMD": "True",
-                "Extensions": "[]",
-            },
-        },
-        "semantics": [
-            '"(define (mul_conv_32x8 matA matB) "',
-            '"(define dst"',
-            '"(apply concat"',
-            '"(for/list ([%i (reverse (range 0 32 1))])"',
-            '"(define res"',
-            '"(apply bvadd"',
-            '"(for/list ([%j (reverse (range 0 8 1))])"',
-            '"(define %aLo1 (* 8 (+ %i %j)))"',
-            '"(define %aHi1 (+ %aLo1 (- 8 1)))"',
-            '"(define %bLo1 (* 8 %j))"',
-            '"(define %bHi1 (+ %bLo1 (- 8 1)))"',
-            '"(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector 32)))"',
-            '"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector 32)))"',
-            '"(define %elem (bvmul %ext_a1 %ext_b1))"',
-            '"%elem"',
-            '")"',
-            '")"',
-            '")"',
-            '"res"',
-            '")"',
-            '")"',
-            '")"',
-            '"dst"',
-            '")"',
-        ],
-    }, 
-        """
+            f"""\t"{MULCONV_classname}"  : {{ 
+    "target_instructions" : {{"""
         )
-        
-        
+        for i in MULCONV_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{MULCONV_sema_str}]""")
+        f.write("""\n\n},\n""")
+
+        f.write(
+            f"""\t"{SHIFT_classname}"  : {{ 
+    "target_instructions" : {{"""
+        )
+        for i in SHIFT_entries:
+            f.write(f"""\t\t{i}""")
+        f.write("""\n},""")
+        f.write(f""" "semantics": [{SHIFT_sema_str}]""")
+        f.write("""\n\n},\n""")
+
         f.write(
             f"""\t"{SHUFFLELO_classname}"  : {{ 
     "target_instructions" : {{"""
@@ -452,7 +562,7 @@ def SemaToDict(SemaList):
         f.write("""\n},""")
         f.write(f""" "semantics": [{SHUFFLEHI_sema_str}]""")
         f.write("""\n\n},\n""")
-        
+
         f.write(
             f"""\t"{ADD_classname}"  : {{ 
     "target_instructions" : {{"""
@@ -494,6 +604,44 @@ def SemaToDict(SemaList):
         f.write("""\n}""")
         f.write("""\n}""")
 
+
+def MULCONVInstEntry(InstName, Sema: AIESema):
+    params = Sema.params
+    in_ty_info_a = extract_info(params[0].type)
+    in_ty_info_b = extract_info(params[0].type)
+    assert in_ty_info_a["SizeOfElement"] == in_ty_info_b["SizeOfElement"]
+    ret_ty_info = extract_info(Sema.rettype)
+    lanesize = ret_ty_info["NumLanes"]
+    datasize = ret_ty_info["SizeOfElement"]
+    out_vectsize = lanesize * datasize
+    in_datasize = in_ty_info_a["SizeOfElement"]
+    in_lanesize = in_ty_info_a["NumLanes"]
+    in_vectsize = in_lanesize * in_datasize
+    conv_dict = extract_conv_info(InstName)
+    m = conv_dict["M"]
+    n = conv_dict["N"]
+
+    ret_str = f"""
+    \t"{InstName}" : {{
+    \t "args": ["SYMBOLIC_BV_{in_vectsize}", "SYMBOLIC_BV_{in_vectsize}", "{m}", "{n}" , "{in_lanesize}", "{lanesize}", "{in_datasize}", "{datasize}"],
+                    "in_vectsize": {in_vectsize},
+                    "out_vectsize": {out_vectsize},
+                    "lanesize": {in_lanesize},
+                    "in_precision": {in_datasize},
+                    "out_precision": {datasize},
+                    "in_vectsize_index": 4,
+                    "out_vectsize_index": 5,
+                    "in_lanesize_index": 4,
+                    "out_lanesize_index": 5,
+                    "in_precision_index": 6,
+                    "out_precision_index": 7,
+                    "arg_permute_map": [0, 1, -1, -1, -1, -1, -1, -1],
+                    "Signedness": {int(all(param.is_signed for param in params))},
+                    "Cost": "None",
+                    "SIMD": "True",
+                    "Extensions": "[]",
+    }},"""
+    return ret_str
 
 def ELTMULInstEntry(InstName, Sema: AIESema):
     params = Sema.params
@@ -620,31 +768,28 @@ def ShiftInstEntry(InstName, Sema: AIESema):
     lanesize = ret_ty_info["NumLanes"]
     datasize = ret_ty_info["SizeOfElement"]
     vectsize = lanesize * datasize
-    shift = params[2]
 
     ret_str = f"""
   \t"{InstName}" : {{
-   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "{shift}" "{lanesize}", "{datasize}"],
+   \t "args": ["SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_{vectsize}", "SYMBOLIC_BV_32", "{lanesize}", "{datasize}"],
                 "in_vectsize": {vectsize},
                 "out_vectsize": {vectsize},
                 "lanesize": {lanesize},
                 "in_precision": {datasize},
                 "out_precision": {datasize},
-                "in_vectsize_index": 2,
-                "out_vectsize_index": 2,
-                "in_lanesize_index": 2,
-                "out_lanesize_index": 2,
-                "in_precision_index": 3,
-                "out_precision_index": 3,
-                "arg_permute_map": [0, 1, -1, -1],
+                "in_vectsize_index": 3,
+                "out_vectsize_index": 3,
+                "in_lanesize_index": 3,
+                "out_lanesize_index": 3,
+                "in_precision_index": 4,
+                "out_precision_index": 4,
+                "arg_permute_map": [0, 1, 2, -1, -1],
                 "Signedness": {int(all(param.is_signed for param in params))},
                 "Cost": "None",
                 "SIMD": "True",
                 "Extensions": "[]",
   }},"""
     return ret_str
-
-
 
 
 def SUBInstEntry(InstName, Sema: AIESema):

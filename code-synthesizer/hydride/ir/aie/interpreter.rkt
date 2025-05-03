@@ -81,12 +81,18 @@
 	[ (scalar_splat_dsl v0 size_i size_o)
 		(scalar_splat (aie:interpret v0 env) size_i size_o)
 	]
-	[ (shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
-		(shift_bytes (aie:interpret v0 env) (aie:interpret v1 env) num_2 
-		 size_i_o prec_i_o)
+	[ (concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
+		(concat_v16int16 (aie:interpret v0 env) (aie:interpret v1 env) size_i 
+		 size_o prec_i prec_o)
+	]
+	[ (ups_to_v16acc32_dsl v0)
+		(ups_to_v16acc32 (aie:interpret v0 env))
 	]
 	[ (ups_to_v32acc32_dsl v0)
 		(ups_to_v32acc32 (aie:interpret v0 env))
+	]
+	[ (srs_to_v16int16_dsl v0)
+		(srs_to_v16int16 (aie:interpret v0 env))
 	]
 	[ (srs_to_v32int16_dsl v0)
 		(srs_to_v32int16 (aie:interpret v0 env))
@@ -94,8 +100,14 @@
 	[ (mac_elem_32_dsl v0 v1 v2)
 		(mac_elem_32 (aie:interpret v0 env) (aie:interpret v1 env) (aie:interpret v2 env))
 	]
-	[ (mul_conv_32x8_dsl v0 v1)
-		(mul_conv_32x8 (aie:interpret v0 env) (aie:interpret v1 env))
+	[ (mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
+		(mul_conv_16x4_conf_v16acc64 (aie:interpret v0 env) (aie:interpret v1 env) num_2 
+		 num_3 size_i size_o 
+		 prec_i prec_o)
+	]
+	[ (shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(shift_v16int32 (aie:interpret v0 env) (aie:interpret v1 env) (aie:interpret v2 env) 
+		 size_i_o prec_i_o)
 	]
 	[ (shuffle_v128int4_lo_dsl v0 v1 size_i_o prec_i_o)
 		(shuffle_v128int4_lo (aie:interpret v0 env) (aie:interpret v1 env) size_i_o 

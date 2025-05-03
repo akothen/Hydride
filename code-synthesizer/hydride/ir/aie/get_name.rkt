@@ -67,11 +67,21 @@
 		[(scalar_splat_dsl v0 size_i size_o)
 		 (append (list  "llvm-splat-8-32") (aie:get-target-name v0))
 	]
-	[(shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
+	[(concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
 		(cond 
-		[(and  (equal? num_2 8) (equal? size_i_o 16) (equal? prec_i_o 32)) 
-   (append (list  "shift_bytes") (aie:get-target-name v0) (aie:get-target-name v1))]
-		[else (error "Unable to get name  for shift_bytes")]
+		[(and  (equal? size_i 16) (equal? size_o 32) (equal? prec_i 16) (equal? prec_o 16)) 
+   (append (list  "concat_v16int16") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? size_i 32) (equal? size_o 64) (equal? prec_i 8) (equal? prec_o 8)) 
+   (append (list  "concat_v32int8") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for concat_v16int16")]
+)
+
+	]
+	[(ups_to_v16acc32_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "ups_to_v16acc32") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for ups_to_v16acc32")]
 )
 
 	]
@@ -80,6 +90,14 @@
 		[(and ) 
    (append (list  "ups_to_v32acc32") (aie:get-target-name v0))]
 		[else (error "Unable to get name  for ups_to_v32acc32")]
+)
+
+	]
+	[(srs_to_v16int16_dsl v0)
+		(cond 
+		[(and ) 
+   (append (list  "srs_to_v16int16") (aie:get-target-name v0))]
+		[else (error "Unable to get name  for srs_to_v16int16")]
 )
 
 	]
@@ -99,11 +117,43 @@
 )
 
 	]
-	[(mul_conv_32x8_dsl v0 v1)
+	[(mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
 		(cond 
-		[(and ) 
-   (append (list  "mul_conv_32x8") (aie:get-target-name v0) (aie:get-target-name v1))]
-		[else (error "Unable to get name  for mul_conv_32x8")]
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)) 
+   (append (list  "mul_conv_16x4_conf_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)) 
+   (append (list  "mul_conv_16x4_v16acc64") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_32x8_conf_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_32x8_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_4x4_8ch_conf_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_4x4_8ch_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_8x8_4ch_conf_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 
+   (append (list  "mul_conv_8x8_4ch_v32acc32") (aie:get-target-name v0) (aie:get-target-name v1))]
+		[else (error "Unable to get name  for mul_conv_16x4_conf_v16acc64")]
+)
+
+	]
+	[(shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(cond 
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 
+   (append (list  "shift_v16int32") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 
+   (append (list  "shift_v16uint32") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 
+   (append (list  "shift_v32int16") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 
+   (append (list  "shift_v32uint16") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 
+   (append (list  "shift_v64int8") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 
+   (append (list  "shift_v64uint8") (aie:get-target-name v0) (aie:get-target-name v1) (aie:get-target-name v2))]
+		[else (error "Unable to get name  for shift_v16int32")]
 )
 
 	]

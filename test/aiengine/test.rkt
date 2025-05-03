@@ -222,6 +222,57 @@
   dst
 )
 
+(define (mul_conv matA matB m n indatasize outdatasize) 
+  (define dst
+    (apply concat
+      (for/list ([%i (reverse (range 0 m 1))])
+        (define res
+          (apply bvadd
+            (for/list ([%j (reverse (range 0 n 1))])
+              (define %aLo1 (* indatasize (+ %i %j)))
+              (define %aHi1 (+ %aLo1 (- indatasize 1)))
+              (define %bLo1 (* indatasize %j))
+              (define %bHi1 (+ %bLo1 (- indatasize 1)))
+              (define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))
+              (define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))
+              (define %elem (bvmul %ext_a1 %ext_b1))
+              %elem
+            )
+          )
+        )
+        res
+      )
+    )
+  )
+  dst
+)
+
+
+'"(define (mul_conv matA matB m n indatasize outdatasize) "',
+'"(define dst"',
+'"(apply concat"',
+'"(for/list ([%i (reverse (range 0 m 1))])"',
+'"(define res"',
+'"(apply bvadd"',
+'"(for/list ([%j (reverse (range 0 n 1))])"',
+'"(define %aLo1 (* indatasize (+ %i %j)))"',
+'"(define %aHi1 (+ %aLo1 (- indatasize 1)))"',
+'"(define %bLo1 (* indatasize %j))"',
+'"(define %bHi1 (+ %bLo1 (- indatasize 1)))"',
+'"(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))"',
+'"(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))"',
+'"(define %elem (bvmul %ext_a1 %ext_b1))"',
+'"%elem"',
+'")"',
+'")"',
+'")"',
+'"res"',
+'")"',
+'")"',
+'")"',
+'"dst"',
+'")"',
+
 (define (shift_bytes a b shift %lanesize %datasize)
   (define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))
   dst

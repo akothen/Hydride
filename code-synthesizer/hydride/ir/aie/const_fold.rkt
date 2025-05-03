@@ -154,14 +154,23 @@
 		[else ( scalar_splat_dsl v0-folded size_i size_o )]
 		)
 	]
-	[ (shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
+	[ (concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( shift_bytes_dsl v0-folded v1-folded num_2 size_i_o prec_i_o ) (vector)))
+(lit (aie:interpret ( concat_v16int16_dsl v0-folded v1-folded size_i size_o prec_i prec_o ) (vector)))
 ]
-		[else ( shift_bytes_dsl v0-folded v1-folded num_2 size_i_o prec_i_o )]
+		[else ( concat_v16int16_dsl v0-folded v1-folded size_i size_o prec_i prec_o )]
+		)
+	]
+	[ (ups_to_v16acc32_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( ups_to_v16acc32_dsl v0-folded ) (vector)))
+]
+		[else ( ups_to_v16acc32_dsl v0-folded )]
 		)
 	]
 	[ (ups_to_v32acc32_dsl v0)
@@ -171,6 +180,15 @@
 (lit (aie:interpret ( ups_to_v32acc32_dsl v0-folded ) (vector)))
 ]
 		[else ( ups_to_v32acc32_dsl v0-folded )]
+		)
+	]
+	[ (srs_to_v16int16_dsl v0)
+		(define v0-folded (aie:const-fold v0))
+		(cond
+		[(and (lit? v0-folded))
+(lit (aie:interpret ( srs_to_v16int16_dsl v0-folded ) (vector)))
+]
+		[else ( srs_to_v16int16_dsl v0-folded )]
 		)
 	]
 	[ (srs_to_v32int16_dsl v0)
@@ -193,14 +211,25 @@
 		[else ( mac_elem_32_dsl v0-folded v1-folded v2-folded )]
 		)
 	]
-	[ (mul_conv_32x8_dsl v0 v1)
+	[ (mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
 		(define v0-folded (aie:const-fold v0))
 		(define v1-folded (aie:const-fold v1))
 		(cond
 		[(and (lit? v0-folded) (lit? v1-folded))
-(lit (aie:interpret ( mul_conv_32x8_dsl v0-folded v1-folded ) (vector)))
+(lit (aie:interpret ( mul_conv_16x4_conf_v16acc64_dsl v0-folded v1-folded num_2 num_3 size_i size_o prec_i prec_o ) (vector)))
 ]
-		[else ( mul_conv_32x8_dsl v0-folded v1-folded )]
+		[else ( mul_conv_16x4_conf_v16acc64_dsl v0-folded v1-folded num_2 num_3 size_i size_o prec_i prec_o )]
+		)
+	]
+	[ (shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(define v0-folded (aie:const-fold v0))
+		(define v1-folded (aie:const-fold v1))
+		(define v2-folded (aie:const-fold v2))
+		(cond
+		[(and (lit? v0-folded) (lit? v1-folded) (lit? v2-folded))
+(lit (aie:interpret ( shift_v16int32_dsl v0-folded v1-folded v2-folded size_i_o prec_i_o ) (vector)))
+]
+		[else ( shift_v16int32_dsl v0-folded v1-folded v2-folded size_i_o prec_i_o )]
 		)
 	]
 	[ (shuffle_v128int4_lo_dsl v0 v1 size_i_o prec_i_o)

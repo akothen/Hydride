@@ -26,8 +26,20 @@
 ;;                                DSL Semantics
 ;; ================================================================================
 
-(define (shift_bytes a b shift %lanesize %datasize)
-(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))
+(define (concat_v16int16 vecA vecB %inlanesize %outlanesize %inprec %outprec)
+(concat vecA vecB)
+)
+(define (ups_to_v16acc32 vec)
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 16 1))])
+(define %low1 (* 16 %i))
+(define %high1 (+ %low1 (- 16 1)))
+(define %o (sign-extend (extract %high1 %low1 vec) (bitvector 32)))
+%o
+)
+)
+)
 dst
 )
 (define (ups_to_v32acc32 vec)
@@ -42,6 +54,19 @@ dst
 )
 )
 dst
+)
+(define (srs_to_v16int16 acc)
+(define dst
+(apply concat
+(for/list ([%i (reverse (range 0 16 1))])
+(define %low1 (* 64 %i))
+(define %high1 (+ %low1 (- 64 1)))
+(define %o (extract 15 0 (extract %high1 %low1 acc)))
+%o
+)
+)
+)
+dst 
 )
 (define (srs_to_v32int16 acc)
 (define dst
@@ -76,19 +101,19 @@ dst
 )
 dst
 )
-(define (mul_conv_32x8 matA matB) 
+(define (mul_conv_16x4_conf_v16acc64 matA matB m n in_lanesize lanesize indatasize outdatasize) 
 (define dst
 (apply concat
-(for/list ([%i (reverse (range 0 32 1))])
+(for/list ([%i (reverse (range 0 m 1))])
 (define res
 (apply bvadd
-(for/list ([%j (reverse (range 0 8 1))])
-(define %aLo1 (* 8 (+ %i %j)))
-(define %aHi1 (+ %aLo1 (- 8 1)))
-(define %bLo1 (* 8 %j))
-(define %bHi1 (+ %bLo1 (- 8 1)))
-(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector 32)))
-(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector 32)))
+(for/list ([%j (reverse (range 0 n 1))])
+(define %aLo1 (* indatasize (+ %i %j)))
+(define %aHi1 (+ %aLo1 (- indatasize 1)))
+(define %bLo1 (* indatasize %j))
+(define %bHi1 (+ %bLo1 (- indatasize 1)))
+(define %ext_a1 (sign-extend (extract %aHi1 %aLo1 matA) (bitvector outdatasize)))
+(define %ext_b1 (sign-extend (extract %bHi1 %bLo1 matB) (bitvector outdatasize)))
 (define %elem (bvmul %ext_a1 %ext_b1))
 %elem
 )
@@ -98,6 +123,10 @@ res
 )
 )
 )
+dst
+)
+(define (shift_v16int32 a b shift %lanesize %datasize)
+(define dst (extract (+ (- (* %lanesize %datasize) 1) (* %datasize shift)) (* %datasize shift) (concat a b)))
 dst
 )
 (define (shuffle_v128int4_lo arg0 arg1 %lanesize %indatasize)

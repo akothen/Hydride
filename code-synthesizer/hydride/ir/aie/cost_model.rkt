@@ -28,11 +28,14 @@
 ;; ================================================================================
 ;;                                DSL Cost Model
 ;; ================================================================================
-(define cost_shift_bytes_dsl 1)
+(define cost_concat_v16int16_dsl 1)
+(define cost_ups_to_v16acc32_dsl 1)
 (define cost_ups_to_v32acc32_dsl 1)
+(define cost_srs_to_v16int16_dsl 1)
 (define cost_srs_to_v32int16_dsl 1)
 (define cost_mac_elem_32_dsl 1)
-(define cost_mul_conv_32x8_dsl 1)
+(define cost_mul_conv_16x4_conf_v16acc64_dsl 1)
+(define cost_shift_v16int32_dsl 1)
 (define cost_shuffle_v128int4_lo_dsl 1)
 (define cost_shuffle_v128int4_hi_dsl 1)
 (define cost_add_v16acc64_dsl 1)
@@ -89,12 +92,18 @@
 		[ (scalar_splat_dsl v0 size_i size_o)
 		(+ 1 (aie:cost  v0) )
 	]
-	[ (shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
-		(+ cost_shift_bytes_dsl (aie:cost  v0)  (aie:cost  v1)  
+	[ (concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
+		(+ cost_concat_v16int16_dsl (aie:cost  v0)  (aie:cost  v1)  
 		)
+	]
+	[ (ups_to_v16acc32_dsl v0)
+		(+ cost_ups_to_v16acc32_dsl (aie:cost  v0) )
 	]
 	[ (ups_to_v32acc32_dsl v0)
 		(+ cost_ups_to_v32acc32_dsl (aie:cost  v0) )
+	]
+	[ (srs_to_v16int16_dsl v0)
+		(+ cost_srs_to_v16int16_dsl (aie:cost  v0) )
 	]
 	[ (srs_to_v32int16_dsl v0)
 		(+ cost_srs_to_v32int16_dsl (aie:cost  v0) )
@@ -102,8 +111,14 @@
 	[ (mac_elem_32_dsl v0 v1 v2)
 		(+ cost_mac_elem_32_dsl (aie:cost  v0)  (aie:cost  v1)  (aie:cost  v2) )
 	]
-	[ (mul_conv_32x8_dsl v0 v1)
-		(+ cost_mul_conv_32x8_dsl (aie:cost  v0)  (aie:cost  v1) )
+	[ (mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
+		(+ cost_mul_conv_16x4_conf_v16acc64_dsl (aie:cost  v0)  (aie:cost  v1)  
+		 
+		)
+	]
+	[ (shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(+ cost_shift_v16int32_dsl (aie:cost  v0)  (aie:cost  v1)  (aie:cost  v2)  
+		)
 	]
 	[ (shuffle_v128int4_lo_dsl v0 v1 size_i_o prec_i_o)
 		(+ cost_shuffle_v128int4_lo_dsl (aie:cost  v0)  (aie:cost  v1)  

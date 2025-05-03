@@ -23,9 +23,9 @@ DEBUG_LIST = [
     # "vqadd_s16",
     #"vzip_u16",
     #"v8acc80_mul32",
-    "srs_to_v32int16",
-    "mul_elem_32",
-    "mac_elem_32",
+    "ups_to_v32acc32",
+    "ups_to_v16acc32",
+    "concat_v16int16",
     #"v8int32_add8",
     # "vmovl_s8",
     # "vqmovn_u32",
@@ -1081,9 +1081,8 @@ class SynthesizerBase:
 
             if check:
                 print("-"*50)
-                print(ctx.name, "Supports Input Prec:", supports_inputs_prec,
-                      " with input Prec: ", ctx.in_precision)
-                print(ctx.name, "Supports Input Length:", supports_input_length)
+                print(ctx.name, "Supports Input Prec:", supports_inputs_prec, " with input Prec: ", ctx.in_precision)
+                print(f"{ctx.name} Supports Input Length:  {supports_input_length} with {ctx.out_precision}")
                 print(ctx.name, "Supports Output prec", supports_outputs_prec)
                 print(ctx.name, "Supports Output Length:",
                       supports_output_length)
@@ -1416,10 +1415,10 @@ class SynthesizerBase:
                 input_size) for input_size in self.input_sizes])
 
             if dsl_inst.name in DEBUG_LIST and DEBUG:
-                print("Supports input prec:", supports_inputs_prec)
-                print("Supports output prec:", supports_outputs_prec)
-                print("supports input length:", supports_input_length)
-                print("supports output length:", supports_output_length)
+                print("Supports input prec:", supports_inputs_prec, " for ", self.spec.input_precision)
+                print("Supports output prec:", supports_outputs_prec , " for ", self.spec.output_precision)
+                print("supports input length:", supports_input_length , " for ", self.input_sizes)
+                print("supports output length:", supports_output_length, " for ", self.output_slice_length)
 
             old_condition = (supports_inputs_prec and supports_input_length) and (
                 supports_outputs_prec or supports_output_length)

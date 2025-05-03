@@ -48,10 +48,18 @@
 	[(llvm-vect-mul_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-sdiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
 	[(llvm-vect-udiv_dsl v0 v1 num_2 prec_i_o) (* num_2 prec_i_o) ]
-	[(shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
+	[(concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
 		(cond 
-		[(and  (equal? num_2 8) (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
-		[else (error "Unable to infer length for shift_bytes: "  prog)]
+		[(and  (equal? size_i 16) (equal? size_o 32) (equal? prec_i 16) (equal? prec_o 16)) 512]
+		[(and  (equal? size_i 32) (equal? size_o 64) (equal? prec_i 8) (equal? prec_o 8)) 512]
+		[else (error "Unable to infer length for concat_v16int16: "  prog)]
+)
+
+	]
+	[(ups_to_v16acc32_dsl v0)
+		(cond 
+		[(and ) 512]
+		[else (error "Unable to infer length for ups_to_v16acc32: "  prog)]
 )
 
 	]
@@ -59,6 +67,13 @@
 		(cond 
 		[(and ) 1024]
 		[else (error "Unable to infer length for ups_to_v32acc32: "  prog)]
+)
+
+	]
+	[(srs_to_v16int16_dsl v0)
+		(cond 
+		[(and ) 256]
+		[else (error "Unable to infer length for srs_to_v16int16: "  prog)]
 )
 
 	]
@@ -76,10 +91,29 @@
 )
 
 	]
-	[(mul_conv_32x8_dsl v0 v1)
+	[(mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
 		(cond 
-		[(and ) 1024]
-		[else (error "Unable to infer length for mul_conv_32x8: "  prog)]
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)) 1024]
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)) 1024]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)) 1024]
+		[else (error "Unable to infer length for mul_conv_16x4_conf_v16acc64: "  prog)]
+)
+
+	]
+	[(shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(cond 
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)) 512]
+		[else (error "Unable to infer length for shift_v16int32: "  prog)]
 )
 
 	]

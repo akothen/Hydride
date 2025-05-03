@@ -98,15 +98,32 @@
 
 (values (scalar_splat_dsl expr-0 size_i size_o ) num-consumed-0)
 	]
-	[(shift_bytes_dsl v0 v1 num_2 size_i_o prec_i_o)
+	[(concat_v16int16_dsl v0 v1 size_i size_o prec_i prec_o)
 		(cond 
-		[(and  (equal? num_2 8) (equal? size_i_o 16) (equal? prec_i_o 32)); shift_bytes
+		[(and  (equal? size_i 16) (equal? size_o 32) (equal? prec_i 16) (equal? prec_o 16)); concat_v16int16
  
  (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
  
- (values (shift_bytes_dsl expr-0 expr-1 num_2 size_i_o prec_i_o ) num-consumed-1)]
-		[else (error "Unable to extract  for shift_bytes")]
+ (values (concat_v16int16_dsl expr-0 expr-1 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? size_i 32) (equal? size_o 64) (equal? prec_i 8) (equal? prec_o 8)); concat_v32int8
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (concat_v16int16_dsl expr-0 expr-1 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[else (error "Unable to extract  for concat_v16int16")]
+)
+
+	]
+	[(ups_to_v16acc32_dsl v0)
+		(cond 
+		[(and ); ups_to_v16acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (ups_to_v16acc32_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for ups_to_v16acc32")]
 )
 
 	]
@@ -118,6 +135,17 @@
  
  (values (ups_to_v32acc32_dsl expr-0 ) num-consumed-0)]
 		[else (error "Unable to extract  for ups_to_v32acc32")]
+)
+
+	]
+	[(srs_to_v16int16_dsl v0)
+		(cond 
+		[(and ); srs_to_v16int16
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+ 
+ (values (srs_to_v16int16_dsl expr-0 ) num-consumed-0)]
+		[else (error "Unable to extract  for srs_to_v16int16")]
 )
 
 	]
@@ -145,15 +173,105 @@
 )
 
 	]
-	[(mul_conv_32x8_dsl v0 v1)
+	[(mul_conv_16x4_conf_v16acc64_dsl v0 v1 num_2 num_3 size_i size_o prec_i prec_o)
 		(cond 
-		[(and ); mul_conv_32x8
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_conv_16x4_conf_v16acc64
  
  (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
 (define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
  
- (values (mul_conv_32x8_dsl expr-0 expr-1 ) num-consumed-1)]
-		[else (error "Unable to extract  for mul_conv_32x8")]
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 16) (equal? num_3 4) (equal? size_i 32) (equal? size_o 16) (equal? prec_i 16) (equal? prec_o 64)); mul_conv_16x4_v16acc64
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_32x8_conf_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 32) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_32x8_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_4x4_8ch_conf_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 4) (equal? num_3 4) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_4x4_8ch_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_8x8_4ch_conf_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[(and  (equal? num_2 8) (equal? num_3 8) (equal? size_i 64) (equal? size_o 32) (equal? prec_i 8) (equal? prec_o 32)); mul_conv_8x8_4ch_v32acc32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+ 
+ (values (mul_conv_16x4_conf_v16acc64_dsl expr-0 expr-1 num_2 num_3 size_i size_o prec_i prec_o ) num-consumed-1)]
+		[else (error "Unable to extract  for mul_conv_16x4_conf_v16acc64")]
+)
+
+	]
+	[(shift_v16int32_dsl v0 v1 v2 size_i_o prec_i_o)
+		(cond 
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)); shift_v16int32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[(and  (equal? size_i_o 16) (equal? prec_i_o 32)); shift_v16uint32
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)); shift_v32int16
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[(and  (equal? size_i_o 32) (equal? prec_i_o 16)); shift_v32uint16
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)); shift_v64int8
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[(and  (equal? size_i_o 64) (equal? prec_i_o 8)); shift_v64uint8
+ 
+ (define-values (expr-0 num-consumed-0) (aie:extract-expr v0 num-consumed (- depth 1)))
+(define-values (expr-1 num-consumed-1) (aie:extract-expr v1 num-consumed-0 (- depth 1)))
+(define-values (expr-2 num-consumed-2) (aie:extract-expr v2 num-consumed-1 (- depth 1)))
+ 
+ (values (shift_v16int32_dsl expr-0 expr-1 expr-2 size_i_o prec_i_o ) num-consumed-2)]
+		[else (error "Unable to extract  for shift_v16int32")]
 )
 
 	]

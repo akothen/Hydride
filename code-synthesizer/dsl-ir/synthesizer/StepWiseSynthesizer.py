@@ -697,6 +697,7 @@ class StepWiseSynthesizer(SynthesizerBase):
                 continue
             else:
                 print(f"Skipping  {dsl_inst.name} as it is not considered")
+                print(f"{dsl_inst.name} is ")
 
         # Due to the volume of instructions available, selecting contexts
         # Based of operations and input/output configurations may still result
