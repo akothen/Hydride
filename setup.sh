@@ -14,6 +14,7 @@ export SIMILARITY_SUMMARY=$CUR_DIR/codegen-generator/tools/similarity-checker/su
 #export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
 
 export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/bitsimd/bitsimd_wrappers.ll
+export LEGALIZERS_DIR=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/
 
 if [ $(uname -s) = "Darwin" ]; then
     export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.dylib
