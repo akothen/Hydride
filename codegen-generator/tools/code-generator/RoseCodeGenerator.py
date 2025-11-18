@@ -36,6 +36,7 @@ class RoseCodeGenerator:
         "x86": x86RoseLang,
         "Hexagon": HexRoseLang,
         "DRAMBitSIMD": DRAMRoseLang,
+        "swizzle": x86RoseLang,
         #"UPMEM": UPMEMRoseLang,
         #"ARM": ARMRoseLang,
     }
@@ -65,21 +66,38 @@ class RoseCodeGenerator:
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
+
             RoseAssignDestination.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
+
             RoseBVLengthReduction.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
             Context.print()
-            RoseLoopReroller.Run(Function, Context)
+
+
+            Copy = Function.clone()
+            try:
+                RoseLoopReroller.Run(Function, Context)
+                pass
+            except:
+                print("ReRoll failed!")
+                Function = Copy
+            # TEMP DISABLE PIM COM
+            #RoseLoopReroller.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             # Function = Function.clone()
             # RoseOpSimplify.Run(Function, Context)
             # FunctionInfo.addFunctionAtNewStage(Function)
             Function = Function.clone()
+            #FunctionInfo.addTargetSpecificFunction(Function)
             Context.print()
+
+
+        ## TEMP
+        #else:
             RoseOpCombine.Run(Function, Context)
             FunctionInfo.addFunctionAtNewStage(Function)
             # Function = Function.clone()
@@ -170,12 +188,12 @@ class RoseCodeGenerator:
         return FunctionInfo
 
     def codeGen(self, FunctionInfo=None, JustGenRosette: bool = False,
-                ExtractConstants: bool = False, NumThreads: int = 1):
+                ExtractConstants: bool = False, NumThreads: int = 1, xml_file_path: str = None):
         print("START CODEGEN-----")
         self.JustGenRosette = JustGenRosette
         self.ExtractConstants = ExtractConstants
         if FunctionInfo == None:
-            FunctionInfoList = self.TargetAPI[self.Target].Compile()
+            FunctionInfoList = self.TargetAPI[self.Target].Compile(xml_file_path = xml_file_path)
             if NumThreads == 1:
                 for FunctionInfoIt in FunctionInfoList:
                     print("START CODEGEN")

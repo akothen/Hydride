@@ -24,15 +24,16 @@ from RoseSimilarityCheckerParallel import RoseSimilarityCheckerParallel
 from copy import deepcopy
 
 
-NumThreads = 16
-ParallelChecker = True # Enable by default
+NumThreads = 1
+ParallelChecker = False # Enable by default
 
 EliminateUnnecessaryArgs = False
 
 
 class RoseSimilarityChecker():
-    def __init__(self, TargetList: list):
+    def __init__(self, TargetList: list, xml_file_path : str = None):
         self.TargetList = TargetList
+        self.xml_file_path = xml_file_path
         self.FunctionInfoList = list()
         self.FunctionInfoListToTarget = dict()
         self.FunctionToFunctionInfo = dict()
@@ -50,9 +51,10 @@ class RoseSimilarityChecker():
             # Generate code for all semantics first
             CodeGenerator = RoseCodeGenerator(TargetName)
             FunctionInfoList = CodeGenerator.codeGen(ExtractConstants=False,
-                                                     JustGenRosette=False, NumThreads=NumThreads)
+                                                     JustGenRosette=False, NumThreads=NumThreads, xml_file_path = self.xml_file_path)
             # Compute some semantics info for the functions
             for FunctionInfo in FunctionInfoList:
+                FunctionInfo.print()
                 FunctionInfo.computeSemanticsInfoFromTargetSpecficFunction()
                 FunctionInfo.print()
             # Check the validity of a functioninfo
@@ -74,10 +76,11 @@ class RoseSimilarityChecker():
             #  FunctionInfoList.append(CodeGenerator.codeGen(FunctionInfo=FunctionInfo, \
             #                                                ExtractConstants=True))
             FunctionInfoList = CodeGenerator.codeGen(
-                ExtractConstants=True, NumThreads=NumThreads)
+                ExtractConstants=True, NumThreads=NumThreads, xml_file_path = self.xml_file_path)
             self.FunctionInfoList.extend(FunctionInfoList)
             # Generate rosette code
             for FunctionInfo in FunctionInfoList:
+                print("GENERATE ROSETTE CODE")
                 Function = FunctionInfo.getLatestFunction()
                 FunctionInfo.computeSemanticsInfo()
                 FunctionInfo.print()
@@ -2729,7 +2732,7 @@ class RoseSimilarityChecker():
 if __name__ == '__main__':
     # SimilarityChecker = RoseSimilarityChecker(["Hexagon"])
     if ParallelChecker:
-        SimilarityChecker = RoseSimilarityCheckerParallel(["x86"])
+        SimilarityChecker = None #RoseSimilarityCheckerParallel(["x86"])
     else:
         SimilarityChecker = RoseSimilarityChecker(["x86"])
     # SimilarityChecker = RoseSimilarityChecker(["x86"])

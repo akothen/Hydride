@@ -1225,6 +1225,10 @@ class RoseSimilarityCheckerParallel():
                     PermCheckFunctionInfo.computeSemanticsInfo()
                     # Perform verification
                     Suffix += 1
+
+                    if Suffix % 5000 == 0:
+                        self.summarize()
+
                     ClosureArg = self.verifyClosure(self.FunctionToFunctionInfo[Function],
                                                     PermCheckFunctionInfo, str(Suffix))
                     if not ClosureArg:  # No need to verify
@@ -1407,6 +1411,10 @@ class RoseSimilarityCheckerParallel():
                     PermCheckFunctionInfo.computeSemanticsInfo()
                     # Perform verification
                     Suffix += 1
+
+                    if Suffix % 5000 == 0:
+                        self.summarize()
+
                     VerifyResult = self.verify(self.FunctionToFunctionInfo[Function],
                                                PermCheckFunctionInfo, str(Suffix))
                     if VerifyResult == True:
@@ -2943,6 +2951,9 @@ class RoseSimilarityCheckerParallel():
                 HolesList = self.punchHolesInFunction(
                     ClonedCheckFunction, CheckFunctionInfo.getContext())
                 Suffix += 1
+
+                if Suffix % 5000 == 0:
+                    self.summarize()
                 VerifyResult = self.verifyUsingSynthesis(
                     ClonedCheckFunction, Function, HolesList, Suffix)
                 if VerifyResult == True:
