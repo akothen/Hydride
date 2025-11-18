@@ -1,8 +1,7 @@
 CUR_DIR=$(pwd)
 
 export HYDRIDE_ROOT=$CUR_DIR
-#export LLVM_ROOT=$CUR_DIR/frontends/halide/llvm-build
-export LLVM_ROOT=/home/arnoor2/temp/llvm-build/
+export LLVM_ROOT=$CUR_DIR/frontends/halide/llvm-build
 export LLVM_DIS_ROOT=$LLVM_ROOT
 export LLVM_CONFIG=$LLVM_DIS_ROOT/bin/llvm-config
 export HALIDE_SRC=$CUR_DIR/frontends/halide
@@ -15,6 +14,7 @@ export SIMILARITY_SUMMARY=$CUR_DIR/codegen-generator/tools/similarity-checker/su
 #export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/arm/arm_wrappers.c.ll
 
 export INTRINSICS_LL=$CUR_DIR/codegen-generator/tools/low-level-codegen/InstSelectors/bitsimd/bitsimd_wrappers.ll
+export LEGALIZERS_DIR=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/
 
 if [ $(uname -s) = "Darwin" ]; then
     export LEGALIZER_PATH=$CUR_DIR/codegen-generator/tools/low-level-codegen/build/libARMLegalizer.dylib
