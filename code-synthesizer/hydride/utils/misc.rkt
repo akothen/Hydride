@@ -241,3 +241,13 @@
       [else
        (assume (bvsgt slice (bv 0 prec)))
        (assume (bvugt slice (bv 0 prec)))])))
+
+
+
+;; create non-zero symbolic-bitvector 
+(define (get-non-zero-bv bw)
+  (define-symbolic* lit-hole (bitvector bw))
+  (assert (not (equal? lit-hole (bv 0 bw))))
+  (assume (not (equal? lit-hole (bv 0 bw))))
+  lit-hole
+  )

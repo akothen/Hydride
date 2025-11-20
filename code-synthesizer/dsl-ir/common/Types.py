@@ -143,6 +143,45 @@ class ConstBitVector(OperandType):
 
 
 
+class ConstBitVectorHole(ConstBitVector):
+
+    def __init__(self, size, name = None, non_zero = True):
+
+        self.non_zero = non_zero
+        literal_str = self.get_literal_bv(size)
+        super().__init__(literal_str, size, name = name)
+        self.is_hole = True
+
+    def get_literal_bv(self, size):
+        if self.non_zero:
+            return f"(get-non-zero-bv {size})"
+        else:
+            return f"(?? (bitvector {size}))"
+
+    def __eq__(self, Other):
+        if Other == None:
+            return False
+
+        if isinstance(Other, ConstBitVectorHole):
+            return (Other.value == self.value) and (Other.size == self.size)
+        else:
+            return False
+
+    def get_rkt_value(self):
+        return "{}".format(self.value)
+
+
+    def get_rkt_comment(self):
+        return ";; {}-bit Constant Bitvector Hole operand".format(self.size)
+
+    def print_operand(self, prefix = ""):
+        trunc_value = self.value
+        if len(trunc_value) > 20:
+            trunc_value = self.value[:20] + "..."
+
+        print("{} {}\t| Constant Bitvector Hole {}".format(prefix, trunc_value, self.size))
+
+
 class LaneSize(OperandType):
 
     def __init__(self, name, value = None, input_precision = False,

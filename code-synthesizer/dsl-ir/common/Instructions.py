@@ -4,6 +4,7 @@ import sys
 
 SYM_BV_STR = "SYMBOLIC_BV_"
 BOUNDED_BV_STR = "BOUNDED_SYMBOLIC_BV_"
+CONST_BV_HOLE_STR = "CONST_HOLE_BV_"
 CONST_BV_STR = "(bv"
 IDX_I_STR = "IDX_I"
 IDX_J_STR = "IDX_J"
@@ -732,6 +733,11 @@ class Context:
                 bv_size = int(arg.split(BOUNDED_BV_STR)[-1])
                 context_arg = BoundedBitVector("v{}".format(idx), bv_size)
                 self.is_bounded = True
+
+            elif arg.startswith(CONST_BV_HOLE_STR):
+                size = int(arg.split("_")[-1])
+                context_arg = ConstBitVectorHole(size, name = f"const_hole_{idx}")
+
             elif arg.startswith(CONST_BV_STR):
                 tokens = arg.split(" ")
                 assert len(tokens) == 3, "Unable to parse bv constant"
